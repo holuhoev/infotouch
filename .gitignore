@@ -1,5 +1,6 @@
 # dependencies
 /infotouch-terminal/infotouch-terminal-front/node_modules
+/infotouch-terminal/infotouch-terminal-front/node
 /infotouch-terminal/infotouch-terminal-front/.pnp
 .pnp.js
 
