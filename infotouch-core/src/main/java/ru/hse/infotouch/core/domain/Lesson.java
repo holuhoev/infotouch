@@ -1,7 +1,7 @@
 package ru.hse.infotouch.core.domain;
 
 
-import ru.hse.infotouch.core.ruz.converter.Convert;
+import ru.hse.infotouch.core.ruz.converter.RuzConvert;
 import ru.hse.infotouch.core.ruz.converter.KindOfWorkConverter;
 import ru.hse.infotouch.core.ruz.util.JsonAttribute;
 
@@ -22,7 +22,7 @@ public class Lesson extends RuzObject {
     private String discipline;
 
     @JsonAttribute
-    @Convert(converter = KindOfWorkConverter.class)
+    @RuzConvert(converter = KindOfWorkConverter.class)
     private KindOfWork kindOfWork;
 
     private Integer hours;

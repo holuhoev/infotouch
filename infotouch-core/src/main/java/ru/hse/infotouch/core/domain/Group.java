@@ -3,6 +3,7 @@ package ru.hse.infotouch.core.domain;
 
 import ru.hse.infotouch.core.ruz.converter.CourseConverter;
 import ru.hse.infotouch.core.ruz.converter.EducationTypeConverter;
+import ru.hse.infotouch.core.ruz.converter.RuzConvert;
 import ru.hse.infotouch.core.ruz.util.JsonAttribute;
 
 import javax.persistence.*;
@@ -22,7 +23,7 @@ public class Group extends RuzObject {
 
     @JsonAttribute
     @Column(name = "course")
-    @Convert(converter = CourseConverter.class)
+    @RuzConvert(converter = CourseConverter.class)
     private Course course;
 
     @Column(name = "institute_id")
@@ -38,7 +39,7 @@ public class Group extends RuzObject {
 
     @Column(name = "education_type")
     @JsonAttribute(name = "kindEducation")
-    @Convert(converter = EducationTypeConverter.class)
+    @RuzConvert(converter = EducationTypeConverter.class)
     private EducationType educationType;
 
     public Integer getFacultyId() {

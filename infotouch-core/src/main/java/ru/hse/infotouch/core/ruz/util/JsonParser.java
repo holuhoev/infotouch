@@ -5,7 +5,7 @@ import io.vertx.core.json.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.hse.infotouch.core.ruz.converter.AttributeConverter;
-import ru.hse.infotouch.core.ruz.converter.Convert;
+import ru.hse.infotouch.core.ruz.converter.RuzConvert;
 
 import java.lang.reflect.Field;
 import java.util.LinkedList;
@@ -36,8 +36,8 @@ public class JsonParser {
                     if (jsonAttributeAnnotation != null) {
                         field.setAccessible(true);
                         Object value = jsonObject.getMap().get(isNullOrEmpty(jsonAttributeAnnotation.name()) ? field.getName() : jsonAttributeAnnotation.name());
-                        if (field.getAnnotation(Convert.class) != null) {
-                            Object converterInstance = field.getAnnotation(Convert.class).converter().newInstance();
+                        if (field.getAnnotation(RuzConvert.class) != null) {
+                            Object converterInstance = field.getAnnotation(RuzConvert.class).converter().newInstance();
                             if (converterInstance instanceof AttributeConverter) {
                                 value = ((AttributeConverter) converterInstance).convertToEntityAttribute(value);
                             }
