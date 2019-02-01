@@ -1,7 +1,7 @@
 package ru.hse.infotouch.core.domain;
 
 
-import ru.hse.infotouch.core.ruz.util.JsonAttribute;
+import ru.hse.infotouch.core.ruz.util.JsonField;
 
 import javax.persistence.*;
 
@@ -15,19 +15,19 @@ import javax.persistence.*;
 public class Faculty {
 
     @Id
-    @JsonAttribute(name = "facultyOid")
+    @JsonField(name = "facultyOid")
     @Column(name = "ID")
     private Integer Id;
 
     @Column(name = "institute_id")
     private Integer instituteId;
 
-    @JsonAttribute
+    @JsonField
     @Column(name = "faculty_name")
     private String name;
 
     @Transient
-    @JsonAttribute
+    @JsonField
     private String institute;
 
     public Faculty() {

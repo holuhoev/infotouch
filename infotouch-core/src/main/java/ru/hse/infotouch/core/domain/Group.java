@@ -4,7 +4,7 @@ package ru.hse.infotouch.core.domain;
 import ru.hse.infotouch.core.ruz.converter.CourseConverter;
 import ru.hse.infotouch.core.ruz.converter.EducationTypeConverter;
 import ru.hse.infotouch.core.ruz.converter.RuzConvert;
-import ru.hse.infotouch.core.ruz.util.JsonAttribute;
+import ru.hse.infotouch.core.ruz.util.JsonField;
 
 import javax.persistence.*;
 
@@ -17,11 +17,11 @@ import javax.persistence.*;
 @Table(name = "STUDGROUP")
 public class Group extends RuzObject {
     @Id
-    @JsonAttribute(name = "groupOid")
+    @JsonField(name = "groupOid")
     @Column(name = "ID")
     private Integer Id;
 
-    @JsonAttribute
+    @JsonField
     @Column(name = "course")
     @RuzConvert(converter = CourseConverter.class)
     private Course course;
@@ -29,16 +29,16 @@ public class Group extends RuzObject {
     @Column(name = "institute_id")
     private Integer instituteId;
 
-    @JsonAttribute(name = "facultyOid")
+    @JsonField(name = "facultyOid")
     @Column(name = "faculty_id")
     private Integer facultyId;
 
-    @JsonAttribute
+    @JsonField
     @Column(name = "group_number")
     private String number;
 
     @Column(name = "education_type")
-    @JsonAttribute(name = "kindEducation")
+    @JsonField(name = "kindEducation")
     @RuzConvert(converter = EducationTypeConverter.class)
     private EducationType educationType;
 

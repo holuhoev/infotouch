@@ -12,7 +12,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Target({METHOD, FIELD})
 @Retention(RUNTIME)
-public @interface JsonAttribute {
+public @interface JsonField {
     /**
      * (Optional) The name of the ruz-api-field. Defaults to
      * the property or field name.

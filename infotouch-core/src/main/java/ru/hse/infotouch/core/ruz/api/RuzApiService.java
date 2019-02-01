@@ -2,6 +2,7 @@ package ru.hse.infotouch.core.ruz.api;
 
 
 import ru.hse.infotouch.core.domain.*;
+import ru.hse.infotouch.core.ruz.util.JsonField;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -10,7 +11,7 @@ import java.util.List;
 /**
  * Предоставляет интерфейс взаимодействия с http://ruz.hse.ru
  * Для того, чтобы получать значение поля объекта, возвращаемого из RUZ API,
- * необходимо использовать аннотацию {@link ru.hse.infotouch.core.ruz.util.JsonAttribute}
+ * необходимо использовать аннотацию {@link JsonField}
  *
  * @author Evgeny Kholukhoev
  */

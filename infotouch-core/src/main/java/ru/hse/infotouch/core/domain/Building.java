@@ -1,7 +1,7 @@
 package ru.hse.infotouch.core.domain;
 
 
-import ru.hse.infotouch.core.ruz.util.JsonAttribute;
+import ru.hse.infotouch.core.ruz.util.JsonField;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,15 +11,15 @@ import javax.persistence.Table;
 @Table(name = "BUILDING")
 public class Building {
     @javax.persistence.Id
-    @JsonAttribute(name = "buildingOid")
+    @JsonField(name = "buildingOid")
     @Column(name = "ID")
     private Integer Id;
 
-    @JsonAttribute()
+    @JsonField()
     @Column(name = "address")
     private String address;
 
-    @JsonAttribute()
+    @JsonField()
     @Column(name = "building_name")
     private String name;
 

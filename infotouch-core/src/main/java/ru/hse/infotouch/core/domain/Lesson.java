@@ -3,25 +3,25 @@ package ru.hse.infotouch.core.domain;
 
 import ru.hse.infotouch.core.ruz.converter.RuzConvert;
 import ru.hse.infotouch.core.ruz.converter.KindOfWorkConverter;
-import ru.hse.infotouch.core.ruz.util.JsonAttribute;
+import ru.hse.infotouch.core.ruz.util.JsonField;
 
 /**
  * @author Evgeny Kholukhoev
  */
 public class Lesson extends RuzObject {
-    @JsonAttribute
+    @JsonField
     private String date;
 
-    @JsonAttribute
+    @JsonField
     private String beginLesson;
 
-    @JsonAttribute
+    @JsonField
     private String endLesson;
 
-    @JsonAttribute
+    @JsonField
     private String discipline;
 
-    @JsonAttribute
+    @JsonField
     @RuzConvert(converter = KindOfWorkConverter.class)
     private KindOfWork kindOfWork;
 

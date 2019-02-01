@@ -1,7 +1,7 @@
 package ru.hse.infotouch.core.domain;
 
 
-import ru.hse.infotouch.core.ruz.util.JsonAttribute;
+import ru.hse.infotouch.core.ruz.util.JsonField;
 
 import javax.persistence.*;
 
@@ -14,19 +14,19 @@ import javax.persistence.*;
 @Table(name = "LECTURER")
 public class Lecturer extends RuzObject {
     @Id
-    @JsonAttribute(name = "lecturerOid")
+    @JsonField(name = "lecturerOid")
     @Column(name = "ID")
     private Integer Id;
 
-    @JsonAttribute(name = "chairOid")
+    @JsonField(name = "chairOid")
     @Column(name = "chair_id")
     private Integer chairId;
 
-    @JsonAttribute
+    @JsonField
     @Column(name = "fio")
     private String fio;
 
-    @JsonAttribute
+    @JsonField
     @Column(name = "short_fio")
     private String shortFIO;
 

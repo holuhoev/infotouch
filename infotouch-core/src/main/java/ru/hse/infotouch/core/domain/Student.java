@@ -1,6 +1,6 @@
 package ru.hse.infotouch.core.domain;
 
-import ru.hse.infotouch.core.ruz.util.JsonAttribute;
+import ru.hse.infotouch.core.ruz.util.JsonField;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,11 +14,11 @@ import javax.persistence.Table;
 @Table(name = "STUDENT")
 public class Student {
     @Id
-    @JsonAttribute(name = "studentOid")
+    @JsonField(name = "studentOid")
     @Column(name = "ID")
     private Integer Id;
 
-    @JsonAttribute
+    @JsonField
     @Column(name = "fio")
     private String fio;
 

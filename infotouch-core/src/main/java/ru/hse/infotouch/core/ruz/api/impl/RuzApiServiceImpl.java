@@ -2,6 +2,7 @@ package ru.hse.infotouch.core.ruz.api.impl;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.hse.infotouch.core.domain.*;
 import ru.hse.infotouch.core.ruz.Endpoint;
@@ -32,9 +33,12 @@ public class RuzApiServiceImpl implements RuzApiService {
     private final JsonParser jsonParser;
     private final LessonParser lessonParser;
 
+    @Value("${ruz.api.url}")
+    private String url;
+
     @Override
     public List<Building> getAllBuildings() {
-        return jsonParser.parse(readRuz(Endpoint.BUILDINGS, null), Building.class);
+        return jsonParser.mapStringToList(readRuz(Endpoint.BUILDINGS, null), Building.class);
     }
 
     @Autowired
@@ -48,22 +52,22 @@ public class RuzApiServiceImpl implements RuzApiService {
         Map<Param, Object> params = new HashMap<>();
         params.put(Param.CHAIR_ID, chairId);
         String lecturersInString = readRuz(Endpoint.LECTURERS, params);
-        return jsonParser.parse(lecturersInString, Lecturer.class);
+        return jsonParser.mapStringToList(lecturersInString, Lecturer.class);
     }
 
     @Override
     public List<Lecturer> getAllLecturers() {
-        return jsonParser.parse(readRuz(Endpoint.LECTURERS, null), Lecturer.class);
+        return jsonParser.mapStringToList(readRuz(Endpoint.LECTURERS, null), Lecturer.class);
     }
 
     @Override
     public List<Chair> getAllChairs() {
-        return jsonParser.parse(readRuz(Endpoint.CHAIRS, null), Chair.class);
+        return jsonParser.mapStringToList(readRuz(Endpoint.CHAIRS, null), Chair.class);
     }
 
     @Override
     public List<Faculty> getAllFaculties() {
-        return jsonParser.parse(readRuz(Endpoint.FACULTIES, null), Faculty.class);
+        return jsonParser.mapStringToList(readRuz(Endpoint.FACULTIES, null), Faculty.class);
     }
 
     @Override
@@ -110,16 +114,16 @@ public class RuzApiServiceImpl implements RuzApiService {
         Map<Param, Object> params = new HashMap<>();
         params.put(Param.GROUP_ID, groupId);
         String studentsInString = readRuz(Endpoint.STAFF_OF_GROUP, params);
-        return jsonParser.parse(studentsInString, Student.class);
+        return jsonParser.mapStringToList(studentsInString, Student.class);
     }
 
     @Override
     public List<Group> getGroups() {
-        return jsonParser.parse(readRuz(Endpoint.GROUPS, null), Group.class);
+        return jsonParser.mapStringToList(readRuz(Endpoint.GROUPS, null), Group.class);
     }
 
     private List<Lesson> getLessons(Map<Param, ?> params) {
-        return lessonParser.parse(jsonParser.parse(readRuz(Endpoint.LESSONS, params), Lesson.class));
+        return lessonParser.parse(jsonParser.mapStringToList(readRuz(Endpoint.LESSONS, params), Lesson.class));
     }
 
     private String paramsToString(Map<Param, ?> params) {
