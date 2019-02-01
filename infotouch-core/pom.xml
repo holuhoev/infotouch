@@ -7,7 +7,6 @@
 
     <artifactId>infotouch-core</artifactId>
     <version>1.0.0</version>
-    <name>infotouch-core</name>
     <packaging>jar</packaging>
 
     <description>Core module for Infotouch</description>
@@ -86,7 +85,7 @@
             </resource>
             <resource>
                 <directory>src/main/resources</directory>
-                <filtering>false</filtering>
+                <filtering>true</filtering>
             </resource>
         </resources>
     </build>
