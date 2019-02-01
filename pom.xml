@@ -19,6 +19,7 @@
     <description>infotouch application</description>
 
     <properties>
+        <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.deploy.skip>true</maven.deploy.skip>
@@ -36,6 +37,7 @@
             <modules>
                 <module>infotouch-core</module>
                 <module>infotouch-terminal</module>
+                <module>infotouch-feed</module>
             </modules>
         </profile>
     </profiles>
@@ -51,7 +53,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <version>${spring.boot.version}</version>
-            <optional>true</optional>
         </dependency>
     </dependencies>
 

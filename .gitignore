@@ -23,6 +23,7 @@ yarn-error.log*
 
 infotouch-terminal/target/
 infotouch-core/target/
+infotouch-feed/target/
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
