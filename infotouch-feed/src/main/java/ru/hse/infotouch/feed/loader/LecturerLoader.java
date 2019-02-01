@@ -15,26 +15,27 @@ import java.util.List;
 public class LecturerLoader implements CommandLineRunner {
     private final RuzApiService ruzApi;
 
-    //    private final LecturerRepository repository;
-//    private final Logger logger = LoggerFactory.getLogger(LecturerLoader.class);
-//
+    private final LecturerRepository repository;
+    private final Logger logger = LoggerFactory.getLogger(LecturerLoader.class);
+
     @Autowired
-    public LecturerLoader(RuzApiService ruzApi) {
+    public LecturerLoader(RuzApiService ruzApi, LecturerRepository repository) {
         this.ruzApi = ruzApi;
+        this.repository = repository;
     }
 
     @Override
     public void run(String... args) throws Exception {
-        Lecturer lecturer = new Lecturer();
-//        logger.info("Lecturer loader starts");
-//
-//        long t = System.currentTimeMillis();
-//        try {
-//            List<Lecturer> allLecturers = ruzApi.getAllLecturers();
-//            repository.saveAll(allLecturers);
-//        } finally {
-//            long end = System.currentTimeMillis();
-//            logger.info("Lecturer loader took: {} ms", end - t);
-//        }
+        logger.info("Lecturer loader starts");
+
+        long t1 = System.currentTimeMillis();
+
+        List<Lecturer> allLecturers = ruzApi.getAllLecturers();
+        long t1_end = System.currentTimeMillis();
+        logger.info("Get all lecturers from RUZ took: {} ms", t1_end - t1);
+
+        repository.saveAll(allLecturers);
+        long end = System.currentTimeMillis();
+        logger.info("Save all lecturers took: {} ms", end - t1_end);
     }
 }
