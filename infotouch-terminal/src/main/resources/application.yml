@@ -1,3 +1,8 @@
 logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"
+
+server:
+  servlet:
+    context-path: "/infotouch-terminal-api"
+  port: 8888

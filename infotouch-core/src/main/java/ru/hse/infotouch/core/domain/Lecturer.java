@@ -11,7 +11,7 @@ import javax.persistence.*;
  * @author Evgeny Kholukhoev
  */
 @Entity
-@Table(name = "LECTURER")
+@Table(name = "lecturer")
 public class Lecturer extends RuzObject {
     @Id
     @JsonField(name = "lecturerOid")
@@ -23,11 +23,11 @@ public class Lecturer extends RuzObject {
     private Integer chairId;
 
     @JsonField
-    @Column(name = "fio")
+    @Column(name = "fio", columnDefinition = "nvarchar(255)")
     private String fio;
 
     @JsonField
-    @Column(name = "short_fio")
+    @Column(name = "short_fio", columnDefinition = "nvarchar(255)")
     private String shortFIO;
 
     public Integer getId() {
@@ -38,8 +38,7 @@ public class Lecturer extends RuzObject {
         this.Id = id;
     }
 
-    public Lecturer() {
-    }
+    public Lecturer() { }
 
     public Integer getChairId() {
         return chairId;

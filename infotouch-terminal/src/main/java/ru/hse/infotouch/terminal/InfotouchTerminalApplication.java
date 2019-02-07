@@ -3,7 +3,8 @@ package ru.hse.infotouch.terminal;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+
+@SpringBootApplication(scanBasePackages = {"ru.hse.infotouch"})
 public class InfotouchTerminalApplication {
 
 	public static void main(String[] args) {
