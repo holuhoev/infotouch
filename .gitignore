@@ -1,14 +1,14 @@
 # dependencies
-/infotouch-terminal/infotouch-terminal-front/node_modules
-/infotouch-terminal/infotouch-terminal-front/node
-/infotouch-terminal/infotouch-terminal-front/.pnp
+/terminal/infotouch-terminal-front/node_modules
+/terminal/infotouch-terminal-front/node
+/terminal/infotouch-terminal-front/.pnp
 .pnp.js
 
 # testing
-/infotouch-terminal/infotouch-terminal-front/coverage
+/terminal/infotouch-terminal-front/coverage
 
 # production
-/infotouch-terminal/infotouch-terminal-front/build
+/terminal/infotouch-terminal-front/build
 
 # misc
 .DS_Store
@@ -21,9 +21,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-infotouch-terminal/target/
-infotouch-core/target/
-infotouch-feed/target/
+/terminal/target
+/core/target
+/feed/target
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
