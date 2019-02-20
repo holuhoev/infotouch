@@ -23,8 +23,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import static ru.hse.infotouch.ruz.URL.MAX_QUERY_DAYS;
-
 /**
  * @author Evgeny Kholukhoev
  */
@@ -35,6 +33,9 @@ public class RuzApiServiceImpl implements RuzApiService {
 
     @Value("${ruz.api.url}")
     private String url;
+
+    @Value("${ruz.api.schedule.max.days}")
+    private int maxQueryDays;
 
     @Override
     public List<Building> getAllBuildings() {
@@ -73,9 +74,9 @@ public class RuzApiServiceImpl implements RuzApiService {
     @Override
     public List<Lesson> getStudentLessons(Integer studentId, LocalDate fromDate, LocalDate toDate) {
         List<Lesson> result = new LinkedList<>();
-        while (ChronoUnit.DAYS.between(fromDate, toDate) > MAX_QUERY_DAYS) {
-            result.addAll(getStudentLessonsForShortPeriod(studentId, fromDate, fromDate.plusDays(MAX_QUERY_DAYS)));
-            fromDate = fromDate.plusDays(MAX_QUERY_DAYS + 1);
+        while (ChronoUnit.DAYS.between(fromDate, toDate) > this.maxQueryDays) {
+            result.addAll(getStudentLessonsForShortPeriod(studentId, fromDate, fromDate.plusDays(this.maxQueryDays)));
+            fromDate = fromDate.plusDays(this.maxQueryDays + 1);
         }
         result.addAll(getStudentLessonsForShortPeriod(studentId, fromDate, toDate));
         return result;
@@ -92,9 +93,9 @@ public class RuzApiServiceImpl implements RuzApiService {
     @Override
     public List<Lesson> getLecturerLessons(Integer lecturerId, LocalDate fromDate, LocalDate toDate) {
         List<Lesson> result = new LinkedList<>();
-        while (ChronoUnit.DAYS.between(fromDate, toDate) > MAX_QUERY_DAYS) {
-            result.addAll(getLecturerLessonsForShortPeriod(lecturerId, fromDate, fromDate.plusDays(MAX_QUERY_DAYS)));
-            fromDate = fromDate.plusDays(MAX_QUERY_DAYS + 1);
+        while (ChronoUnit.DAYS.between(fromDate, toDate) > this.maxQueryDays) {
+            result.addAll(getLecturerLessonsForShortPeriod(lecturerId, fromDate, fromDate.plusDays(this.maxQueryDays)));
+            fromDate = fromDate.plusDays(this.maxQueryDays + 1);
         }
         result.addAll(getLecturerLessonsForShortPeriod(lecturerId, fromDate, toDate));
         return result;
@@ -142,7 +143,7 @@ public class RuzApiServiceImpl implements RuzApiService {
 
     private String readRuz(Endpoint endpoint, Map<Param, ?> params) {
         try {
-            java.net.URL url = new java.net.URL(URL.URL.concat(endpoint.toString()).concat(paramsToString(params)));
+            java.net.URL url = new java.net.URL(this.url.concat(endpoint.toString()).concat(paramsToString(params)));
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
 
