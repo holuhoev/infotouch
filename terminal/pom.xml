@@ -49,6 +49,7 @@
     </dependencies>
 
     <build>
+        <finalName>infotouch-terminal</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
