@@ -23,11 +23,11 @@ public class Lecturer extends RuzObject {
     private Integer chairId;
 
     @JsonField
-    @Column(name = "fio", columnDefinition = "nvarchar(255)")
+    @Column(name = "fio")
     private String fio;
 
     @JsonField
-    @Column(name = "short_fio", columnDefinition = "nvarchar(255)")
+    @Column(name = "short_fio")
     private String shortFIO;
 
     public Integer getId() {

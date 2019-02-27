@@ -29,10 +29,14 @@ public class LecturerService {
             throw new IllegalArgumentException("searchString must not be empty");
         }
 
-        return Lists.newArrayList(repository.findAll(qLecturer.fio.containsIgnoreCase(searchString)));
+        return Lists.newArrayList(repository.findAll(qLecturer.fio.containsIgnoreCase(searchString.trim())));
     }
 
     public List<Lecturer> saveAll(Iterable<Lecturer> lecturers) {
         return repository.saveAll(lecturers);
+    }
+
+    public boolean isLecturerExists(int lecturerId) {
+        return repository.existsById(lecturerId);
     }
 }

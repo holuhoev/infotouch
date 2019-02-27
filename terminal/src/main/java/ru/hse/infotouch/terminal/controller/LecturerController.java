@@ -20,10 +20,10 @@ public class LecturerController {
 
 
     @GetMapping
-    public ResponseEntity getLecturersByFilter(String searchString) {
-        isValidSearchString(searchString);
+    public ResponseEntity getLecturersByFilter(String fio) {
+        isValidSearchString(fio);
 
-        return ResponseEntity.ok(lecturerService.findAllBy(searchString));
+        return ResponseEntity.ok(lecturerService.findAllBy(fio));
     }
 
 
