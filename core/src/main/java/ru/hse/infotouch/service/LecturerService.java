@@ -22,7 +22,7 @@ public class LecturerService {
     }
 
 
-    public List<Lecturer> searchByString(String searchString) {
+    public List<Lecturer> findAllBy(String searchString) {
         Objects.requireNonNull(searchString);
 
         if (searchString.length() == 0) {

@@ -23,7 +23,7 @@ public class LecturerController {
     public ResponseEntity getLecturersByFilter(String searchString) {
         isValidSearchString(searchString);
 
-        return ResponseEntity.ok(lecturerService.searchByString(searchString));
+        return ResponseEntity.ok(lecturerService.findAllBy(searchString));
     }
 
 
