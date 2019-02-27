@@ -1,42 +1,37 @@
-# dependencies
-/terminal/infotouch-terminal-front/node_modules
-/terminal/infotouch-terminal-front/node
-/terminal/infotouch-terminal-front/.pnp
-.pnp.js
+# Operating System Files
 
-# testing
-/terminal/infotouch-terminal-front/coverage
+*.DS_Store
+Thumbs.db
+*~
+.#*
+#*
+*#
 
-# production
-/terminal/infotouch-terminal-front/build
+# Build Files #
 
-# misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+bin
+target
+build/
+.gradle
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# Eclipse Project Files #
 
-/terminal/target
-/core/target
-/feed/target
-!.mvn/wrapper/maven-wrapper.jar
-
-### STS ###
-.apt_generated
 .classpath
-.factorypath
 .project
 .settings
-.springBeans
-.sts4-cache
 
-### IntelliJ IDEA ###
-.idea
-*.iws
+# IntelliJ IDEA Files #
+
 *.iml
 *.ipr
+*.iws
+*.idea
+
+# Spring Bootstrap artifacts
+
+dependency-reduced-pom.xml
+
+mem*.db
+
+README.html
+

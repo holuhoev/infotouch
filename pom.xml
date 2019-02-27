@@ -5,15 +5,13 @@
 
     <groupId>ru.hse</groupId>
     <artifactId>infotouch</artifactId>
-    <version>1.0.0</version>
+    <version>0.1.0</version>
     <packaging>pom</packaging>
-
-
 
     <modules>
         <module>core</module>
-        <module>feed</module>
         <module>terminal</module>
+        <module>feed</module>
     </modules>
 
 </project>

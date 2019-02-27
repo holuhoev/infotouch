@@ -3,15 +3,12 @@ package ru.hse.infotouch.terminal.controller;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.hse.infotouch.service.LecturerService;
 
 
 @RestController
-@RequestMapping(value = "/lecturer")
+@RequestMapping(value = "/api/lecturer")
 public class LecturerController {
 
     private final LecturerService lecturerService;
@@ -22,8 +19,8 @@ public class LecturerController {
     }
 
 
-    @RequestMapping(value = "/listByFilter", method = RequestMethod.GET)
-    public ResponseEntity getLecturersByFilter(@RequestParam(value = "searchString") String searchString) {
+    @GetMapping
+    public ResponseEntity getLecturersByFilter(String searchString) {
         isValidSearchString(searchString);
 
         return ResponseEntity.ok(lecturerService.searchByString(searchString));
