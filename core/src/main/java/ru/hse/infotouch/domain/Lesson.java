@@ -1,9 +1,12 @@
 package ru.hse.infotouch.domain;
 
 
+import ru.hse.infotouch.domain.enums.KindOfWork;
 import ru.hse.infotouch.ruz.converter.RuzConvert;
 import ru.hse.infotouch.ruz.converter.KindOfWorkConverter;
 import ru.hse.infotouch.ruz.util.JsonField;
+
+import java.util.Objects;
 
 /**
  * @author Evgeny Kholukhoev
@@ -82,5 +85,23 @@ public class Lesson extends RuzObject {
 
     public void setKindOfWork(KindOfWork kindOfWork) {
         this.kindOfWork = kindOfWork;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Lesson lesson = (Lesson) o;
+        return Objects.equals(date, lesson.date) &&
+                Objects.equals(beginLesson, lesson.beginLesson) &&
+                Objects.equals(endLesson, lesson.endLesson) &&
+                Objects.equals(discipline, lesson.discipline) &&
+                kindOfWork == lesson.kindOfWork &&
+                Objects.equals(hours, lesson.hours);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(date, beginLesson, endLesson, discipline, kindOfWork, hours);
     }
 }

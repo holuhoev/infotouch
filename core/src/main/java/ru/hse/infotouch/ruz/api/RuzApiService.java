@@ -35,4 +35,6 @@ public interface RuzApiService {
     List<Faculty> getAllFaculties();
 
     List<Building> getAllBuildings();
+
+    List<Auditorium> getAllAuditoriums();
 }

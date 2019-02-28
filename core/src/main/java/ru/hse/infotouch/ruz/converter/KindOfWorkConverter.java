@@ -3,7 +3,7 @@ package ru.hse.infotouch.ruz.converter;
 import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.hse.infotouch.domain.KindOfWork;
+import ru.hse.infotouch.domain.enums.KindOfWork;
 
 public class KindOfWorkConverter implements AttributeConverter<KindOfWork, String> {
     private final Logger logger = LoggerFactory.getLogger(KindOfWorkConverter.class);

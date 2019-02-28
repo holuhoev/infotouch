@@ -4,6 +4,7 @@ package ru.hse.infotouch.domain;
 import ru.hse.infotouch.ruz.util.JsonField;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 /**
  * Преподаватель.
@@ -62,5 +63,21 @@ public class Lecturer extends RuzObject {
 
     public void setShortFIO(String shortFio) {
         this.shortFIO = shortFio;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Lecturer lecturer = (Lecturer) o;
+        return Objects.equals(Id, lecturer.Id) &&
+                Objects.equals(chairId, lecturer.chairId) &&
+                Objects.equals(fio, lecturer.fio) &&
+                Objects.equals(shortFIO, lecturer.shortFIO);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(Id, chairId, fio, shortFIO);
     }
 }

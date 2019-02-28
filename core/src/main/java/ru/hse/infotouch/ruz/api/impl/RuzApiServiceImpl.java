@@ -18,10 +18,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Evgeny Kholukhoev
@@ -40,6 +37,11 @@ public class RuzApiServiceImpl implements RuzApiService {
     @Override
     public List<Building> getAllBuildings() {
         return jsonParser.mapStringToList(readRuz(Endpoint.BUILDINGS, null), Building.class);
+    }
+
+    @Override
+    public List<Auditorium> getAllAuditoriums() {
+        return jsonParser.mapStringToList(readRuz(Endpoint.AUDITORIUMS, Collections.emptyMap()), Auditorium.class);
     }
 
     @Autowired

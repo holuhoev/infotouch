@@ -1,11 +1,14 @@
 package ru.hse.infotouch.domain;
 
+import ru.hse.infotouch.domain.enums.Course;
+import ru.hse.infotouch.domain.enums.EducationType;
 import ru.hse.infotouch.ruz.util.JsonField;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Objects;
 
 /**
  * @author Evgeny Kholukhoev
@@ -94,5 +97,24 @@ public class Student {
 
     public void setEducationType(EducationType educationType) {
         this.educationType = educationType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Student student = (Student) o;
+        return Objects.equals(Id, student.Id) &&
+                Objects.equals(fio, student.fio) &&
+                Objects.equals(facultyID, student.facultyID) &&
+                Objects.equals(groupID, student.groupID) &&
+                Objects.equals(instituteID, student.instituteID) &&
+                course == student.course &&
+                educationType == student.educationType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(Id, fio, facultyID, groupID, instituteID, course, educationType);
     }
 }

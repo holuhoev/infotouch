@@ -1,12 +1,15 @@
 package ru.hse.infotouch.domain;
 
 
+import ru.hse.infotouch.domain.enums.Course;
+import ru.hse.infotouch.domain.enums.EducationType;
 import ru.hse.infotouch.ruz.converter.CourseConverter;
 import ru.hse.infotouch.ruz.converter.EducationTypeConverter;
 import ru.hse.infotouch.ruz.converter.RuzConvert;
 import ru.hse.infotouch.ruz.util.JsonField;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 /**
  * Группа студентов.
@@ -92,6 +95,24 @@ public class Group extends RuzObject {
 
     public void setEducationType(EducationType educationType) {
         this.educationType = educationType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Group group = (Group) o;
+        return Objects.equals(Id, group.Id) &&
+                course == group.course &&
+                Objects.equals(instituteId, group.instituteId) &&
+                Objects.equals(facultyId, group.facultyId) &&
+                Objects.equals(number, group.number) &&
+                educationType == group.educationType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(Id, course, instituteId, facultyId, number, educationType);
     }
 }
 

@@ -1,7 +1,7 @@
 package ru.hse.infotouch.ruz.converter;
 
 
-import ru.hse.infotouch.domain.EducationType;
+import ru.hse.infotouch.domain.enums.EducationType;
 
 import static java.util.Objects.requireNonNull;
 

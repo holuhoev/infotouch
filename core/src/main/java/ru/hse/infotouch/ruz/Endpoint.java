@@ -7,7 +7,8 @@ public enum Endpoint {
     FACULTIES("faculties"),
     STAFF_OF_GROUP("StaffOfGroup"),
     CHAIRS("chairs"),
-    BUILDINGS("buildings");
+    BUILDINGS("buildings"),
+    AUDITORIUMS("auditoriums");
 
     private final String value;
 

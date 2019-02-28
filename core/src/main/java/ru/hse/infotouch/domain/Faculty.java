@@ -4,6 +4,7 @@ package ru.hse.infotouch.domain;
 import ru.hse.infotouch.ruz.util.JsonField;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 /**
  * Образовательная программа.
@@ -19,16 +20,9 @@ public class Faculty {
     @Column(name = "ID")
     private Integer Id;
 
-    @Column(name = "institute_id")
-    private Integer instituteId;
-
     @JsonField
     @Column(name = "faculty_name")
     private String name;
-
-    @Transient
-    @JsonField
-    private String institute;
 
     public Faculty() {
     }
@@ -41,13 +35,6 @@ public class Faculty {
         this.Id = id;
     }
 
-    public Integer getInstituteId() {
-        return instituteId;
-    }
-
-    public void setInstituteId(Integer instituteId) {
-        this.instituteId = instituteId;
-    }
 
     public String getName() {
         return name;
@@ -57,11 +44,17 @@ public class Faculty {
         this.name = name;
     }
 
-    public String getInstitute() {
-        return institute;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Faculty faculty = (Faculty) o;
+        return Objects.equals(Id, faculty.Id) &&
+                Objects.equals(name, faculty.name);
     }
 
-    public void setInstitute(String institute) {
-        this.institute = institute;
+    @Override
+    public int hashCode() {
+        return Objects.hash(Id, name);
     }
 }

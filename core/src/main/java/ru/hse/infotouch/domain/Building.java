@@ -1,16 +1,19 @@
 package ru.hse.infotouch.domain;
 
 
+import ru.hse.infotouch.domain.enums.CityType;
 import ru.hse.infotouch.ruz.util.JsonField;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Objects;
 
 @Entity
 @Table(name = "BUILDING")
-public class Building {
-    @javax.persistence.Id
+public class Building extends RuzObject {
+    @Id
     @JsonField(name = "buildingOid")
     @Column(name = "ID")
     private Integer Id;
@@ -59,5 +62,21 @@ public class Building {
 
     public void setCity(CityType city) {
         this.city = city;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Building building = (Building) o;
+        return Objects.equals(Id, building.Id) &&
+                Objects.equals(address, building.address) &&
+                Objects.equals(name, building.name) &&
+                city == building.city;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(Id, address, name, city);
     }
 }

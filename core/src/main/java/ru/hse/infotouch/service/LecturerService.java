@@ -39,4 +39,8 @@ public class LecturerService {
     public boolean isLecturerExists(int lecturerId) {
         return repository.existsById(lecturerId);
     }
+
+    public void deleteAll() {
+        repository.deleteAll();
+    }
 }

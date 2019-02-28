@@ -7,6 +7,8 @@ import ru.hse.infotouch.ruz.util.JsonField;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Id;
+import java.util.Objects;
 
 /**
  * Департамент
@@ -16,7 +18,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "CHAIR")
 public class Chair extends RuzObject {
-    @javax.persistence.Id
+    @Id
     @JsonField(name = "chairOid")
     @Column(name = "ID")
     private Integer Id;
@@ -68,5 +70,19 @@ public class Chair extends RuzObject {
         this.code = code;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Chair chair = (Chair) o;
+        return Objects.equals(Id, chair.Id) &&
+                Objects.equals(facultyId, chair.facultyId) &&
+                Objects.equals(name, chair.name) &&
+                Objects.equals(code, chair.code);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(Id, facultyId, name, code);
+    }
 }
