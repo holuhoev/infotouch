@@ -26,7 +26,6 @@ import java.util.*;
 @Service
 public class RuzApiServiceImpl implements RuzApiService {
     private final JsonParser jsonParser;
-    private final LessonParser lessonParser;
 
     @Value("${ruz.api.url}")
     private String url;
@@ -45,8 +44,7 @@ public class RuzApiServiceImpl implements RuzApiService {
     }
 
     @Autowired
-    public RuzApiServiceImpl(LessonParser lessonParser) {
-        this.lessonParser = lessonParser;
+    public RuzApiServiceImpl() {
         this.jsonParser = JsonParser.getInstance();
     }
 
@@ -126,7 +124,7 @@ public class RuzApiServiceImpl implements RuzApiService {
     }
 
     private List<Lesson> getLessons(Map<Param, ?> params) {
-        return lessonParser.parse(jsonParser.mapStringToList(readRuz(Endpoint.LESSONS, params), Lesson.class));
+        return jsonParser.mapStringToList(readRuz(Endpoint.LESSONS, params), Lesson.class);
     }
 
     private String paramsToString(Map<Param, ?> params) {

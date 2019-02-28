@@ -2,10 +2,13 @@ package ru.hse.infotouch.domain;
 
 
 import ru.hse.infotouch.domain.enums.KindOfWork;
+import ru.hse.infotouch.ruz.converter.LocalTimeConverter;
 import ru.hse.infotouch.ruz.converter.RuzConvert;
 import ru.hse.infotouch.ruz.converter.KindOfWorkConverter;
 import ru.hse.infotouch.ruz.util.JsonField;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Objects;
 
 /**
@@ -16,13 +19,18 @@ public class Lesson extends RuzObject {
     private String date;
 
     @JsonField
-    private String beginLesson;
+    @RuzConvert(converter = LocalTimeConverter.class)
+    private LocalTime beginLesson;
 
     @JsonField
-    private String endLesson;
+    @RuzConvert(converter = LocalTimeConverter.class)
+    private LocalTime endLesson;
 
     @JsonField
     private String discipline;
+
+    @JsonField(name = "auditoriumOid")
+    private Integer auditoriumId;
 
     @JsonField
     @RuzConvert(converter = KindOfWorkConverter.class)
@@ -30,27 +38,6 @@ public class Lesson extends RuzObject {
 
     private Integer hours;
 
-    public Lesson(String date, String beginLesson, String endLesson) {
-        this.date = date;
-        this.beginLesson = beginLesson;
-        this.endLesson = endLesson;
-    }
-
-    public String getBeginLesson() {
-        return beginLesson;
-    }
-
-    public void setBeginLesson(String beginLesson) {
-        this.beginLesson = beginLesson;
-    }
-
-    public String getEndLesson() {
-        return endLesson;
-    }
-
-    public void setEndLesson(String endLesson) {
-        this.endLesson = endLesson;
-    }
 
     public Lesson() {
     }
@@ -97,11 +84,20 @@ public class Lesson extends RuzObject {
                 Objects.equals(endLesson, lesson.endLesson) &&
                 Objects.equals(discipline, lesson.discipline) &&
                 kindOfWork == lesson.kindOfWork &&
-                Objects.equals(hours, lesson.hours);
+                Objects.equals(hours, lesson.hours) &&
+                Objects.equals(auditoriumId, lesson.auditoriumId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(date, beginLesson, endLesson, discipline, kindOfWork, hours);
+        return Objects.hash(date, beginLesson, endLesson, discipline, kindOfWork, hours, auditoriumId);
+    }
+
+    public Integer getAuditoriumId() {
+        return auditoriumId;
+    }
+
+    public void setAuditoriumId(Integer auditoriumId) {
+        this.auditoriumId = auditoriumId;
     }
 }
