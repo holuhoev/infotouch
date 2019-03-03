@@ -36,10 +36,24 @@ public class Lesson extends RuzObject {
     @RuzConvert(converter = KindOfWorkConverter.class)
     private KindOfWork kindOfWork;
 
-    private Integer hours;
-
-
     public Lesson() {
+    }
+
+
+    public void setBeginLesson(LocalTime beginLesson) {
+        this.beginLesson = beginLesson;
+    }
+
+    public void setEndLesson(LocalTime endLesson) {
+        this.endLesson = endLesson;
+    }
+
+    public LocalTime getBeginLesson() {
+        return beginLesson;
+    }
+
+    public LocalTime getEndLesson() {
+        return endLesson;
     }
 
     public String getDate() {
@@ -48,14 +62,6 @@ public class Lesson extends RuzObject {
 
     public void setDate(String date) {
         this.date = date;
-    }
-
-    public Integer getHours() {
-        return hours;
-    }
-
-    public void setHours(Integer hours) {
-        this.hours = hours;
     }
 
     public String getDiscipline() {
@@ -74,6 +80,14 @@ public class Lesson extends RuzObject {
         this.kindOfWork = kindOfWork;
     }
 
+    public Integer getAuditoriumId() {
+        return auditoriumId;
+    }
+
+    public void setAuditoriumId(Integer auditoriumId) {
+        this.auditoriumId = auditoriumId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -84,20 +98,13 @@ public class Lesson extends RuzObject {
                 Objects.equals(endLesson, lesson.endLesson) &&
                 Objects.equals(discipline, lesson.discipline) &&
                 kindOfWork == lesson.kindOfWork &&
-                Objects.equals(hours, lesson.hours) &&
                 Objects.equals(auditoriumId, lesson.auditoriumId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(date, beginLesson, endLesson, discipline, kindOfWork, hours, auditoriumId);
+        return Objects.hash(date, beginLesson, endLesson, discipline, kindOfWork, auditoriumId);
     }
 
-    public Integer getAuditoriumId() {
-        return auditoriumId;
-    }
 
-    public void setAuditoriumId(Integer auditoriumId) {
-        this.auditoriumId = auditoriumId;
-    }
 }

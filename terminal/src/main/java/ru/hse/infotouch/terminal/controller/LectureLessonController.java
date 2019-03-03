@@ -1,8 +1,6 @@
 package ru.hse.infotouch.terminal.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hse.infotouch.domain.Lesson;
@@ -24,15 +22,15 @@ public class LectureLessonController {
 
     @GetMapping
     public ResponseEntity<List<Lesson>> getLecturerLessons(int lecturerId,
-                                                           @RequestParam(name = "from") @DateTimeFormat(iso = ISO.DATE) LocalDate from,
-                                                           @RequestParam(name = "to") @DateTimeFormat(iso = ISO.DATE) LocalDate to) {
+                                                           @RequestParam(name = "from") LocalDate from,
+                                                           @RequestParam(name = "to") LocalDate to) {
 
         return ResponseEntity.ok(lessonService.getLecturerLessons(lecturerId, from, to));
     }
 
     @GetMapping(value = "/date")
     public ResponseEntity<List<Lesson>> getLecturerLessonsAtDate(int lecturerId,
-                                                                 @RequestParam(name = "date") @DateTimeFormat(iso = ISO.DATE) LocalDate date) {
+                                                                 @RequestParam(name = "date") LocalDate date) {
 
         return ResponseEntity.ok(lessonService.getLecturerLessonsAtDate(lecturerId, date));
     }
