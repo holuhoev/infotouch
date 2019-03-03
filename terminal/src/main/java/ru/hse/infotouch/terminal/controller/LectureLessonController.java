@@ -41,4 +41,9 @@ public class LectureLessonController {
         return ResponseEntity.ok(lessonService.getTodayLecturerLesson(lecturerId));
     }
 
+    @GetMapping(value = "/now")
+    public ResponseEntity<List<Lesson>> getLecturerLessonNow(int lecturerId) {
+
+        return ResponseEntity.ok(lessonService.getNowLecturerLessons(lecturerId));
+    }
 }

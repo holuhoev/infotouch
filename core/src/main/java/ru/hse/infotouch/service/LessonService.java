@@ -6,8 +6,10 @@ import ru.hse.infotouch.domain.Lesson;
 import ru.hse.infotouch.ruz.api.RuzApiService;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class LessonService {
@@ -44,6 +46,15 @@ public class LessonService {
         return this.getLecturerLessons(lecturerId,
                 date,
                 date);
+    }
+
+    public List<Lesson> getNowLecturerLessons(int lecturerId) {
+        List<Lesson> todayLessons = getTodayLecturerLesson(lecturerId);
+        LocalTime now = LocalTime.now();
+
+        return todayLessons.stream()
+                .filter(lesson -> now.isAfter(lesson.getBeginLesson()) && now.isBefore(lesson.getEndLesson()))
+                .collect(Collectors.toList());
     }
 
 
