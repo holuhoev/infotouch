@@ -77,6 +77,10 @@ public class RuzDomainLoader implements CommandLineRunner {
                     return person;
                 }).collect(Collectors.toList());
 
+        // 1. парсить город у chair
+        // 2. find exact lecturer (if fio contains name and chair contains one of faculties)
+        // 3. после того как нашли точно такого же лектора, то проставляем ему href
+
         System.out.println(lecturersToRef);
         System.out.println(persons);
     }
