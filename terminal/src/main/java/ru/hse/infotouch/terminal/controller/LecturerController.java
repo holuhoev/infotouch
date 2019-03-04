@@ -4,7 +4,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hse.infotouch.domain.Lecturer;
 import ru.hse.infotouch.service.LecturerService;
+
+import java.util.List;
 
 
 @RestController
@@ -20,7 +23,7 @@ public class LecturerController {
 
 
     @GetMapping
-    public ResponseEntity getLecturersByFilter(String fio) {
+    public ResponseEntity<List<Lecturer>> findAllBy(String fio) {
         isValidSearchString(fio);
 
         return ResponseEntity.ok(lecturerService.findAllBy(fio));

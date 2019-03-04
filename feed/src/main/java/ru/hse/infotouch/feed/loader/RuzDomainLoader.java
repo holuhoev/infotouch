@@ -1,5 +1,8 @@
 package ru.hse.infotouch.feed.loader;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +14,9 @@ import ru.hse.infotouch.repo.*;
 import ru.hse.infotouch.ruz.api.RuzApiService;
 import ru.hse.infotouch.service.LecturerService;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
@@ -43,12 +48,37 @@ public class RuzDomainLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        loadFaculties();
-        loadChairs();
-        loadLecturers();
+//        loadFaculties();
+//        loadChairs();
+//        loadLecturers();
+//
+//        loadBuildings();
+//        loadAuditoriums();
 
-        loadBuildings();
-        loadAuditoriums();
+        parseHsePersons();
+    }
+
+    private void parseHsePersons() throws IOException {
+        Document doc = Jsoup.connect("https://www.hse.ru/org/persons?ltr=%D0%90;udept=22726").get();
+        logger.debug(doc.title());
+
+        Map<String, String> lecturersToRef = doc.select(".content__inner.content__inner_foot1").stream()
+                .collect(Collectors.toMap(e -> e.select(".link.link_dark.large.b").text() + e.select(".with-indent7").text(), e -> e.select(".link.link_dark.large.b").attr("href")));
+
+
+        List<Person> persons = doc.select(".content__inner.content__inner_foot1").stream()
+                .map(e -> {
+                    Person person = new Person();
+
+                    person.setName(e.select(".link.link_dark.large.b").text());
+                    person.setHref(e.select(".link.link_dark.large.b").attr("href"));
+                    person.setFaculties(e.select(".with-indent7").select(".link").stream().map(Element::text).collect(Collectors.toList()));
+
+                    return person;
+                }).collect(Collectors.toList());
+
+        System.out.println(lecturersToRef);
+        System.out.println(persons);
     }
 
     private void loadFaculties() {
