@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static ru.hse.infotouch.domain.Chair.extractChairCity;
+import static ru.hse.infotouch.domain.Chair.extractChairName;
+
 @Component
 public class RuzDomainLoader implements CommandLineRunner {
     private final RuzApiService ruzApi;
@@ -49,8 +52,8 @@ public class RuzDomainLoader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 //        loadFaculties();
-//        loadChairs();
-//        loadLecturers();
+        loadChairs();
+        loadLecturers();
 //
 //        loadBuildings();
 //        loadAuditoriums();
@@ -77,8 +80,8 @@ public class RuzDomainLoader implements CommandLineRunner {
                     return person;
                 }).collect(Collectors.toList());
 
-        // 1. парсить город у chair
-        // 2. find exact lecturer (if fio contains name and chair contains one of faculties)
+        // DONE: 1. парсить город у chair
+        // 2. find exact lecturer (if fio contains name and chair contains one ofBuildingAddress faculties)
         // 3. после того как нашли точно такого же лектора, то проставляем ему href
 
         System.out.println(lecturersToRef);
@@ -107,7 +110,14 @@ public class RuzDomainLoader implements CommandLineRunner {
 
         List<Chair> chairs = ruzApi.getAllChairs();
 
-        chairRepository.saveAll(chairs);
+        List<Chair> chairsToSave = chairs.stream()
+                .peek(chair -> {
+                    chair.setCity(extractChairCity(chair));
+                    chair.setName(extractChairName(chair));
+                })
+                .collect(Collectors.toList());
+
+        chairRepository.saveAll(chairsToSave);
         logger.info("Chairs loader ends");
     }
 
@@ -137,7 +147,7 @@ public class RuzDomainLoader implements CommandLineRunner {
         logger.info("Get all buildings from RUZ took: {} ms", t1_end - t1);
 
         List<Building> buildingsToSave = allBuildings.stream()
-                .peek(building -> building.setCity(CityType.of(building.getAddress())))
+                .peek(building -> building.setCity(CityType.ofBuildingAddress(building.getAddress())))
                 .collect(Collectors.toList());
 
         buildingRepository.saveAll(buildingsToSave);

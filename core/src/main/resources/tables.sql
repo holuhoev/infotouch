@@ -21,8 +21,8 @@ CREATE TABLE auditorium
 DROP TABLE IF EXISTS faculty CASCADE;
 CREATE TABLE faculty
 (
-  ID           integer                           NOT NULL PRIMARY KEY,
-  faculty_name text                              NULL,
+  ID           integer NOT NULL PRIMARY KEY,
+  faculty_name text    NULL,
   CONSTRAINT FACULTY_ID_uindex UNIQUE (ID)
 );
 
@@ -33,6 +33,7 @@ CREATE TABLE chair
   faculty_id integer references faculty (ID) NULL,
   code       text                            NULL,
   chair_name text                            NULL,
+  city       integer                         NULL,
   CONSTRAINT CHAIR_ID_uindex UNIQUE (ID)
 );
 

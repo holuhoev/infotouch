@@ -14,7 +14,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface JsonField {
     /**
-     * (Optional) The name of the ruz-api-field. Defaults to
+     * (Optional) The name ofBuildingAddress the ruz-api-field. Defaults to
      * the property or field name.
      */
     String name() default "";

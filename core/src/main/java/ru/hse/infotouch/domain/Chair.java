@@ -1,7 +1,8 @@
 package ru.hse.infotouch.domain;
 
 
-
+import org.apache.commons.lang3.StringUtils;
+import ru.hse.infotouch.domain.enums.CityType;
 import ru.hse.infotouch.ruz.util.JsonField;
 
 import javax.persistence.Column;
@@ -34,6 +35,9 @@ public class Chair extends RuzObject {
     @JsonField
     @Column(name = "code")
     private String code;
+
+    @Column(name = "chair_city")
+    private CityType city;
 
     public Chair() {
     }
@@ -70,6 +74,14 @@ public class Chair extends RuzObject {
         this.code = code;
     }
 
+    public CityType getCity() {
+        return city;
+    }
+
+    public void setCity(CityType city) {
+        this.city = city;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -78,11 +90,25 @@ public class Chair extends RuzObject {
         return Objects.equals(Id, chair.Id) &&
                 Objects.equals(facultyId, chair.facultyId) &&
                 Objects.equals(name, chair.name) &&
+                Objects.equals(city, chair.city) &&
                 Objects.equals(code, chair.code);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(Id, facultyId, name, code);
+        return Objects.hash(Id, facultyId, name, code, city);
+    }
+
+    public static String extractChairName(final Chair chair) {
+        if (StringUtils.isEmpty(chair.getName()))
+            return chair.getName();
+
+        String chairCityShort = chair.getCity().getShortString();
+
+        return chair.getName().substring(chairCityShort.length());
+    }
+
+    public static CityType extractChairCity(final Chair chair) {
+        return CityType.ofChairName(chair.getName());
     }
 }

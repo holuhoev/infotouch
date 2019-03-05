@@ -7,7 +7,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * The RuzConvert annotation is used to specify the conversion of a Basic field or
+ * The RuzConvert annotation is used to specify the conversion ofBuildingAddress a Basic field or
  * property. It is not necessary to use the Basic annotation or corresponding XML
  * element to specify the basic type.
  */
