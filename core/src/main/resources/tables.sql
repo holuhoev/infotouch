@@ -44,5 +44,6 @@ CREATE TABLE lecturer
   chair_id  integer references chair (ID) NULL,
   fio       text                          NULL,
   short_fio text                          NULL,
+  link      text                          NULL,
   CONSTRAINT LECTURER_ID_uindex UNIQUE (ID)
 );

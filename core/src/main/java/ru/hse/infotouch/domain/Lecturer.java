@@ -31,6 +31,9 @@ public class Lecturer extends RuzObject {
     @Column(name = "short_fio")
     private String shortFIO;
 
+    @Column(name = "link")
+    private String link;
+
     public Integer getId() {
         return Id;
     }
@@ -39,7 +42,8 @@ public class Lecturer extends RuzObject {
         this.Id = id;
     }
 
-    public Lecturer() { }
+    public Lecturer() {
+    }
 
     public Integer getChairId() {
         return chairId;
@@ -79,5 +83,13 @@ public class Lecturer extends RuzObject {
     @Override
     public int hashCode() {
         return Objects.hash(Id, chairId, fio, shortFIO);
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 }

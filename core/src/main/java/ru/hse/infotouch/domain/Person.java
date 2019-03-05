@@ -5,7 +5,7 @@ import java.util.List;
 public class Person {
     private String fio;
     private int lecturerId;
-    private String href;
+    private String link;
     private List<String> faculties;
 
     public String getFio() {
@@ -16,12 +16,12 @@ public class Person {
         this.fio = fio;
     }
 
-    public String getHref() {
-        return href;
+    public String getLink() {
+        return link;
     }
 
-    public void setHref(String href) {
-        this.href = href;
+    public void setLink(String link) {
+        this.link = link;
     }
 
     public List<String> getFaculties() {
