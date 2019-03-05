@@ -3,16 +3,17 @@ package ru.hse.infotouch.domain;
 import java.util.List;
 
 public class Person {
-    private String name;
+    private String fio;
+    private int lecturerId;
     private String href;
     private List<String> faculties;
 
-    public String getName() {
-        return name;
+    public String getFio() {
+        return fio;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFio(String fio) {
+        this.fio = fio;
     }
 
     public String getHref() {
@@ -29,5 +30,13 @@ public class Person {
 
     public void setFaculties(List<String> faculties) {
         this.faculties = faculties;
+    }
+
+    public int getLecturerId() {
+        return lecturerId;
+    }
+
+    public void setLecturerId(int lecturerId) {
+        this.lecturerId = lecturerId;
     }
 }

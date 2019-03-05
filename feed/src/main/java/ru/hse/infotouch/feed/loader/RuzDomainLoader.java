@@ -52,8 +52,8 @@ public class RuzDomainLoader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 //        loadFaculties();
-        loadChairs();
-        loadLecturers();
+//        loadChairs();
+//        loadLecturers();
 //
 //        loadBuildings();
 //        loadAuditoriums();
@@ -65,15 +65,12 @@ public class RuzDomainLoader implements CommandLineRunner {
         Document doc = Jsoup.connect("https://www.hse.ru/org/persons?ltr=%D0%90;udept=22726").get();
         logger.debug(doc.title());
 
-        Map<String, String> lecturersToRef = doc.select(".content__inner.content__inner_foot1").stream()
-                .collect(Collectors.toMap(e -> e.select(".link.link_dark.large.b").text() + e.select(".with-indent7").text(), e -> e.select(".link.link_dark.large.b").attr("href")));
-
 
         List<Person> persons = doc.select(".content__inner.content__inner_foot1").stream()
                 .map(e -> {
                     Person person = new Person();
 
-                    person.setName(e.select(".link.link_dark.large.b").text());
+                    person.setFio(e.select(".link.link_dark.large.b").text());
                     person.setHref(e.select(".link.link_dark.large.b").attr("href"));
                     person.setFaculties(e.select(".with-indent7").select(".link").stream().map(Element::text).collect(Collectors.toList()));
 
@@ -84,7 +81,12 @@ public class RuzDomainLoader implements CommandLineRunner {
         // 2. find exact lecturer (if fio contains name and chair contains one ofBuildingAddress faculties)
         // 3. после того как нашли точно такого же лектора, то проставляем ему href
 
-        System.out.println(lecturersToRef);
+        List<Person> lecturers = persons.stream()
+                .map(person -> {
+
+                    return person;
+                }).collect(Collectors.toList());
+
         System.out.println(persons);
     }
 
@@ -131,6 +133,11 @@ public class RuzDomainLoader implements CommandLineRunner {
         long t1_end = System.currentTimeMillis();
         logger.info("Get all lecturers from RUZ took: {} ms", t1_end - t1);
 
+        List<Lecturer> lecturesToSave = allLecturers.stream()
+                .peek(lecturer -> {
+
+                })
+                .collect(Collectors.toList());
         lecturerService.saveAll(allLecturers);
         long end = System.currentTimeMillis();
         logger.info("Save all lecturers took: {} ms", end - t1_end);
