@@ -50,6 +50,7 @@ public class RuzDomainLoader implements CommandLineRunner {
         this.portalService = portalService;
     }
 
+
     @Override
     public void run(String... args) throws Exception {
 //        loadFaculties();
@@ -65,7 +66,7 @@ public class RuzDomainLoader implements CommandLineRunner {
 
     private void setLecturersLinks() throws IOException {
         logger.info("Start setting lecturers links");
-        List<Person> allHsePersons = portalService.getAllHsePersons();
+        List<Person> allHsePersons = portalService.getMoscowHsePersons();
 
         List<Lecturer> lecturersWithLink = allHsePersons.stream()
                 .map(lecturerService::findByPersonAndSetLink)

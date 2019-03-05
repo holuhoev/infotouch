@@ -81,6 +81,7 @@ public class LecturerService {
         return chairRepository.findById(lecturer.getChairId()).isPresent();
     }
 
+    // TODO: Можно оптимизировать посредством уменьшения запросов в БД. Вытащить сразу все chairs & lecturers и с ними работать.
     public Optional<Lecturer> findByPersonAndSetLink(Person person) {
         String fio = person.getFio();
         String link = person.getLink();
