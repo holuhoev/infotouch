@@ -14,6 +14,8 @@ import ru.hse.infotouch.service.LecturerService;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -68,10 +70,27 @@ public class RuzDomainLoader implements CommandLineRunner {
         logger.info("Start setting lecturers links");
         List<Person> allHsePersons = portalService.getAllHsePersons();
 
-        // 1. Чтобы найти сотрудника: Добавляем в Person: Lecturer
-        // 2. Передаем person в lecturerService чтобы найти и заполнить поле lecturer
-        // 3. Потом можно сгруппировать в два списка: преподы и сотрудники.
-        // 4. Добавить в Person: должноть->факультет Map<String,List<String>>
+        // Как хранить:
+        // Person: id, fio, url, email(array)
+        // Employee: person_id, chair_id, position,lecturer_id
+
+        // Как заполнить, если данные из hse.ru приоритетнее
+        // Использовать таблицу Lecturer только для наполнения Employee.
+
+        // апргрейд PersonService:
+        // 1. Добавить в Person: кампус(город), чтобы потом смаппить правильно
+        // 2. Добавить в Person: email
+        // 3. Добавить в Person: List<{position, faculty, chair}>
+
+
+        // Маппинг на преподов:
+        // 1. Преобразовать имя факультета и кафедры в один chair_id и использовать их при поиск препода.
+
+
+
+        Map<Boolean, List<Person>> personsIsLecturers = allHsePersons.stream()
+                .peek(person -> lecturerService.findByPersonAndSetLink(person).ifPresent(person::setLecturer))
+                .collect(Collectors.groupingBy(person -> Objects.nonNull(person.getLecturer())));
 
         List<Lecturer> lecturersWithLink = allHsePersons.stream()
                 .map(lecturerService::findByPersonAndSetLink)
