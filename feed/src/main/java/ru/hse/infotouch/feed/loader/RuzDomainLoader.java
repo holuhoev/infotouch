@@ -66,7 +66,7 @@ public class RuzDomainLoader implements CommandLineRunner {
 
     private void setLecturersLinks() throws IOException {
         logger.info("Start setting lecturers links");
-        List<Person> allHsePersons = portalService.getMoscowHsePersons();
+        List<Person> allHsePersons = portalService.getAllHsePersons();
 
         List<Lecturer> lecturersWithLink = allHsePersons.stream()
                 .map(lecturerService::findByPersonAndSetLink)

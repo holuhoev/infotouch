@@ -1,0 +1,16 @@
+server:
+  port: 8889
+  servlet:
+    context-path: "/infotouch-feed"
+
+hse:
+  site:
+    persons:
+      request:
+        endpoint: "/org/persons"
+        timeout: 60000
+        params:
+          letter: "ltr"
+          city: "udept"
+        cities: 22726,135288,135083,135213
+    url: "https://www.hse.ru"
