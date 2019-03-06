@@ -7,7 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import ru.hse.infotouch.domain.*;
 import ru.hse.infotouch.domain.enums.CityType;
-import ru.hse.infotouch.feed.site.HsePortalService;
+import ru.hse.infotouch.feed.site.HsePersonService;
 import ru.hse.infotouch.repo.*;
 import ru.hse.infotouch.ruz.api.RuzApiService;
 import ru.hse.infotouch.service.LecturerService;
@@ -29,7 +29,7 @@ public class RuzDomainLoader implements CommandLineRunner {
     private final AuditoriumRepository auditoriumRepository;
     private final FacultyRepository facultyRepository;
     private final ChairRepository chairRepository;
-    private final HsePortalService portalService;
+    private final HsePersonService portalService;
 
     private final Logger logger = LoggerFactory.getLogger(RuzDomainLoader.class);
 
@@ -40,7 +40,7 @@ public class RuzDomainLoader implements CommandLineRunner {
                            AuditoriumRepository auditoriumRepository,
                            FacultyRepository facultyRepository,
                            ChairRepository chairRepository,
-                           HsePortalService portalService) {
+                           HsePersonService portalService) {
         this.ruzApi = ruzApi;
         this.lecturerService = lecturerService;
         this.buildingRepository = buildingRepository;
@@ -67,6 +67,11 @@ public class RuzDomainLoader implements CommandLineRunner {
     private void setLecturersLinks() throws IOException {
         logger.info("Start setting lecturers links");
         List<Person> allHsePersons = portalService.getAllHsePersons();
+
+        // 1. Чтобы найти сотрудника: Добавляем в Person: Lecturer
+        // 2. Передаем person в lecturerService чтобы найти и заполнить поле lecturer
+        // 3. Потом можно сгруппировать в два списка: преподы и сотрудники.
+        // 4. Добавить в Person: должноть->факультет Map<String,List<String>>
 
         List<Lecturer> lecturersWithLink = allHsePersons.stream()
                 .map(lecturerService::findByPersonAndSetLink)

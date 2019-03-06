@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
-public class HsePortalService {
-    private final Logger logger = LoggerFactory.getLogger(HsePortalService.class);
+public class HsePersonService {
+    private final Logger logger = LoggerFactory.getLogger(HsePersonService.class);
 
     @Value("${hse.site.url}")
     private String hseUrl;
@@ -67,13 +67,13 @@ public class HsePortalService {
                 .collect(Collectors.toList());
 
         return allUrls.stream()
-                .map(this::getMoscowHsePersonsByFirstLetter)
+                .map(this::getPersonsByUrl)
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
     }
 
 
-    private List<Person> getMoscowHsePersonsByFirstLetter(String url) {
+    private List<Person> getPersonsByUrl(String url) {
         try {
             Document doc = Jsoup.connect(url)
                     .timeout(requestTimeOut)
@@ -101,7 +101,7 @@ public class HsePortalService {
                 logger.error("Error parsing Persons for url: {}. Try again...", url);
                 Thread.sleep(requestTimeOut * 2);
 
-                return getMoscowHsePersonsByFirstLetter(url);
+                return getPersonsByUrl(url);
             } catch (InterruptedException e1) {
                 logger.error("Interrupted:", e1);
 

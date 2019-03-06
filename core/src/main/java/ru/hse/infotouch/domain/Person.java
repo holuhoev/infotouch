@@ -4,7 +4,6 @@ import java.util.List;
 
 public class Person {
     private String fio;
-    private int lecturerId;
     private String link;
     private List<String> faculties;
 
@@ -30,13 +29,5 @@ public class Person {
 
     public void setFaculties(List<String> faculties) {
         this.faculties = faculties;
-    }
-
-    public int getLecturerId() {
-        return lecturerId;
-    }
-
-    public void setLecturerId(int lecturerId) {
-        this.lecturerId = lecturerId;
     }
 }
