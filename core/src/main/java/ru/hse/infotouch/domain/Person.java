@@ -23,7 +23,7 @@ public class Person {
     @Column(name = "emails", columnDefinition = "text[]")
     private String emails;
 
-    @Transient
+    @OneToMany(mappedBy = "personId")
     private List<Employee> employees;
 
     public String getFio() {

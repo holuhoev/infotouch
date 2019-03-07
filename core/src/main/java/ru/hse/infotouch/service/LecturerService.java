@@ -25,7 +25,8 @@ public class LecturerService {
     private final QChair qChair = QChair.chair;
     private final QLecturer qLecturer = QLecturer.lecturer;
 
-    private static String removeRedundantSpace(String searchString) {
+    // TODO: подумать куда перенести
+    public static String removeRedundantSpace(String searchString) {
         return Arrays.stream(searchString.split(" "))
                 .filter(StringUtils::isNotEmpty)
                 .collect(Collectors.joining(" "));
