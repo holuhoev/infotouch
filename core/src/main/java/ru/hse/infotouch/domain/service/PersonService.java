@@ -10,6 +10,7 @@ import ru.hse.infotouch.domain.repo.PersonRepository;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 import static ru.hse.infotouch.util.Strings.removeRedundantSpace;
 
@@ -40,5 +41,9 @@ public class PersonService {
         Pageable pageRequest = PageRequest.of(page, pageSize);
 
         return Lists.newArrayList(repository.findAll(qPerson.fio.containsIgnoreCase(validated), pageRequest));
+    }
+
+    public Person getById(UUID id){
+        return repository.findById(id).orElseThrow(() -> new IllegalArgumentException(String.format("Сотрудника с id \"%s\" не существует", id)));
     }
 }

@@ -22,8 +22,6 @@ public class ChairService {
         this.repository = repository;
     }
 
-    // TODO:
-
     public Optional<Chair> findExactChair(String chairName, String facultyName) {
 
         return StreamSupport.stream(
