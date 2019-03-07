@@ -22,9 +22,17 @@ public enum CityType {
     public static final String PERM_SHORT_STR = "П ";
     public static final String NIZHNIY_NOVGOROD_SHORT_STR = "НН ";
 
+    public static final int MOSCOW_FROM_HSE_SITE = 22726;
+    public static final int SAINT_PETERBURG_FROM_HSE_SITE = 135083;
+    public static final int PERM_FROM_HSE_SITE = 135213;
+    public static final int NIZHNIY_NOVGOROD_FROM_HSE_SITE = 135288;
 
     public String getShortString() {
         return cityToShortStr.get(this);
+    }
+
+    public Integer getSite() {
+        return cityToSite.get(this);
     }
 
     public static CityType ofBuildingAddress(String address) {
@@ -55,6 +63,10 @@ public enum CityType {
         return OTHER;
     }
 
+    public static CityType ofHseSite(int city) {
+        return siteToCity.getOrDefault(city, OTHER);
+    }
+
     private static Map<CityType, String> cityToShortStr = new HashMap<CityType, String>() {
         {
             put(MOSCOW, MOSCOW_SHORT_STR);
@@ -62,6 +74,24 @@ public enum CityType {
             put(PERM, PERM_SHORT_STR);
             put(NIZHNIY_NOVGOROD, NIZHNIY_NOVGOROD_SHORT_STR);
             put(OTHER, "");
+        }
+    };
+
+    private static Map<CityType, Integer> cityToSite = new HashMap<CityType, Integer>() {
+        {
+            put(MOSCOW, MOSCOW_FROM_HSE_SITE);
+            put(SAINT_PETERBURG, SAINT_PETERBURG_FROM_HSE_SITE);
+            put(PERM, PERM_FROM_HSE_SITE);
+            put(NIZHNIY_NOVGOROD, NIZHNIY_NOVGOROD_FROM_HSE_SITE);
+        }
+    };
+
+    public static Map<Integer, CityType> siteToCity = new HashMap<Integer, CityType>() {
+        {
+            put(MOSCOW_FROM_HSE_SITE, MOSCOW);
+            put(SAINT_PETERBURG_FROM_HSE_SITE, SAINT_PETERBURG);
+            put(PERM_FROM_HSE_SITE, PERM);
+            put(NIZHNIY_NOVGOROD_FROM_HSE_SITE, NIZHNIY_NOVGOROD);
         }
     };
 }

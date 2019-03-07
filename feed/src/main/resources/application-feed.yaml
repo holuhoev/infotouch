@@ -12,5 +12,4 @@ hse:
         params:
           letter: "ltr"
           city: "udept"
-        cities: 22726,135288,135083,135213
     url: "https://www.hse.ru"

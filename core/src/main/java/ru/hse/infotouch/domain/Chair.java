@@ -32,6 +32,9 @@ public class Chair extends RuzObject {
     @Column(name = "chair_name")
     private String name;
 
+    @Column(name = "faculty_name")
+    private String facultyName;
+
     @JsonField
     @Column(name = "code")
     private String code;
@@ -110,5 +113,13 @@ public class Chair extends RuzObject {
 
     public static CityType extractChairCity(final Chair chair) {
         return CityType.ofChairName(chair.getName());
+    }
+
+    public String getFacultyName() {
+        return facultyName;
+    }
+
+    public void setFacultyName(String facultyName) {
+        this.facultyName = facultyName;
     }
 }

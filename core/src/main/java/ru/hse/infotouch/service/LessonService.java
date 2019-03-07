@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
 public class LessonService {
 
     private final RuzApiService apiService;
-    private final LecturerService lecturerService;
+    private final EmployeeService lecturerService;
 
     @Autowired
-    public LessonService(RuzApiService apiService, LecturerService lecturerService) {
+    public LessonService(RuzApiService apiService, EmployeeService lecturerService) {
         this.apiService = apiService;
         this.lecturerService = lecturerService;
     }

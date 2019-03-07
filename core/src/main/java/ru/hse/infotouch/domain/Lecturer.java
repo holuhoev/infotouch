@@ -1,6 +1,7 @@
 package ru.hse.infotouch.domain;
 
 
+import ru.hse.infotouch.domain.enums.CityType;
 import ru.hse.infotouch.ruz.util.JsonField;
 
 import javax.persistence.*;
@@ -31,8 +32,41 @@ public class Lecturer extends RuzObject {
     @Column(name = "short_fio")
     private String shortFIO;
 
-    @Column(name = "link")
-    private String link;
+    @Column(name = "url")
+    private String url;
+
+    @Column(name = "chair_name")
+    private String chairName;
+
+    @Column(name = "faculty_name")
+    private String facultyName;
+
+    @Column(name = "lecturer_city")
+    private CityType chairCity;
+
+    public String getChairName() {
+        return chairName;
+    }
+
+    public void setChairName(String chairName) {
+        this.chairName = chairName;
+    }
+
+    public String getFacultyName() {
+        return facultyName;
+    }
+
+    public void setFacultyName(String facultyName) {
+        this.facultyName = facultyName;
+    }
+
+    public CityType getChairCity() {
+        return chairCity;
+    }
+
+    public void setChairCity(CityType chairCity) {
+        this.chairCity = chairCity;
+    }
 
     public Integer getId() {
         return Id;
@@ -85,11 +119,11 @@ public class Lecturer extends RuzObject {
         return Objects.hash(Id, chairId, fio, shortFIO);
     }
 
-    public String getLink() {
-        return link;
+    public String getUrl() {
+        return url;
     }
 
-    public void setLink(String link) {
-        this.link = link;
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

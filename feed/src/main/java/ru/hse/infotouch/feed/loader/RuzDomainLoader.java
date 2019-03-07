@@ -6,19 +6,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import ru.hse.infotouch.domain.*;
+import ru.hse.infotouch.domain.dto.PersonHseDTO;
 import ru.hse.infotouch.domain.enums.CityType;
 import ru.hse.infotouch.feed.site.HsePersonService;
 import ru.hse.infotouch.repo.*;
 import ru.hse.infotouch.ruz.api.RuzApiService;
+import ru.hse.infotouch.service.EmployeeService;
 import ru.hse.infotouch.service.LecturerService;
+import ru.hse.infotouch.service.PersonService;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static java.util.function.Function.identity;
 import static ru.hse.infotouch.domain.Chair.extractChairCity;
 import static ru.hse.infotouch.domain.Chair.extractChairName;
 
@@ -27,24 +29,30 @@ public class RuzDomainLoader implements CommandLineRunner {
     private final RuzApiService ruzApi;
 
     private final LecturerService lecturerService;
+    private final PersonService personService;
+    private final EmployeeService employeeService;
     private final BuildingRepository buildingRepository;
     private final AuditoriumRepository auditoriumRepository;
     private final FacultyRepository facultyRepository;
     private final ChairRepository chairRepository;
     private final HsePersonService portalService;
 
+    private final QChair qChair = QChair.chair;
+
     private final Logger logger = LoggerFactory.getLogger(RuzDomainLoader.class);
 
     @Autowired
     public RuzDomainLoader(RuzApiService ruzApi,
                            LecturerService lecturerService,
-                           BuildingRepository buildingRepository,
+                           PersonService personService, EmployeeService employeeService, BuildingRepository buildingRepository,
                            AuditoriumRepository auditoriumRepository,
                            FacultyRepository facultyRepository,
                            ChairRepository chairRepository,
                            HsePersonService portalService) {
         this.ruzApi = ruzApi;
         this.lecturerService = lecturerService;
+        this.personService = personService;
+        this.employeeService = employeeService;
         this.buildingRepository = buildingRepository;
         this.auditoriumRepository = auditoriumRepository;
         this.facultyRepository = facultyRepository;
@@ -58,7 +66,7 @@ public class RuzDomainLoader implements CommandLineRunner {
 //        loadFaculties();
 //        loadChairs();
 //        loadLecturers();
-        setLecturersLinks();
+//        loadPersons();
 
 //        loadBuildings();
 //        loadAuditoriums();
@@ -66,40 +74,27 @@ public class RuzDomainLoader implements CommandLineRunner {
 
     }
 
-    private void setLecturersLinks() throws IOException {
+    private void loadPersons() throws IOException {
         logger.info("Start setting lecturers links");
-        List<Person> allHsePersons = portalService.getAllHsePersons();
+        employeeService.deleteAll();
+        personService.deleteAll();
 
-        // Как хранить:
-        // Person: id, fio, url, email(array)
-        // Employee: person_id, chair_id, position,lecturer_id
+        List<PersonHseDTO> allHsePersons = portalService.getAllHsePersons();
 
-        // Как заполнить, если данные из hse.ru приоритетнее
-        // Использовать таблицу Lecturer только для наполнения Employee.
-
-        // апргрейд PersonService:
-        // 1. Добавить в Person: кампус(город), чтобы потом смаппить правильно
-        // 2. Добавить в Person: email
-        // 3. Добавить в Person: List<{position, faculty, chair}>
-
-
-        // Маппинг на преподов:
-        // 1. Преобразовать имя факультета и кафедры в один chair_id и использовать их при поиск препода.
-
-
-
-        Map<Boolean, List<Person>> personsIsLecturers = allHsePersons.stream()
-                .peek(person -> lecturerService.findByPersonAndSetLink(person).ifPresent(person::setLecturer))
-                .collect(Collectors.groupingBy(person -> Objects.nonNull(person.getLecturer())));
-
-        List<Lecturer> lecturersWithLink = allHsePersons.stream()
-                .map(lecturerService::findByPersonAndSetLink)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
+        List<Person> personsToSave = allHsePersons.stream()
+                .map(lecturerService::fillEmployees)
+                .map(Person::ofHseDto)
                 .collect(Collectors.toList());
 
-        lecturerService.saveAll(lecturersWithLink);
-        logger.info("Finish setting lecturers links. Count: {}", lecturersWithLink.size());
+        personService.saveAll(personsToSave);
+
+        List<Employee> employeesToSave = personsToSave.stream()
+                .flatMap(person -> person.getEmployees().stream())
+                .collect(Collectors.toList());
+
+        employeeService.saveAll(employeesToSave);
+
+        logger.info("Finish persons={} and employees={}", personsToSave.size(), employeesToSave.size());
     }
 
     private void loadFaculties() {
@@ -124,10 +119,21 @@ public class RuzDomainLoader implements CommandLineRunner {
 
         List<Chair> chairs = ruzApi.getAllChairs();
 
+
+        Map<Integer, Faculty> faculties = facultyRepository.findAll().stream()
+                .collect(Collectors.toMap(Faculty::getId, identity()));
+
+
         List<Chair> chairsToSave = chairs.stream()
                 .peek(chair -> {
                     chair.setCity(extractChairCity(chair));
                     chair.setName(extractChairName(chair));
+
+                    if (faculties.containsKey(chair.getFacultyId())) {
+                        Faculty faculty = faculties.get(chair.getFacultyId());
+
+                        chair.setFacultyName(faculty.getName());
+                    }
                 })
                 .collect(Collectors.toList());
 
@@ -142,10 +148,35 @@ public class RuzDomainLoader implements CommandLineRunner {
         long t1 = System.currentTimeMillis();
 
         List<Lecturer> allLecturers = ruzApi.getAllLecturers();
+
+
+        Map<Integer, Chair> chairs = chairRepository.findAll().stream()
+                .collect(Collectors.toMap(Chair::getId, identity()));
+
+        Map<Integer, Faculty> faculties = facultyRepository.findAll().stream()
+                .collect(Collectors.toMap(Faculty::getId, identity()));
+
+
         long t1_end = System.currentTimeMillis();
         logger.info("Get all lecturers from RUZ took: {} ms", t1_end - t1);
 
-        lecturerService.saveAll(allLecturers);
+        List<Lecturer> lecturerToSave = allLecturers.stream()
+                .peek(lecturer -> {
+                    if (chairs.containsKey(lecturer.getChairId())) {
+                        Chair chair = chairs.get(lecturer.getChairId());
+                        lecturer.setChairName(chair.getName());
+                        lecturer.setChairCity(chair.getCity());
+
+                        if (faculties.containsKey(chair.getFacultyId())) {
+                            Faculty faculty = faculties.get(chair.getFacultyId());
+
+                            lecturer.setFacultyName(faculty.getName());
+                        }
+                    }
+                })
+                .collect(Collectors.toList());
+
+        lecturerService.saveAll(lecturerToSave);
         long end = System.currentTimeMillis();
         logger.info("Save all lecturers took: {} ms", end - t1_end);
     }
