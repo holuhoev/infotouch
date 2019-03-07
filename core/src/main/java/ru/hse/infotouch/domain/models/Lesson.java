@@ -1,13 +1,12 @@
-package ru.hse.infotouch.domain;
+package ru.hse.infotouch.domain.models;
 
 
-import ru.hse.infotouch.domain.enums.KindOfWork;
+import ru.hse.infotouch.domain.models.enums.KindOfWork;
 import ru.hse.infotouch.ruz.converter.LocalTimeConverter;
 import ru.hse.infotouch.ruz.converter.RuzConvert;
 import ru.hse.infotouch.ruz.converter.KindOfWorkConverter;
 import ru.hse.infotouch.ruz.util.JsonField;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
 

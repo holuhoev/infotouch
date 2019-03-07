@@ -1,8 +1,8 @@
-package ru.hse.infotouch.service;
+package ru.hse.infotouch.domain.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.hse.infotouch.domain.Lesson;
+import ru.hse.infotouch.domain.models.Lesson;
 import ru.hse.infotouch.ruz.api.RuzApiService;
 
 import java.time.LocalDate;

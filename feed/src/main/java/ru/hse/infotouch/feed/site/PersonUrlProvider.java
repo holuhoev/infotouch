@@ -2,7 +2,7 @@ package ru.hse.infotouch.feed.site;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import ru.hse.infotouch.domain.enums.CityType;
+import ru.hse.infotouch.domain.models.enums.CityType;
 
 import java.util.Arrays;
 import java.util.stream.Stream;

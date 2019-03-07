@@ -1,4 +1,4 @@
-package ru.hse.infotouch.domain.enums;
+package ru.hse.infotouch.domain.models.enums;
 
 public enum EducationType {
     BACHELOR, MASTER, OTHER;

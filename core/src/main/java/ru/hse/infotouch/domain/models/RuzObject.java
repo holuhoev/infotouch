@@ -1,4 +1,4 @@
-package ru.hse.infotouch.domain;
+package ru.hse.infotouch.domain.models;
 
 /**
  * @author Evgeny Kholukhoev

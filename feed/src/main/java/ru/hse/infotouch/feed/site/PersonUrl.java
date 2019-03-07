@@ -1,6 +1,6 @@
 package ru.hse.infotouch.feed.site;
 
-import ru.hse.infotouch.domain.enums.CityType;
+import ru.hse.infotouch.domain.models.enums.CityType;
 
 public class PersonUrl {
     private String hseUrl;

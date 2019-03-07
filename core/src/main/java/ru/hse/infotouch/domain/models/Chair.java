@@ -1,8 +1,8 @@
-package ru.hse.infotouch.domain;
+package ru.hse.infotouch.domain.models;
 
 
 import org.apache.commons.lang3.StringUtils;
-import ru.hse.infotouch.domain.enums.CityType;
+import ru.hse.infotouch.domain.models.enums.CityType;
 import ru.hse.infotouch.ruz.util.JsonField;
 
 import javax.persistence.Column;

@@ -3,8 +3,8 @@ package ru.hse.infotouch.terminal.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.hse.infotouch.domain.Lesson;
-import ru.hse.infotouch.service.LessonService;
+import ru.hse.infotouch.domain.models.Lesson;
+import ru.hse.infotouch.domain.service.LessonService;
 
 import java.time.LocalDate;
 import java.util.List;

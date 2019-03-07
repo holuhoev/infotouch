@@ -1,6 +1,6 @@
 package ru.hse.infotouch.domain.dto;
 
-import ru.hse.infotouch.domain.enums.CityType;
+import ru.hse.infotouch.domain.models.enums.CityType;
 
 import java.util.List;
 

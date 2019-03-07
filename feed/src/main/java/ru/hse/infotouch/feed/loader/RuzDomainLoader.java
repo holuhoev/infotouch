@@ -7,13 +7,14 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import ru.hse.infotouch.domain.*;
 import ru.hse.infotouch.domain.dto.PersonHseDTO;
-import ru.hse.infotouch.domain.enums.CityType;
+import ru.hse.infotouch.domain.models.*;
+import ru.hse.infotouch.domain.models.enums.CityType;
 import ru.hse.infotouch.feed.site.HsePersonService;
-import ru.hse.infotouch.repo.*;
+import ru.hse.infotouch.domain.repo.*;
 import ru.hse.infotouch.ruz.api.RuzApiService;
-import ru.hse.infotouch.service.EmployeeService;
-import ru.hse.infotouch.service.LecturerService;
-import ru.hse.infotouch.service.PersonService;
+import ru.hse.infotouch.domain.service.EmployeeService;
+import ru.hse.infotouch.domain.service.LecturerService;
+import ru.hse.infotouch.domain.service.PersonService;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,8 +22,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static java.util.function.Function.identity;
-import static ru.hse.infotouch.domain.Chair.extractChairCity;
-import static ru.hse.infotouch.domain.Chair.extractChairName;
+import static ru.hse.infotouch.domain.models.Chair.extractChairCity;
+import static ru.hse.infotouch.domain.models.Chair.extractChairName;
 
 @Component
 public class RuzDomainLoader implements CommandLineRunner {

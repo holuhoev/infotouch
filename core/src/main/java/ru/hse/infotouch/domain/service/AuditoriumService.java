@@ -1,8 +1,8 @@
-package ru.hse.infotouch.service;
+package ru.hse.infotouch.domain.service;
 
 import org.springframework.stereotype.Service;
-import ru.hse.infotouch.domain.Auditorium;
-import ru.hse.infotouch.repo.AuditoriumRepository;
+import ru.hse.infotouch.domain.models.Auditorium;
+import ru.hse.infotouch.domain.repo.AuditoriumRepository;
 
 import java.util.List;
 

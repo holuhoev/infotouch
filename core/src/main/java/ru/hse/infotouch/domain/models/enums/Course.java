@@ -1,4 +1,4 @@
-package ru.hse.infotouch.domain.enums;
+package ru.hse.infotouch.domain.models.enums;
 
 public enum Course {
     FIRST, SECOND, THIRD, FOURTH, FIFTH, SIX;

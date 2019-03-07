@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import ru.hse.infotouch.domain.Person;
 import ru.hse.infotouch.domain.dto.PersonHseDTO;
-import ru.hse.infotouch.domain.enums.CityType;
 
 import java.io.IOException;
 import java.util.*;

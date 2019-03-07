@@ -4,13 +4,12 @@ package ru.hse.infotouch.ruz.api.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.hse.infotouch.domain.*;
+import ru.hse.infotouch.domain.models.*;
 import ru.hse.infotouch.ruz.Endpoint;
 import ru.hse.infotouch.ruz.Param;
 import ru.hse.infotouch.ruz.URL;
 import ru.hse.infotouch.ruz.api.RuzApiService;
 import ru.hse.infotouch.ruz.util.JsonParser;
-import ru.hse.infotouch.ruz.util.LessonParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;

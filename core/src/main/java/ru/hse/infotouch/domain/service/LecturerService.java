@@ -1,43 +1,35 @@
-package ru.hse.infotouch.service;
+package ru.hse.infotouch.domain.service;
 
 import com.google.common.collect.Lists;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.hse.infotouch.domain.*;
+
 import ru.hse.infotouch.domain.dto.EmployeeHseDTO;
 import ru.hse.infotouch.domain.dto.PersonHseDTO;
-import ru.hse.infotouch.repo.ChairRepository;
-import ru.hse.infotouch.repo.LecturerRepository;
+import ru.hse.infotouch.domain.models.Lecturer;
+import ru.hse.infotouch.domain.models.QLecturer;
+import ru.hse.infotouch.domain.repo.LecturerRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import static org.apache.commons.lang3.StringUtils.stripToEmpty;
+import static ru.hse.infotouch.util.Strings.removeRedundantSpace;
 
 @Service
 public class LecturerService {
 
     private final LecturerRepository repository;
-    private final ChairRepository chairRepository;
+    private final ChairService chairService;
 
-    private final QChair qChair = QChair.chair;
     private final QLecturer qLecturer = QLecturer.lecturer;
 
-    // TODO: подумать куда перенести
-    public static String removeRedundantSpace(String searchString) {
-        return Arrays.stream(searchString.split(" "))
-                .filter(StringUtils::isNotEmpty)
-                .collect(Collectors.joining(" "));
-    }
-
     @Autowired
-    public LecturerService(LecturerRepository repository, ChairRepository chairRepository) {
+    public LecturerService(LecturerRepository repository, ChairService chairService) {
         this.repository = repository;
-        this.chairRepository = chairRepository;
+        this.chairService = chairService;
     }
-
 
     public List<Lecturer> findAllBy(String searchString) {
         Objects.requireNonNull(searchString);
@@ -69,7 +61,7 @@ public class LecturerService {
                 }))
                 .peek(employee -> {
                     if (Objects.isNull(employee.getLecturerId())) {
-                        findExactChair(employee.getChairName(), employee.getFacultyName()).ifPresent(chair -> {
+                        chairService.findExactChair(employee.getChairName(), employee.getFacultyName()).ifPresent(chair -> {
                             employee.setChairId(chair.getId());
                         });
                     }
@@ -81,16 +73,6 @@ public class LecturerService {
         return personHseDTO;
     }
 
-
-    private Optional<Chair> findExactChair(String chairName, String facultyName) {
-
-        return StreamSupport.stream(
-                chairRepository.findAll(
-                        qChair.name.containsIgnoreCase(stripToEmpty(chairName))
-                                .and(qChair.facultyName.containsIgnoreCase(stripToEmpty(facultyName)))
-                ).spliterator(), false)
-                .findFirst();
-    }
 
     private Optional<Lecturer> findExact(EmployeeHseDTO dto, PersonHseDTO person) {
         if (Objects.isNull(person.getFio())) {

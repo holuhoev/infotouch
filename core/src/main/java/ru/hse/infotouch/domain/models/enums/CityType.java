@@ -1,4 +1,4 @@
-package ru.hse.infotouch.domain.enums;
+package ru.hse.infotouch.domain.models.enums;
 
 import org.apache.commons.lang3.StringUtils;
 

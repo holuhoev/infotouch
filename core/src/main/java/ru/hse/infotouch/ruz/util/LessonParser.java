@@ -1,7 +1,7 @@
 package ru.hse.infotouch.ruz.util;
 
 
-import ru.hse.infotouch.domain.Lesson;
+import ru.hse.infotouch.domain.models.Lesson;
 
 import java.util.List;
 

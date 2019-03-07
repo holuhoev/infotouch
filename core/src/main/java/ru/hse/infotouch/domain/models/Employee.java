@@ -1,4 +1,4 @@
-package ru.hse.infotouch.domain;
+package ru.hse.infotouch.domain.models;
 
 import ru.hse.infotouch.domain.dto.EmployeeHseDTO;
 

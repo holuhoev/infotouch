@@ -9,8 +9,8 @@ import ru.hse.infotouch.util.config.YamlPropertySourceFactory;
 
 @SpringBootApplication(scanBasePackages = "ru.hse.infotouch")
 @PropertySource(factory = YamlPropertySourceFactory.class, value = "classpath:application-feed.yaml")
-@EnableJpaRepositories(basePackages = {"ru.hse.infotouch.repo"})
-@EntityScan(basePackages = {"ru.hse.infotouch.domain"})
+@EnableJpaRepositories(basePackages = {"ru.hse.infotouch.domain.repo"})
+@EntityScan(basePackages = {"ru.hse.infotouch.domain.models"})
 public class FeedApplication {
 
     public static void main(String[] args) {

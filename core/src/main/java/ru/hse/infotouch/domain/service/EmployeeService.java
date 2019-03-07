@@ -1,9 +1,9 @@
-package ru.hse.infotouch.service;
+package ru.hse.infotouch.domain.service;
 
 import org.springframework.stereotype.Service;
-import ru.hse.infotouch.domain.Employee;
-import ru.hse.infotouch.domain.QEmployee;
-import ru.hse.infotouch.repo.EmployeeRepository;
+import ru.hse.infotouch.domain.models.Employee;
+import ru.hse.infotouch.domain.models.QEmployee;
+import ru.hse.infotouch.domain.repo.EmployeeRepository;
 
 import java.util.List;
 

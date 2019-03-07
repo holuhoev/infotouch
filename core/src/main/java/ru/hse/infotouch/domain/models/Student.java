@@ -1,7 +1,7 @@
-package ru.hse.infotouch.domain;
+package ru.hse.infotouch.domain.models;
 
-import ru.hse.infotouch.domain.enums.Course;
-import ru.hse.infotouch.domain.enums.EducationType;
+import ru.hse.infotouch.domain.models.enums.Course;
+import ru.hse.infotouch.domain.models.enums.EducationType;
 import ru.hse.infotouch.ruz.util.JsonField;
 
 import javax.persistence.Column;

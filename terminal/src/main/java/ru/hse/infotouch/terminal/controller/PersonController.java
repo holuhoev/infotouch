@@ -4,8 +4,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.hse.infotouch.domain.Person;
-import ru.hse.infotouch.service.PersonService;
+import ru.hse.infotouch.domain.models.Person;
+import ru.hse.infotouch.domain.service.PersonService;
 
 
 import java.util.List;
@@ -23,9 +23,10 @@ public class PersonController {
 
 
     @GetMapping
-    public ResponseEntity<List<Person>> findAll(String fio) {
+    public ResponseEntity<List<Person>> findAll(String fio,
+                                                int page) {
         Objects.requireNonNull(fio, "fio must be not null");
 
-        return ResponseEntity.ok(personService.findAll(fio));
+        return ResponseEntity.ok(personService.findAll(fio, page));
     }
 }

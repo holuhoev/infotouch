@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.hse.infotouch.domain.Auditorium;
-import ru.hse.infotouch.service.AuditoriumService;
+import ru.hse.infotouch.domain.models.Auditorium;
+import ru.hse.infotouch.domain.service.AuditoriumService;
 
 import java.util.List;
 

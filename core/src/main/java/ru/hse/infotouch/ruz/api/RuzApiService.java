@@ -1,7 +1,7 @@
 package ru.hse.infotouch.ruz.api;
 
 
-import ru.hse.infotouch.domain.*;
+import ru.hse.infotouch.domain.models.*;
 import ru.hse.infotouch.ruz.util.JsonField;
 
 import java.time.LocalDate;
