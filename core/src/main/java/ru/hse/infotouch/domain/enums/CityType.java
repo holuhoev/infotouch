@@ -31,7 +31,7 @@ public enum CityType {
         return cityToShortStr.get(this);
     }
 
-    public Integer getSite() {
+    public Integer getSiteParam() {
         return cityToSite.get(this);
     }
 

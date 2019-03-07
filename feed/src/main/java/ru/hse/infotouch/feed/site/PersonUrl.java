@@ -24,7 +24,7 @@ public class PersonUrl {
         return hseUrl
                 + personsEndpoint
                 + "?" + letterParam + "=" + letter
-                + "&" + cityParam + "=" + city.getSite(); // TODO:
+                + "&" + cityParam + "=" + city.getSiteParam();
     }
 
     CityType getCity() {
