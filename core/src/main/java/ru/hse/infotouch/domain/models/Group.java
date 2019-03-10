@@ -1,6 +1,7 @@
 package ru.hse.infotouch.domain.models;
 
 
+import org.springframework.data.geo.Point;
 import ru.hse.infotouch.domain.models.enums.Course;
 import ru.hse.infotouch.domain.models.enums.EducationType;
 import ru.hse.infotouch.ruz.converter.CourseConverter;
