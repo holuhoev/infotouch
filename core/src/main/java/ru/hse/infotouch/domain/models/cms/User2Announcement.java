@@ -2,17 +2,14 @@ package ru.hse.infotouch.domain.models.cms;
 
 import ru.hse.infotouch.domain.models.enums.AccessRight;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 import java.util.Objects;
 
+
 @Entity
-@Table(name = "user2terminal")
-public class User2Terminal {
+@Table(name = "user2announcement")
+public class User2Announcement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
@@ -21,8 +18,8 @@ public class User2Terminal {
     @Column(name = "user_id")
     private Integer userId;
 
-    @Column(name = "terminal_id")
-    private Integer terminalId;
+    @Column(name = "announcement_id")
+    private Integer announcementId;
 
     @Column(name = "access_right")
     private AccessRight accessRight;
@@ -43,12 +40,12 @@ public class User2Terminal {
         this.userId = userId;
     }
 
-    public Integer getTerminalId() {
-        return terminalId;
+    public Integer getAnnouncementId() {
+        return announcementId;
     }
 
-    public void setTerminalId(Integer terminalId) {
-        this.terminalId = terminalId;
+    public void setAnnouncementId(Integer announcementId) {
+        this.announcementId = announcementId;
     }
 
     public AccessRight getAccessRight() {
@@ -63,7 +60,7 @@ public class User2Terminal {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User2Terminal that = (User2Terminal) o;
+        User2Announcement that = (User2Announcement) o;
         return Objects.equals(id, that.id);
     }
 

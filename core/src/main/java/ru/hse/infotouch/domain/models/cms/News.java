@@ -1,9 +1,14 @@
 package ru.hse.infotouch.domain.models.cms;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -11,6 +16,7 @@ import java.util.Set;
 @Table(name = "news")
 public class News {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Integer id;
 

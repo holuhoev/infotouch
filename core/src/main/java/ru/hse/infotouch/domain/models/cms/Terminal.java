@@ -4,8 +4,11 @@ import org.springframework.data.geo.Point;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 import java.util.Objects;
 
 @Entity
@@ -13,6 +16,7 @@ import java.util.Objects;
 public class Terminal {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 

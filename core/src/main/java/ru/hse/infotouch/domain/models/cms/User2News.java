@@ -4,14 +4,18 @@ import ru.hse.infotouch.domain.models.enums.AccessRight;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 import java.util.Objects;
 
 @Entity
 @Table(name = "user2news")
 public class User2News {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Integer id;
 
