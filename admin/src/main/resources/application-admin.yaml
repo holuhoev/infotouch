@@ -1,0 +1,7 @@
+server:
+  port: 8890
+  servlet:
+    context-path: "/infotouch-admin"
+spring:
+  mvc:
+    date-format: "yyyy.MM.dd"

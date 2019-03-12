@@ -1,4 +1,4 @@
-package ru.hse.infotouch.domain.models.cms;
+package ru.hse.infotouch.domain.models.admin;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

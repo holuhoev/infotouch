@@ -1,4 +1,4 @@
-package ru.hse.infotouch.domain.models.cms;
+package ru.hse.infotouch.domain.models.admin;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,9 +31,6 @@ public class Ad {
 
     @Column
     private byte[] video;
-
-    @Column
-    private Topic topic;
 
     @Column
     private LocalDate start;
@@ -80,14 +77,6 @@ public class Ad {
 
     public void setImage(byte[] image) {
         this.image = image;
-    }
-
-    public Topic getTopic() {
-        return topic;
-    }
-
-    public void setTopic(Topic topic) {
-        this.topic = topic;
     }
 
     public LocalDate getStart() {

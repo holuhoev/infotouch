@@ -1,22 +1,25 @@
-package ru.hse.infotouch.domain.models.cms;
+package ru.hse.infotouch.domain.models.admin;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
-public class News2Tag {
+@Entity
+@Table(name = "tag")
+public class Tag {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Integer id;
 
-    @Column(name = "news_id")
-    private Integer newsId;
+    @Column
+    private String title;
 
-    @Column(name = "tag_id")
-    private Integer tagId;
 
     public Integer getId() {
         return id;
@@ -26,28 +29,20 @@ public class News2Tag {
         this.id = id;
     }
 
-    public Integer getNewsId() {
-        return newsId;
+    public String getTitle() {
+        return title;
     }
 
-    public void setNewsId(Integer newsId) {
-        this.newsId = newsId;
-    }
-
-    public Integer getTagId() {
-        return tagId;
-    }
-
-    public void setTagId(Integer tagId) {
-        this.tagId = tagId;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        News2Tag news2Tag = (News2Tag) o;
-        return Objects.equals(id, news2Tag.id);
+        Tag tag = (Tag) o;
+        return Objects.equals(id, tag.id);
     }
 
     @Override

@@ -1,6 +1,7 @@
-package ru.hse.infotouch.domain.models.cms;
+package ru.hse.infotouch.domain.models.admin;
 
 import org.springframework.data.geo.Point;
+import ru.hse.infotouch.domain.models.enums.HseLocationType;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,23 +9,22 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import java.util.Objects;
 
 @Entity
-@Table(name = "terminal")
-public class Terminal {
+@Table(name = "hse_object")
+public class HseLocation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column
     private Integer id;
 
     @Column
     private String title;
 
     @Column
-    private String description;
+    private HseLocationType type;
 
     @Column
     private Point location;
@@ -45,12 +45,12 @@ public class Terminal {
         this.title = title;
     }
 
-    public String getDescription() {
-        return description;
+    public HseLocationType getType() {
+        return type;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setType(HseLocationType type) {
+        this.type = type;
     }
 
     public Point getLocation() {
@@ -65,8 +65,8 @@ public class Terminal {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Terminal terminal = (Terminal) o;
-        return Objects.equals(id, terminal.id);
+        HseLocation that = (HseLocation) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override

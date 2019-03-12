@@ -12,6 +12,7 @@
         <module>core</module>
         <module>terminal</module>
         <module>feed</module>
+        <module>admin</module>
     </modules>
 
 </project>

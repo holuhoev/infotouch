@@ -1,4 +1,4 @@
-package ru.hse.infotouch.domain.models.cms;
+package ru.hse.infotouch.domain.models.admin;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -29,9 +29,8 @@ public class Announcement {
     @Column(name = "created_by")
     private Integer createdBy;
 
-    // TODO Mapping
     @Column(name = "hse_location_id")
-    private HseLocation hseLocation;
+    private Integer hseLocationId;
 
 
     public Integer getCreatedBy() {
@@ -90,14 +89,6 @@ public class Announcement {
         this.link = link;
     }
 
-    public HseLocation getHseLocation() {
-        return hseLocation;
-    }
-
-    public void setHseLocation(HseLocation hseLocation) {
-        this.hseLocation = hseLocation;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -109,5 +100,13 @@ public class Announcement {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public Integer getHseLocationId() {
+        return hseLocationId;
+    }
+
+    public void setHseLocationId(Integer hseLocationId) {
+        this.hseLocationId = hseLocationId;
     }
 }

@@ -1,4 +1,6 @@
-package ru.hse.infotouch.domain.models.cms;
+package ru.hse.infotouch.domain.models.admin;
+
+import ru.hse.infotouch.domain.dto.request.NewsRequest;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,7 +12,6 @@ import javax.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "news")
@@ -29,8 +30,8 @@ public class News {
     @Column
     private byte[] image;
 
-    @Column
-    private Topic topic;
+    @Column(name = "topic_id")
+    private Integer topicId;
 
     @Column
     private LocalDate start;
@@ -38,18 +39,14 @@ public class News {
     @Column
     private LocalDate end;
 
-    @Column
+    @Column(name = "start_time")
     private LocalTime startTime;
 
-    @Column
+    @Column(name = "end_time")
     private LocalTime endTime;
 
     @Column(name = "created_by")
     private Integer createdBy;
-
-    // TODO: mapping (only ids if possible)
-    @Column
-    private Set<Tag> tags;
 
     public Integer getCreatedBy() {
         return createdBy;
@@ -89,14 +86,6 @@ public class News {
 
     public void setImage(byte[] image) {
         this.image = image;
-    }
-
-    public Topic getTopic() {
-        return topic;
-    }
-
-    public void setTopic(Topic topic) {
-        this.topic = topic;
     }
 
     public LocalDate getStart() {
@@ -142,5 +131,39 @@ public class News {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public Integer getTopicId() {
+        return topicId;
+    }
+
+    public void setTopicId(Integer topicId) {
+        this.topicId = topicId;
+    }
+
+    public static News createFromRequest(NewsRequest request) {
+        News news = new News();
+
+        news.setTitle(request.getTitle());
+        news.setContent(request.getContent());
+        news.setEnd(request.getEnd());
+        news.setEndTime(request.getEndTime());
+        news.setImage(request.getImage());
+        news.setTopicId(request.getTopicId());
+        news.setStart(request.getStart());
+        news.setStartTime(request.getStartTime());
+
+        return news;
+    }
+
+    public void updateFromRequest(NewsRequest request) {
+        this.setImage(request.getImage());
+        this.setTopicId(request.getTopicId());
+        this.setContent(request.getContent());
+
+        this.setEnd(request.getEnd());
+        this.setEndTime(request.getEndTime());
+        this.setStart(request.getStart());
+        this.setStartTime(request.getStartTime());
     }
 }
