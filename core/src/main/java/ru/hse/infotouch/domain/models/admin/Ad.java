@@ -32,11 +32,11 @@ public class Ad {
     @Column
     private byte[] video;
 
-    @Column
-    private LocalDate start;
+    @Column(name = "start_date")
+    private LocalDate startDate;
 
-    @Column
-    private LocalDate end;
+    @Column(name = "end_date")
+    private LocalDate endDate;
 
     @Column(name = "created_by")
     private Integer createdBy;
@@ -79,20 +79,20 @@ public class Ad {
         this.image = image;
     }
 
-    public LocalDate getStart() {
-        return start;
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public void setStart(LocalDate start) {
-        this.start = start;
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 
-    public LocalDate getEnd() {
-        return end;
+    public LocalDate getEndDate() {
+        return endDate;
     }
 
-    public void setEnd(LocalDate end) {
-        this.end = end;
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
     }
 
     public LocalTime getStartTime() {

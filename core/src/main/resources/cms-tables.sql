@@ -46,31 +46,31 @@ CREATE TABLE "hse_location"
 DROP TABLE IF EXISTS "news" CASCADE;
 CREATE TABLE "news"
 (
-  id           serial not null primary key,
-  title        text   not null,
-  content      text default '',
-  image        bytea,
-  topic_id     int references "topic" (id),
-  start_time   time   not null,
-  end_time     time   not null,
-  start        date,
-  "end"        date,
-  created_by   int references "user" (id)
+  id         serial not null primary key,
+  title      text   not null,
+  content    text default '',
+  image      bytea,
+  topic_id   int references "topic" (id),
+  start_time time   not null,
+  end_time   time   not null,
+  start_date date,
+  end_date   date,
+  created_by int references "user" (id)
 );
 
 DROP TABLE IF EXISTS "ad" CASCADE;
 CREATE TABLE "ad"
 (
-  id           serial not null primary key,
-  title        text   not null,
-  content      text default '',
-  image        bytea,
-  video        bytea,
-  start_time   time   not null,
-  end_time     time   not null,
-  start        date,
-  "end"        date,
-  created_by   int references "user" (id)
+  id         serial not null primary key,
+  title      text   not null,
+  content    text default '',
+  image      bytea,
+  video      bytea,
+  start_time time   not null,
+  end_time   time   not null,
+  start_date date,
+  end_date   date,
+  created_by int references "user" (id)
 );
 
 DROP TABLE IF EXISTS "announcement" CASCADE;

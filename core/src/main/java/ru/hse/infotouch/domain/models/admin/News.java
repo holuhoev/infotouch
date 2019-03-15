@@ -33,11 +33,11 @@ public class News {
     @Column(name = "topic_id")
     private Integer topicId;
 
-    @Column
-    private LocalDate start;
+    @Column(name = "start_date")
+    private LocalDate startDate;
 
-    @Column
-    private LocalDate end;
+    @Column(name = "end_date")
+    private LocalDate endDate;
 
     @Column(name = "start_time")
     private LocalTime startTime;
@@ -88,20 +88,20 @@ public class News {
         this.image = image;
     }
 
-    public LocalDate getStart() {
-        return start;
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public void setStart(LocalDate start) {
-        this.start = start;
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 
-    public LocalDate getEnd() {
-        return end;
+    public LocalDate getEndDate() {
+        return endDate;
     }
 
-    public void setEnd(LocalDate end) {
-        this.end = end;
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
     }
 
     public LocalTime getStartTime() {
@@ -146,11 +146,11 @@ public class News {
 
         news.setTitle(request.getTitle());
         news.setContent(request.getContent());
-        news.setEnd(request.getEnd());
+        news.setEndDate(request.getEnd());
         news.setEndTime(request.getEndTime());
         news.setImage(request.getImage());
         news.setTopicId(request.getTopicId());
-        news.setStart(request.getStart());
+        news.setStartDate(request.getStart());
         news.setStartTime(request.getStartTime());
 
         return news;
@@ -161,9 +161,9 @@ public class News {
         this.setTopicId(request.getTopicId());
         this.setContent(request.getContent());
 
-        this.setEnd(request.getEnd());
+        this.setEndDate(request.getEnd());
         this.setEndTime(request.getEndTime());
-        this.setStart(request.getStart());
+        this.setStartDate(request.getStart());
         this.setStartTime(request.getStartTime());
     }
 }
