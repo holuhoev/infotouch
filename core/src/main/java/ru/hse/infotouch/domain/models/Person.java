@@ -20,10 +20,10 @@ public class Person {
     @Column(name = "url")
     private String url;
 
-    @Column(name = "emails", columnDefinition = "text[]")
+    @Column(name = "emails")
     private String emails;
 
-    @OneToMany(mappedBy = "personId")
+    @Transient
     private List<Employee> employees;
 
     public String getFio() {

@@ -4,6 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import ru.hse.infotouch.domain.models.Employee;
 
-public interface EmployeeRepository extends JpaRepository<Employee, Integer>, QuerydslPredicateExecutor<Employee> {
+import java.util.UUID;
+
+public interface EmployeeRepository extends JpaRepository<Employee, UUID>, QuerydslPredicateExecutor<Employee> {
 }
 

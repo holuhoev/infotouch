@@ -1,28 +1,21 @@
 package ru.hse.infotouch.domain.service;
 
-import com.google.common.collect.Lists;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import ru.hse.infotouch.domain.datasource.PersonDatasource;
 import ru.hse.infotouch.domain.models.Person;
-import ru.hse.infotouch.domain.models.QPerson;
 import ru.hse.infotouch.domain.repo.PersonRepository;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
-
-import static ru.hse.infotouch.util.Strings.removeRedundantSpace;
+import java.util.*;
 
 @Service
 public class PersonService {
 
-    private final int pageSize = 30;
     private final PersonRepository repository;
-    private final QPerson qPerson = QPerson.person;
+    private final PersonDatasource datasource;
 
-    public PersonService(PersonRepository repository) {
+    public PersonService(PersonRepository repository, PersonDatasource datasource) {
         this.repository = repository;
+        this.datasource = datasource;
     }
 
     public void saveAll(List<Person> persons) {
@@ -33,17 +26,11 @@ public class PersonService {
         repository.deleteAll();
     }
 
-    public List<Person> findAll(String fio, int page) {
-        Objects.requireNonNull(fio);
-
-        String validated = removeRedundantSpace(fio);
-
-        Pageable pageRequest = PageRequest.of(page, pageSize);
-
-        return Lists.newArrayList(repository.findAll(qPerson.fio.containsIgnoreCase(validated), pageRequest));
+    public List<Person> findAll(String fio, int page, UUID[] employeesIds) {
+        return datasource.findAll(fio, employeesIds, page);
     }
 
-    public Person getById(UUID id){
+    public Person getById(UUID id) {
         return repository.findById(id).orElseThrow(() -> new IllegalArgumentException(String.format("Сотрудника с id \"%s\" не существует", id)));
     }
 }
