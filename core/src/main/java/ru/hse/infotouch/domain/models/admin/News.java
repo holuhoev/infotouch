@@ -2,12 +2,7 @@ package ru.hse.infotouch.domain.models.admin;
 
 import ru.hse.infotouch.domain.dto.request.NewsRequest;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -30,8 +25,9 @@ public class News {
     @Column
     private byte[] image;
 
-    @Column(name = "topic_id")
-    private Integer topicId;
+    @ManyToOne
+    @JoinColumn(name = "topic_id")
+    private Topic topic;
 
     @Column(name = "start_date")
     private LocalDate startDate;
@@ -133,37 +129,40 @@ public class News {
         return Objects.hash(id);
     }
 
-    public Integer getTopicId() {
-        return topicId;
-    }
 
-    public void setTopicId(Integer topicId) {
-        this.topicId = topicId;
-    }
-
-    public static News createFromRequest(NewsRequest request) {
+    public static News createFromRequest(NewsRequest request, Topic topic) {
         News news = new News();
+
+        news.setTopic(topic);
 
         news.setTitle(request.getTitle());
         news.setContent(request.getContent());
         news.setEndDate(request.getEnd());
         news.setEndTime(request.getEndTime());
         news.setImage(request.getImage());
-        news.setTopicId(request.getTopicId());
         news.setStartDate(request.getStart());
         news.setStartTime(request.getStartTime());
 
         return news;
     }
 
-    public void updateFromRequest(NewsRequest request) {
+    public void updateFromRequest(NewsRequest request, Topic topic) {
+        this.setTopic(topic);
+
         this.setImage(request.getImage());
-        this.setTopicId(request.getTopicId());
         this.setContent(request.getContent());
 
         this.setEndDate(request.getEnd());
         this.setEndTime(request.getEndTime());
         this.setStartDate(request.getStart());
         this.setStartTime(request.getStartTime());
+    }
+
+    public Topic getTopic() {
+        return topic;
+    }
+
+    public void setTopic(Topic topic) {
+        this.topic = topic;
     }
 }

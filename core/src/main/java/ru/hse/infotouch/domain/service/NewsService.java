@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import ru.hse.infotouch.domain.dto.request.NewsRequest;
 import ru.hse.infotouch.domain.models.admin.News;
+import ru.hse.infotouch.domain.models.admin.Topic;
 import ru.hse.infotouch.domain.repo.NewsRepository;
 
 import java.util.List;
@@ -13,10 +14,12 @@ import java.util.List;
 public class NewsService {
 
     private final NewsRepository repository;
+    private final TopicService topicService;
 
     @Autowired
-    public NewsService(NewsRepository repository) {
+    public NewsService(NewsRepository repository, TopicService topicService) {
         this.repository = repository;
+        this.topicService = topicService;
     }
 
     public List<News> findAll() {
@@ -27,8 +30,9 @@ public class NewsService {
         return this.repository.findById(id).orElseThrow(() -> new IllegalArgumentException(String.format("Новости с id \"%d\" не существует", id)));
     }
 
-    public News create(NewsRequest newsRequest) {
-        News news = News.createFromRequest(newsRequest);
+    public News create(NewsRequest request) {
+        Topic topic = topicService.getOneById(request.getTopicId());
+        News news = News.createFromRequest(request, topic);
 
         // TODO: set createdBy when Security;
 
@@ -36,9 +40,11 @@ public class NewsService {
     }
 
     public News update(int id, NewsRequest request) {
+        Topic topic = topicService.getOneById(request.getTopicId());
+
         final News news = this.getOneById(id);
 
-        news.updateFromRequest(request);
+        news.updateFromRequest(request, topic);
 
         return repository.save(news);
     }
