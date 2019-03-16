@@ -49,7 +49,7 @@ public class NewsController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void removeNews(@PathVariable("id") Integer id) {
+    public void deleteNews(@PathVariable("id") Integer id) {
 
         this.newsService.delete(id);
     }
