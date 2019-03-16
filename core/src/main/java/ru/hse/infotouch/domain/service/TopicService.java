@@ -15,8 +15,12 @@ public class TopicService {
         this.repository = repository;
     }
 
-    public Topic getOneById(int id){
+    public Topic getOneById(int id) {
         return this.repository.findById(id).orElseThrow(() -> new IllegalArgumentException(String.format("Темы с id \"%d\" не существует", id)));
+    }
+
+    public boolean isNotExist(int id) {
+        return !repository.existsById(id);
     }
 }
 

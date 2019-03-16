@@ -1,11 +1,10 @@
 package ru.hse.infotouch.domain.models.admin;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 
+@Entity
+@Table(name = "news2tag")
 public class News2Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +16,11 @@ public class News2Tag {
 
     @Column(name = "tag_id")
     private Integer tagId;
+
+    public News2Tag(Integer newsId, Integer tagId) {
+        this.newsId = newsId;
+        this.tagId = tagId;
+    }
 
     public Integer getId() {
         return id;

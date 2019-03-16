@@ -21,6 +21,10 @@ public class NewsRequest {
 
     private LocalTime endTime;
 
+    private int[] tagIds;
+
+    private int[] terminalIds;
+
     public String getTitle() {
         return title;
     }
@@ -83,5 +87,21 @@ public class NewsRequest {
 
     public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
+    }
+
+    public int[] getTagIds() {
+        return tagIds;
+    }
+
+    public void setTagIds(int[] tagIds) {
+        this.tagIds = tagIds;
+    }
+
+    public int[] getTerminalIds() {
+        return terminalIds;
+    }
+
+    public void setTerminalIds(int[] terminalIds) {
+        this.terminalIds = terminalIds;
     }
 }

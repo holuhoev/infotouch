@@ -6,7 +6,9 @@ import javax.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "news")
@@ -25,9 +27,8 @@ public class News {
     @Column
     private byte[] image;
 
-    @ManyToOne
-    @JoinColumn(name = "topic_id")
-    private Topic topic;
+    @Column(name = "topic_id")
+    private Integer topicId;
 
     @Column(name = "start_date")
     private LocalDate startDate;
@@ -130,10 +131,10 @@ public class News {
     }
 
 
-    public static News createFromRequest(NewsRequest request, Topic topic) {
+    public static News createFromRequest(NewsRequest request) {
         News news = new News();
 
-        news.setTopic(topic);
+        news.setTopicId(request.getTopicId());
 
         news.setTitle(request.getTitle());
         news.setContent(request.getContent());
@@ -146,8 +147,8 @@ public class News {
         return news;
     }
 
-    public void updateFromRequest(NewsRequest request, Topic topic) {
-        this.setTopic(topic);
+    public void updateFromRequest(NewsRequest request) {
+        this.setTopicId(request.getTopicId());
 
         this.setImage(request.getImage());
         this.setContent(request.getContent());
@@ -158,11 +159,11 @@ public class News {
         this.setStartTime(request.getStartTime());
     }
 
-    public Topic getTopic() {
-        return topic;
+    public Integer getTopicId() {
+        return topicId;
     }
 
-    public void setTopic(Topic topic) {
-        this.topic = topic;
+    public void setTopicId(Integer topicId) {
+        this.topicId = topicId;
     }
 }

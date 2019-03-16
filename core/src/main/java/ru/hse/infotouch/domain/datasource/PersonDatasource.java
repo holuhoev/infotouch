@@ -31,7 +31,6 @@ public class PersonDatasource {
 
     public List<Person> findAll(String fio, UUID[] employeesIds, int page) {
         BooleanBuilder whereClause = new BooleanBuilder();
-        JPAQuery<Person> query = new JPAQuery<>(entityManager);
 
         if (StringUtils.isNotEmpty(fio)) {
             whereClause.and(qPerson.fio.containsIgnoreCase(removeRedundantSpace(fio)));

@@ -22,7 +22,7 @@ public class Topic {
     private String title;
 
     @Column
-    private String text;
+    private String color;
 
     public Integer getId() {
         return id;
@@ -53,11 +53,11 @@ public class Topic {
         return Objects.hash(id);
     }
 
-    public String getText() {
-        return text;
+    public String getColor() {
+        return color;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setColor(String color) {
+        this.color = color;
     }
 }
