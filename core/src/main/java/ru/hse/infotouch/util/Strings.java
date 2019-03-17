@@ -7,6 +7,10 @@ import java.util.stream.Collectors;
 
 public class Strings {
 
+    private Strings() {
+        throw new AssertionError();
+    }
+
     public static String removeRedundantSpace(String searchString) {
         return Arrays.stream(searchString.split(" "))
                 .filter(StringUtils::isNotEmpty)
