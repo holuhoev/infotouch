@@ -3,6 +3,7 @@ package ru.hse.infotouch.domain.datasource;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import ru.hse.infotouch.domain.models.admin.QTag;
 import ru.hse.infotouch.domain.models.admin.Tag;
@@ -14,11 +15,12 @@ import java.util.List;
 
 @Repository
 public class TagDatasource {
-    private final int pageSize = 30;
-
-    private final EntityManager entityManager;
+    @Value("${entities.page-size.default}")
+    private int pageSize;
 
     private final QTag qTag = QTag.tag;
+
+    private final EntityManager entityManager;
 
     public TagDatasource(EntityManager entityManager) {
         this.entityManager = entityManager;

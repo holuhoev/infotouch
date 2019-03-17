@@ -3,6 +3,7 @@ package ru.hse.infotouch.domain.datasource;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import ru.hse.infotouch.domain.models.admin.QTerminal;
 import ru.hse.infotouch.domain.models.admin.Terminal;
@@ -14,9 +15,11 @@ import java.util.List;
 @Repository
 public class TerminalDatasource {
 
-    private final int pageSize = 30;
+    @Value("${entities.page-size.default}")
+    private int pageSize;
 
     private final QTerminal qTerminal = QTerminal.terminal;
+
     private final EntityManager entityManager;
 
     public TerminalDatasource(EntityManager entityManager) {

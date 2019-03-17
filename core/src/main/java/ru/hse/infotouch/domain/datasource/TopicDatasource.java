@@ -3,6 +3,7 @@ package ru.hse.infotouch.domain.datasource;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import ru.hse.infotouch.domain.models.admin.QTopic;
@@ -15,11 +16,12 @@ import java.util.List;
 @Repository
 public class TopicDatasource {
 
-    private final EntityManager entityManager;
-
-    private final int pageSize = 30;
+    @Value("${entities.page-size.default}")
+    private int pageSize;
 
     private QTopic qTopic = QTopic.topic;
+
+    private final EntityManager entityManager;
 
     public TopicDatasource(EntityManager entityManager) {
         this.entityManager = entityManager;
