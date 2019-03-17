@@ -1,4 +1,4 @@
-package ru.hse.infotouch.domain.datasource;
+package ru.hse.infotouch.domain.datasource.util;
 
 import com.querydsl.core.types.*;
 import com.querydsl.core.types.dsl.*;

@@ -4,8 +4,8 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
-import ru.hse.infotouch.domain.models.admin.QTopic;
+import ru.hse.infotouch.domain.models.admin.QTag;
+import ru.hse.infotouch.domain.models.admin.Tag;
 import ru.hse.infotouch.domain.models.admin.Topic;
 import ru.hse.infotouch.util.Strings;
 
@@ -13,35 +13,31 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 @Repository
-public class TopicDatasource {
+public class TagDatasource {
+    private final int pageSize = 30;
 
     private final EntityManager entityManager;
 
-    private final int pageSize = 30;
+    private QTag qTag = QTag.tag;
 
-    private QTopic qTopic = QTopic.topic;
-
-    public TopicDatasource(EntityManager entityManager) {
+    public TagDatasource(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
-    public List<Topic> findAll(String title, String color, int page) {
+    public List<Tag> findAll(String title, int page) {
         BooleanBuilder whereClause = new BooleanBuilder();
 
         if (StringUtils.isNotEmpty(title)) {
-            whereClause.and(qTopic.title.containsIgnoreCase(Strings.removeRedundantSpace(title)));
+            whereClause.and(qTag.title.containsIgnoreCase(Strings.removeRedundantSpace(title)));
         }
 
-        if (StringUtils.isNotEmpty(color)) {
-            whereClause.and(qTopic.color.containsIgnoreCase(Strings.removeRedundantSpace(color)));
-        }
+        JPAQuery<Tag> query = new JPAQuery<>(entityManager);
 
-        JPAQuery<Topic> query = new JPAQuery<>(entityManager);
-
-        return query.from(qTopic)
+        return query.from(qTag)
                 .where(whereClause)
                 .offset(pageSize * page)
                 .limit(pageSize)
                 .fetch();
     }
+
 }

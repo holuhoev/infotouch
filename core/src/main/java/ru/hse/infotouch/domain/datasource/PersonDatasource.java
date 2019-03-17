@@ -4,6 +4,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
+import ru.hse.infotouch.domain.datasource.util.ToManyFetcher;
 import ru.hse.infotouch.domain.models.Person;
 import ru.hse.infotouch.domain.models.QEmployee;
 import ru.hse.infotouch.domain.models.QPerson;
