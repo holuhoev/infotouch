@@ -1,6 +1,9 @@
 package ru.hse.infotouch.domain.models.admin;
 
-import org.springframework.data.geo.Point;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.vividsolutions.jts.geom.Point;
+import ru.hse.infotouch.domain.dto.request.TerminalRequest;
+import ru.hse.infotouch.util.json.PointToJsonSerializer;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,7 +29,8 @@ public class Terminal {
     @Column
     private String description;
 
-    @Column
+    @Column(columnDefinition = "geometry(Point,4326)")
+    @JsonSerialize(using = PointToJsonSerializer.class)
     private Point location;
 
     public Integer getId() {
@@ -72,5 +76,10 @@ public class Terminal {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public void updateFromRequest(TerminalRequest request) {
+        this.setTitle(request.getTitle());
+        this.setDescription(request.getDescription());
     }
 }

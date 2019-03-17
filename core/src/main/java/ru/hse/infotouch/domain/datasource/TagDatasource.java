@@ -18,7 +18,7 @@ public class TagDatasource {
 
     private final EntityManager entityManager;
 
-    private QTag qTag = QTag.tag;
+    private final QTag qTag = QTag.tag;
 
     public TagDatasource(EntityManager entityManager) {
         this.entityManager = entityManager;

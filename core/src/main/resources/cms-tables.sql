@@ -3,9 +3,9 @@ DROP TABLE IF EXISTS "user" CASCADE;
 CREATE TABLE "user"
 (
   id         serial      not null primary key,
-  first_name color default '',
-  last_name  color default '',
-  login      color unique not null,
+  first_name text default '',
+  last_name  text default '',
+  login      text unique not null,
   role       integer
 );
 
@@ -13,8 +13,8 @@ DROP TABLE IF EXISTS terminal CASCADE;
 CREATE TABLE terminal
 (
   id          serial not null primary key,
-  title       color default '',
-  description color default '',
+  title       text default '',
+  description text default '',
   location    geometry(Point, 4326)
 );
 
@@ -22,15 +22,15 @@ DROP TABLE IF EXISTS "tag" CASCADE;
 CREATE TABLE "tag"
 (
   id    serial not null primary key,
-  title color   not null unique
+  title text   not null unique
 );
 
 DROP TABLE IF EXISTS "topic" CASCADE;
 CREATE TABLE "topic"
 (
   id    serial not null primary key,
-  title color   not null unique,
-  color color   not null
+  title text   not null unique,
+  color text   not null
 );
 
 DROP TABLE IF EXISTS "hse_location" CASCADE;
@@ -38,7 +38,7 @@ CREATE TABLE "hse_location"
 (
   id       serial not null primary key,
   type     integer,
-  title    color   not null unique,
+  title    text   not null unique,
   location geometry(Point, 4326)
 );
 
@@ -47,8 +47,8 @@ DROP TABLE IF EXISTS "news" CASCADE;
 CREATE TABLE "news"
 (
   id         serial not null primary key,
-  title      color   not null,
-  content    color default '',
+  title      text   not null,
+  content    text default '',
   image      bytea,
   topic_id   int references "topic" (id),
   start_time time   not null,
@@ -62,8 +62,8 @@ DROP TABLE IF EXISTS "ad" CASCADE;
 CREATE TABLE "ad"
 (
   id         serial not null primary key,
-  title      color   not null,
-  content    color default '',
+  title      text   not null,
+  content    text default '',
   image      bytea,
   video      bytea,
   start_time time   not null,
@@ -77,12 +77,12 @@ DROP TABLE IF EXISTS "announcement" CASCADE;
 CREATE TABLE "announcement"
 (
   id              serial not null primary key,
-  title           color   not null,
-  content         color default '',
+  title           text   not null,
+  content         text default '',
   image           bytea,
   priority        int    not null,
   hse_location_id int references "hse_location" (id),
-  link            color default '',
+  link            text default '',
   created_by      int references "user" (id)
 );
 
