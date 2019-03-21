@@ -1,7 +1,10 @@
 package ru.hse.infotouch.domain.models.admin;
 
-import org.springframework.data.geo.Point;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.vividsolutions.jts.geom.Point;
+import ru.hse.infotouch.domain.dto.request.HseLocationRequest;
 import ru.hse.infotouch.domain.models.enums.HseLocationType;
+import ru.hse.infotouch.util.json.PointToJsonSerializer;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,7 +29,8 @@ public class HseLocation {
     @Column
     private HseLocationType type;
 
-    @Column
+    @Column(columnDefinition = "geometry(Point,4326)")
+    @JsonSerialize(using = PointToJsonSerializer.class)
     private Point location;
 
     public Integer getId() {
@@ -53,14 +57,6 @@ public class HseLocation {
         this.type = type;
     }
 
-    public Point getLocation() {
-        return location;
-    }
-
-    public void setLocation(Point location) {
-        this.location = location;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -72,5 +68,20 @@ public class HseLocation {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public Point getLocation() {
+        return location;
+    }
+
+    public void setLocation(Point location) {
+        this.location = location;
+    }
+
+    public HseLocation updateFromRequest(HseLocationRequest request) {
+        this.setType(request.getType());
+        this.setTitle(request.getTitle());
+
+        return this;
     }
 }
