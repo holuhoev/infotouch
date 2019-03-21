@@ -1,4 +1,4 @@
-package ru.hse.infotouch.domain.models.admin;
+package ru.hse.infotouch.domain.models.admin.relations;
 
 import ru.hse.infotouch.domain.models.enums.AccessRight;
 

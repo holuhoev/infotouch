@@ -1,4 +1,4 @@
-package ru.hse.infotouch.domain.models.admin;
+package ru.hse.infotouch.domain.models.admin.relations;
 
 import ru.hse.infotouch.domain.models.enums.AccessRight;
 
@@ -8,12 +8,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import java.util.Objects;
 
 @Entity
-@Table(name = "user2news")
-public class User2News {
+@Table(name = "user2terminal")
+public class User2Terminal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
@@ -22,8 +21,8 @@ public class User2News {
     @Column(name = "user_id")
     private Integer userId;
 
-    @Column(name = "ad_id")
-    private Integer adId;
+    @Column(name = "terminal_id")
+    private Integer terminalId;
 
     @Column(name = "access_right")
     private AccessRight accessRight;
@@ -44,12 +43,12 @@ public class User2News {
         this.userId = userId;
     }
 
-    public Integer getAdId() {
-        return adId;
+    public Integer getTerminalId() {
+        return terminalId;
     }
 
-    public void setAdId(Integer adId) {
-        this.adId = adId;
+    public void setTerminalId(Integer terminalId) {
+        this.terminalId = terminalId;
     }
 
     public AccessRight getAccessRight() {
@@ -64,8 +63,8 @@ public class User2News {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User2News user2News = (User2News) o;
-        return Objects.equals(id, user2News.id);
+        User2Terminal that = (User2Terminal) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override

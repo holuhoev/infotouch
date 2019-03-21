@@ -1,4 +1,13 @@
-- [ ] CRUD объявлений со всеми связями , пагинация, фильтр-- Доменная модель
+-
+[
+]
+CRUD
+объявлений
+со
+всеми
+связями ,
+пагинация,
+фильтр-- Доменная модель
 DROP TABLE IF EXISTS "user" CASCADE;
 CREATE TABLE "user"
 (
@@ -145,9 +154,9 @@ CREATE TABLE "terminal2announcement"
 DROP TABLE IF EXISTS "terminal2news" CASCADE;
 CREATE TABLE "terminal2news"
 (
-  id          serial not null primary key,
-  terminal_id int    not null references "terminal" (id),
-  news_id     int    not null references "news" (id)
+  terminal_id int not null references "terminal" (id),
+  news_id     int not null references "news" (id),
+  PRIMARY KEY (terminal_id, news_id)
 );
 
 -- Связи новостей

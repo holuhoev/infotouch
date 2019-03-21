@@ -1,4 +1,4 @@
-package ru.hse.infotouch.domain.models.admin;
+package ru.hse.infotouch.domain.models.admin.relations;
 
 import ru.hse.infotouch.domain.models.enums.AccessRight;
 
@@ -12,8 +12,8 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name ="user2ad")
-public class User2Ad {
+@Table(name = "user2news")
+public class User2News {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
@@ -64,8 +64,8 @@ public class User2Ad {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User2Ad that = (User2Ad) o;
-        return Objects.equals(id, that.id);
+        User2News user2News = (User2News) o;
+        return Objects.equals(id, user2News.id);
     }
 
     @Override

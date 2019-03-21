@@ -4,8 +4,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.hse.infotouch.domain.datasource.TagDatasource;
 import ru.hse.infotouch.domain.dto.request.TagRequest;
-import ru.hse.infotouch.domain.models.admin.News2Tag;
-import ru.hse.infotouch.domain.models.admin.QNews2Tag;
+import ru.hse.infotouch.domain.models.admin.relations.QNews2Tag;
+import ru.hse.infotouch.domain.models.admin.relations.News2Tag;
+
 import ru.hse.infotouch.domain.models.admin.Tag;
 import ru.hse.infotouch.domain.repo.News2TagsRepository;
 import ru.hse.infotouch.domain.repo.TagRepository;

@@ -141,8 +141,9 @@ public class News {
         news.setEndDate(request.getEnd());
         news.setEndTime(request.getEndTime());
         news.setImage(request.getImage());
-        news.setStartDate(request.getStart());
-        news.setStartTime(request.getStartTime());
+
+        news.setStartTime(request.getEndTime() != null ? request.getEndTime() : LocalTime.of(0, 0));
+        news.setEndTime(request.getEndTime() != null ? request.getEndTime() : LocalTime.of(23, 0));
 
         return news;
     }
@@ -154,9 +155,10 @@ public class News {
         this.setContent(request.getContent());
 
         this.setEndDate(request.getEnd());
-        this.setEndTime(request.getEndTime());
         this.setStartDate(request.getStart());
-        this.setStartTime(request.getStartTime());
+
+        this.setStartTime(request.getEndTime() != null ? request.getEndTime() : LocalTime.of(0, 0));
+        this.setEndTime(request.getEndTime() != null ? request.getEndTime() : LocalTime.of(23, 0));
     }
 
     public Integer getTopicId() {

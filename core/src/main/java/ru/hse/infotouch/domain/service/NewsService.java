@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.hse.infotouch.domain.dto.request.NewsRequest;
 import ru.hse.infotouch.domain.models.admin.News;
-import ru.hse.infotouch.domain.models.admin.Topic;
 import ru.hse.infotouch.domain.repo.NewsRepository;
 
 import java.util.List;
@@ -16,12 +15,17 @@ public class NewsService {
 
     private final NewsRepository repository;
     private final TopicService topicService;
+    private final TerminalService terminalService;
     private final TagService tagService;
 
     @Autowired
-    public NewsService(NewsRepository repository, TopicService topicService, TagService tagService) {
+    public NewsService(NewsRepository repository,
+                       TopicService topicService,
+                       TerminalService terminalService,
+                       TagService tagService) {
         this.repository = repository;
         this.topicService = topicService;
+        this.terminalService = terminalService;
         this.tagService = tagService;
     }
 
@@ -41,6 +45,7 @@ public class NewsService {
 
         News news = repository.save(News.createFromRequest(request));
 
+        terminalService.insertNewsRelations(news.getId(), request.getTerminalIds());
         tagService.insertNewsRelations(news.getId(), request.getTagIds());
 
         return news;
@@ -54,6 +59,10 @@ public class NewsService {
 
         tagService.deleteAllRelationsByNewsId(id);
         tagService.insertNewsRelations(id, request.getTagIds());
+
+        terminalService.deleteAllNewsRelations(id);
+        terminalService.insertNewsRelations(id, request.getTerminalIds());
+
         news.updateFromRequest(request);
 
         return repository.save(news);
@@ -64,17 +73,22 @@ public class NewsService {
         final News news = this.getOneById(id);
 
         tagService.deleteAllRelationsByNewsId(id);
+        terminalService.deleteAllNewsRelations(id);
         this.repository.delete(news);
     }
 
     private void requireExistingRelations(NewsRequest newsRequest) {
         // TODO: uiException
+        if (topicService.isNotExist(newsRequest.getTopicId())) {
+            throw new IllegalArgumentException("Topic does not exist.");
+        }
+
         if (tagService.isNotExistsAll(newsRequest.getTagIds())) {
             throw new IllegalArgumentException("Does not all tags exist.");
         }
 
-        if (topicService.isNotExist(newsRequest.getTopicId())) {
-            throw new IllegalArgumentException("Topic does not exist.");
+        if (terminalService.isNotExistAll(newsRequest.getTerminalIds())) {
+            throw new IllegalArgumentException("Does not all terminals exist.");
         }
 
     }
