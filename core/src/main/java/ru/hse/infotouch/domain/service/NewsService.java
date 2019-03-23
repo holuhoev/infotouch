@@ -83,7 +83,12 @@ public class NewsService {
 
         news.updateFromRequest(request);
 
-        return repository.save(news);
+        News saved = repository.save(news);
+
+        saved.setTopic(topicService.getOneById(news.getTopicId()));
+        saved.setTags(tagDatasource.findByOneNews(id));
+
+        return saved;
     }
 
     @Transactional

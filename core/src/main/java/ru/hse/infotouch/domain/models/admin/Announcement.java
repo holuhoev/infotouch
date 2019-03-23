@@ -1,5 +1,7 @@
 package ru.hse.infotouch.domain.models.admin;
 
+import ru.hse.infotouch.domain.dto.request.AnnouncementRequest;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -21,7 +23,7 @@ public class Announcement {
     private byte[] image;
 
     @Column
-    private Integer priority;
+    private int priority;
 
     @Column
     private String link;
@@ -32,6 +34,8 @@ public class Announcement {
     @Column(name = "hse_location_id")
     private Integer hseLocationId;
 
+    @Transient
+    private HseLocation hseLocation;
 
     public Integer getCreatedBy() {
         return createdBy;
@@ -73,11 +77,11 @@ public class Announcement {
         this.image = image;
     }
 
-    public Integer getPriority() {
+    public int getPriority() {
         return priority;
     }
 
-    public void setPriority(Integer priority) {
+    public void setPriority(int priority) {
         this.priority = priority;
     }
 
@@ -108,5 +112,35 @@ public class Announcement {
 
     public void setHseLocationId(Integer hseLocationId) {
         this.hseLocationId = hseLocationId;
+    }
+
+    public HseLocation getHseLocation() {
+        return hseLocation;
+    }
+
+    public void setHseLocation(HseLocation hseLocation) {
+        this.hseLocation = hseLocation;
+    }
+
+    public static Announcement createFromRequest(AnnouncementRequest request) {
+        Announcement announcement = new Announcement();
+
+        announcement.setHseLocationId(request.getHseLocationId());
+        announcement.setContent(request.getContent());
+        announcement.setImage(request.getImage());
+        announcement.setLink(request.getLink());
+        announcement.setTitle(request.getTitle());
+        announcement.setPriority(request.getPriority());
+
+        return announcement;
+    }
+
+    public Announcement updateFromRequest(AnnouncementRequest request) {
+        Announcement announcement = createFromRequest(request);
+
+        announcement.setId(this.id);
+        announcement.setCreatedBy(this.createdBy);
+
+        return announcement;
     }
 }

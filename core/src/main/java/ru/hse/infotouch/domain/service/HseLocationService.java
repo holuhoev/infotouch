@@ -63,4 +63,7 @@ public class HseLocationService {
         return geometryFactory.createPoint(new Coordinate(x, y));
     }
 
+    public boolean isNotExist(int hseLocationId) {
+        return !repository.existsById(hseLocationId);
+    }
 }

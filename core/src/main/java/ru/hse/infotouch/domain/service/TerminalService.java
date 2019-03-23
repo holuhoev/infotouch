@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.hse.infotouch.domain.datasource.TerminalDatasource;
 import ru.hse.infotouch.domain.dto.request.TerminalRequest;
 import ru.hse.infotouch.domain.models.admin.Terminal;
-import ru.hse.infotouch.domain.models.admin.relations.Terminal2News;
-import ru.hse.infotouch.domain.models.admin.relations.Terminal2NewsId;
+import ru.hse.infotouch.domain.models.admin.relations.*;
+import ru.hse.infotouch.domain.repo.Terminal2AnnouncementRepository;
 import ru.hse.infotouch.domain.repo.Terminal2NewsRepository;
 import ru.hse.infotouch.domain.repo.TerminalRepository;
 
@@ -17,6 +17,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,30 +27,18 @@ public class TerminalService {
     private final TerminalDatasource datasource;
     private final TerminalRepository terminalRepository;
     private final Terminal2NewsRepository terminal2NewsRepository;
+    private final Terminal2AnnouncementRepository terminal2AnnouncementRepository;
 
     private GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
 
-    public TerminalService(EntityManager entityManager, TerminalDatasource datasource, TerminalRepository terminalRepository, Terminal2NewsRepository terminal2NewsRepository) {
+    public TerminalService(EntityManager entityManager, TerminalDatasource datasource, TerminalRepository terminalRepository, Terminal2NewsRepository terminal2NewsRepository, Terminal2AnnouncementRepository terminal2AnnouncementRepository) {
         this.entityManager = entityManager;
         this.datasource = datasource;
         this.terminalRepository = terminalRepository;
         this.terminal2NewsRepository = terminal2NewsRepository;
+        this.terminal2AnnouncementRepository = terminal2AnnouncementRepository;
     }
 
-    public void deleteAllNewsRelations(int newsId) {
-        Query query = entityManager.createNativeQuery("delete from terminal2news tn where tn.news_id = :newsId ");
-        query.setParameter("newsId", newsId).executeUpdate();
-    }
-
-    public void insertNewsRelations(int newsId, int[] terminalIds) {
-        List<Terminal2News> toSave = Arrays.stream(terminalIds).boxed().map(id -> {
-            Terminal2NewsId terminal2NewsId = new Terminal2NewsId(id, newsId);
-
-            return new Terminal2News(terminal2NewsId);
-        }).collect(Collectors.toList());
-
-        terminal2NewsRepository.saveAll(toSave);
-    }
 
     public List<Terminal> findAll(String searchString, int page) {
 
@@ -98,4 +87,33 @@ public class TerminalService {
         return false;
     }
 
+    public void deleteAllNewsRelations(int newsId) {
+        Query query = entityManager.createNativeQuery("delete from terminal2news tn where tn.news_id = :newsId ");
+        query.setParameter("newsId", newsId).executeUpdate();
+    }
+
+    public void insertNewsRelations(int newsId, int[] terminalIds) {
+        List<Terminal2News> toSave = getRelations(newsId, terminalIds, Terminal2News::createOf);
+
+        terminal2NewsRepository.saveAll(toSave);
+    }
+
+
+    public void deleteAllAnnouncementRelations(int announcementId) {
+        Query query = entityManager.createNativeQuery("delete from terminal2announcement tn where tn.announcement_id = :announcementId ");
+        query.setParameter("announcementId", announcementId).executeUpdate();
+    }
+
+    public void insertAnnouncementRelations(int announcementId, int[] terminalIds) {
+        List<Terminal2Announcement> toSave = getRelations(announcementId, terminalIds, Terminal2Announcement::createOf);
+
+        terminal2AnnouncementRepository.saveAll(toSave);
+    }
+
+    private <T> List<T> getRelations(int relationId, int[] terminalIds, BiFunction<Integer, Integer, T> createMethod) {
+
+        return Arrays.stream(terminalIds).boxed()
+                .map(terminalId -> createMethod.apply(terminalId, relationId))
+                .collect(Collectors.toList());
+    }
 }

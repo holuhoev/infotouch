@@ -15,7 +15,7 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "hse_object")
+@Table(name = "hse_location")
 public class HseLocation {
 
     @Id
