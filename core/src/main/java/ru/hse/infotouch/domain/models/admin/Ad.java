@@ -1,5 +1,7 @@
 package ru.hse.infotouch.domain.models.admin;
 
+import ru.hse.infotouch.domain.dto.request.AdRequest;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -140,4 +142,34 @@ public class Ad {
     public void setCreatedBy(Integer createdBy) {
         this.createdBy = createdBy;
     }
+
+
+    public static Ad createFromRequest(AdRequest request) {
+        Ad ad = new Ad();
+
+        ad = ad.updateFromRequest(request);
+
+        return ad;
+    }
+
+    public Ad updateFromRequest(AdRequest request) {
+        Ad ad = new Ad();
+        ad.setContent(request.getContent());
+        ad.setTitle(request.getTitle());
+
+        ad.setImage(request.getImage());
+        ad.setVideo(request.getVideo());
+
+        ad.setEndTime(request.getEndTime());
+        ad.setEndDate(request.getEndDate());
+
+        ad.setStartTime(request.getStartTime());
+        ad.setStartDate(request.getStartDate());
+
+        ad.setCreatedBy(this.createdBy);
+        ad.setId(this.id);
+
+        return ad;
+    }
+
 }

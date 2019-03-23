@@ -9,6 +9,7 @@ import ru.hse.infotouch.domain.datasource.TerminalDatasource;
 import ru.hse.infotouch.domain.dto.request.TerminalRequest;
 import ru.hse.infotouch.domain.models.admin.Terminal;
 import ru.hse.infotouch.domain.models.admin.relations.*;
+import ru.hse.infotouch.domain.repo.Terminal2AdRepository;
 import ru.hse.infotouch.domain.repo.Terminal2AnnouncementRepository;
 import ru.hse.infotouch.domain.repo.Terminal2NewsRepository;
 import ru.hse.infotouch.domain.repo.TerminalRepository;
@@ -28,15 +29,17 @@ public class TerminalService {
     private final TerminalRepository terminalRepository;
     private final Terminal2NewsRepository terminal2NewsRepository;
     private final Terminal2AnnouncementRepository terminal2AnnouncementRepository;
+    private final Terminal2AdRepository terminal2AdRepository;
 
     private GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
 
-    public TerminalService(EntityManager entityManager, TerminalDatasource datasource, TerminalRepository terminalRepository, Terminal2NewsRepository terminal2NewsRepository, Terminal2AnnouncementRepository terminal2AnnouncementRepository) {
+    public TerminalService(EntityManager entityManager, TerminalDatasource datasource, TerminalRepository terminalRepository, Terminal2NewsRepository terminal2NewsRepository, Terminal2AnnouncementRepository terminal2AnnouncementRepository, Terminal2AdRepository terminal2AdRepository) {
         this.entityManager = entityManager;
         this.datasource = datasource;
         this.terminalRepository = terminalRepository;
         this.terminal2NewsRepository = terminal2NewsRepository;
         this.terminal2AnnouncementRepository = terminal2AnnouncementRepository;
+        this.terminal2AdRepository = terminal2AdRepository;
     }
 
 
@@ -108,6 +111,17 @@ public class TerminalService {
         List<Terminal2Announcement> toSave = getRelations(announcementId, terminalIds, Terminal2Announcement::createOf);
 
         terminal2AnnouncementRepository.saveAll(toSave);
+    }
+
+    public void deleteAllAdRelations(int adId) {
+        Query query = entityManager.createNativeQuery("delete from terminal2ad tn where tn.ad_id = :adId ");
+        query.setParameter("adId", adId).executeUpdate();
+    }
+
+    public void insertAdRelations(int adId, int[] terminalIds) {
+        List<Terminal2Ad> toSave = getRelations(adId, terminalIds, Terminal2Ad::createOf);
+
+        terminal2AdRepository.saveAll(toSave);
     }
 
     private <T> List<T> getRelations(int relationId, int[] terminalIds, BiFunction<Integer, Integer, T> createMethod) {

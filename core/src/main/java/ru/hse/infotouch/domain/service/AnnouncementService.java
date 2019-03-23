@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.hse.infotouch.domain.datasource.AnnouncementDatasource;
 import ru.hse.infotouch.domain.dto.request.AnnouncementRequest;
 import ru.hse.infotouch.domain.models.admin.Announcement;
+import ru.hse.infotouch.domain.models.admin.HseLocation;
 import ru.hse.infotouch.domain.repo.AnnouncementRepository;
 
 import java.util.List;
@@ -50,6 +51,10 @@ public class AnnouncementService {
 
         terminalService.insertAnnouncementRelations(announcement.getId(), request.getTerminalIds());
 
+        HseLocation hseLocation = hseLocationService.getOneById(announcement.getId());
+
+        announcement.setHseLocation(hseLocation);
+
         return announcement;
     }
 
@@ -57,14 +62,13 @@ public class AnnouncementService {
     public Announcement update(int id, AnnouncementRequest request) {
         requireExistingRelations(request);
 
-        final Announcement announcement = this.getOneById(id);
+        Announcement announcement = this.getOneById(id)
+                .updateFromRequest(request);
 
         terminalService.deleteAllAnnouncementRelations(id);
         terminalService.insertAnnouncementRelations(id, request.getTerminalIds());
-
-        announcement.updateFromRequest(request);
-
         Announcement saved = repository.save(announcement);
+
         saved.setHseLocation(hseLocationService.getOneById(request.getHseLocationId()));
 
         return saved;
