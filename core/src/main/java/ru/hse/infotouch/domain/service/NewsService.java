@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
+import ru.hse.infotouch.domain.datasource.NewsDatasource;
+import ru.hse.infotouch.domain.datasource.TagDatasource;
 import ru.hse.infotouch.domain.dto.request.NewsRequest;
 import ru.hse.infotouch.domain.models.admin.News;
 import ru.hse.infotouch.domain.repo.NewsRepository;
@@ -18,23 +20,39 @@ public class NewsService {
     private final TerminalService terminalService;
     private final TagService tagService;
 
+    private final NewsDatasource newsDatasource;
+    private final TagDatasource tagDatasource;
+
     @Autowired
     public NewsService(NewsRepository repository,
                        TopicService topicService,
                        TerminalService terminalService,
-                       TagService tagService) {
+                       TagService tagService,
+                       NewsDatasource newsDatasource,
+                       TagDatasource tagDatasource) {
         this.repository = repository;
         this.topicService = topicService;
         this.terminalService = terminalService;
         this.tagService = tagService;
+        this.newsDatasource = newsDatasource;
+        this.tagDatasource = tagDatasource;
     }
 
-    public List<News> findAll() {
-        return repository.findAll();
+    public List<News> findAll(String searchString,
+                              Integer topicId,
+                              int[] tagIds,
+                              int page) {
+
+        return newsDatasource.findAll(searchString, topicId, tagIds, page);
     }
 
     public News getOneById(int id) {
-        return this.repository.findById(id).orElseThrow(() -> new IllegalArgumentException(String.format("Новости с id \"%d\" не существует", id)));
+        News news = this.repository.findById(id).orElseThrow(() -> new IllegalArgumentException(String.format("Новости с id \"%d\" не существует", id)));
+
+        news.setTopic(topicService.getOneById(news.getTopicId()));
+        news.setTags(tagDatasource.findByOneNews(id));
+
+        return news;
     }
 
     @Transactional
@@ -74,6 +92,7 @@ public class NewsService {
 
         tagService.deleteAllRelationsByNewsId(id);
         terminalService.deleteAllNewsRelations(id);
+
         this.repository.delete(news);
     }
 

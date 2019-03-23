@@ -5,3 +5,6 @@ server:
 spring:
   mvc:
     date-format: "yyyy.MM.dd"
+entities:
+  page-size:
+    default: 30

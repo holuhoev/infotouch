@@ -36,18 +36,19 @@ public class PersonDatasource {
     public List<Person> findAll(String fio, UUID[] employeesIds, int page) {
         BooleanBuilder whereClause = new BooleanBuilder();
 
+        JPAQuery<Person> query = new JPAQuery<>(entityManager).select(qPerson)
+                .from(qPerson);
+
         if (StringUtils.isNotEmpty(fio)) {
             whereClause.and(qPerson.fio.containsIgnoreCase(removeRedundantSpace(fio)));
         }
 
         if (Objects.nonNull(employeesIds) && employeesIds.length > 0) {
             whereClause.and(qEmployee.Id.in(employeesIds));
+            query = query.leftJoin(qEmployee).on(qPerson.id.eq(qEmployee.personId));
         }
 
-        List<Person> persons = new JPAQuery<>(entityManager).select(qPerson)
-                .from(qPerson)
-                .leftJoin(qEmployee).on(qPerson.id.eq(qEmployee.personId))
-                .where(whereClause)
+        List<Person> persons = query.where(whereClause)
                 .distinct()
                 .offset(page * pageSize)
                 .limit(pageSize)
@@ -57,7 +58,7 @@ public class PersonDatasource {
                 .by(Person::getId)
                 .from(qEmployee)
                 .joiningOn(qEmployee.personId)
-                .fetchAndCombine(entityManager,Person::setEmployees);
+                .fetchAndCombine(entityManager, Person::setEmployees);
 
 
         return personWithEmployees;

@@ -10,6 +10,8 @@ import ru.hse.infotouch.domain.service.NewsService;
 
 import java.util.List;
 
+import static java.util.Objects.isNull;
+
 @RestController
 @RequestMapping("api/news")
 public class NewsController {
@@ -28,9 +30,18 @@ public class NewsController {
     }
 
     @GetMapping
-    public ResponseEntity<List<News>> findAll() {
+    public ResponseEntity<List<News>> findAll(@RequestParam(value = "searchString", required = false) String searchString,
+                                              @RequestParam(value = "topicId", required = false) Integer topicId,
+                                              @RequestParam(value = "tagIds", required = false) int[] tagIds,
+                                              @RequestParam(value = "page", required = false) Integer page) {
 
-        return ResponseEntity.ok(newsService.findAll());
+        return ResponseEntity.ok(
+                newsService.findAll(
+                        searchString,
+                        topicId,
+                        tagIds,
+                        isNull(page) ? 0 : page
+                ));
     }
 
     @PostMapping

@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -44,6 +45,12 @@ public class News {
 
     @Column(name = "created_by")
     private Integer createdBy;
+
+    @Transient
+    private List<Tag> tags;
+
+    @Transient
+    private Topic topic;
 
     public Integer getCreatedBy() {
         return createdBy;
@@ -167,5 +174,21 @@ public class News {
 
     public void setTopicId(Integer topicId) {
         this.topicId = topicId;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public Topic getTopic() {
+        return topic;
+    }
+
+    public void setTopic(Topic topic) {
+        this.topic = topic;
     }
 }
