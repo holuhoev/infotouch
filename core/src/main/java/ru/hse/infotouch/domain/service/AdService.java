@@ -27,7 +27,7 @@ public class AdService {
         return this.repository.findById(id).orElseThrow(() -> new IllegalArgumentException(String.format("Рекламы с id \"%d\" не существует", id)));
     }
 
-    private List<Ad> findAll(String searchString, int page) {
+    public List<Ad> findAll(String searchString, int page) {
         return datasource.findAll(searchString, page);
     }
 

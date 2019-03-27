@@ -75,9 +75,9 @@ CREATE TABLE "ad"
   content    text default '',
   image      bytea,
   video      bytea,
---   Убрать Видео из модели, хранить его отдельно, как preview
-  start_time time   not null,
-  end_time   time   not null,
+  --   Убрать Видео из модели, хранить его отдельно, как preview
+  start_time time,
+  end_time   time,
   start_date date,
   end_date   date,
   created_by int references "user" (id)

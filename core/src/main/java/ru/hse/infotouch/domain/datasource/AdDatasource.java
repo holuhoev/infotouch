@@ -37,7 +37,7 @@ public class AdDatasource {
                 .from(qAd)
                 .where(whereClause)
                 .offset(pageSize * page)
-                .limit(page)
+                .limit(pageSize)
                 .fetch();
     }
 }
