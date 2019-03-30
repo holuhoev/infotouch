@@ -32,8 +32,9 @@ public class AdminController {
                                                                         @RequestParam(name = "page", required = false) Integer page) {
 
         return ResponseEntity.ok(
-                userService.findAllWithTerminals(searchString, Objects.nonNull(page) ? page : 0)
-        );
+                userService.findAllWithTerminals(searchString,
+                        Objects.nonNull(page) ? page : 0
+                ));
     }
 
 
