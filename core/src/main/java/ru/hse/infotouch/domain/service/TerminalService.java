@@ -80,7 +80,7 @@ public class TerminalService {
         terminalRepository.delete(terminal);
     }
 
-    public boolean isNotExistAll(int[] ids) {
+    public boolean isNotExistAll(int... ids) {
         for (int id : ids) {
             if (!terminalRepository.existsById(id)) {
                 return true;

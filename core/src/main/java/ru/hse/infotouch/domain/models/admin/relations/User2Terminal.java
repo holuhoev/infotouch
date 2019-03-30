@@ -1,13 +1,9 @@
 package ru.hse.infotouch.domain.models.admin.relations;
 
+import ru.hse.infotouch.domain.models.admin.User;
 import ru.hse.infotouch.domain.models.enums.AccessRight;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -26,6 +22,9 @@ public class User2Terminal {
 
     @Column(name = "access_right")
     private AccessRight accessRight;
+
+    @Transient
+    private User user;
 
     public Integer getId() {
         return id;
@@ -59,6 +58,12 @@ public class User2Terminal {
         this.accessRight = accessRight;
     }
 
+    public User2Terminal(Integer userId, Integer terminalId, AccessRight accessRight) {
+        this.userId = userId;
+        this.terminalId = terminalId;
+        this.accessRight = accessRight;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -70,5 +75,13 @@ public class User2Terminal {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
