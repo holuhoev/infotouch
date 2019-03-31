@@ -1,6 +1,7 @@
 package ru.hse.infotouch.domain.models.admin;
 
 import ru.hse.infotouch.domain.dto.UserTerminalDTO;
+import ru.hse.infotouch.domain.dto.request.UserRequest;
 import ru.hse.infotouch.domain.models.enums.UserRole;
 
 import javax.persistence.*;
@@ -90,5 +91,25 @@ public class User {
 
     public void setTerminals(List<UserTerminalDTO> terminals) {
         this.terminals = terminals;
+    }
+
+    public static User createFromRequest(UserRequest request) {
+        User user = new User();
+
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setLogin(request.getLogin());
+        user.setUserRole(request.getRole());
+
+        return user;
+    }
+
+
+    public User updateFromRequest(UserRequest request) {
+        User user = createFromRequest(request);
+
+        user.setId(this.getId());
+
+        return user;
     }
 }

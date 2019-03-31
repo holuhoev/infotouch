@@ -2,9 +2,11 @@ package ru.hse.infotouch.admin.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hse.infotouch.domain.dto.request.UserRequest;
 import ru.hse.infotouch.domain.models.admin.User;
 import ru.hse.infotouch.domain.service.UserService;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
 
@@ -29,5 +31,19 @@ public class UserController {
                                               @RequestParam(value = "page", required = false) Integer page) {
 
         return ResponseEntity.ok(userService.findAll(searchString, Objects.nonNull(page) ? page : 0));
+    }
+
+    // TODO: require AdminRole
+    @PostMapping
+    public ResponseEntity<User> createUser(@Valid UserRequest userRequest) {
+
+        return ResponseEntity.ok(userService.create(userRequest));
+    }
+
+    // TODO: require AdminRole
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable("id") int id, @Valid UserRequest userRequest) {
+
+        return ResponseEntity.ok(userService.update(id, userRequest));
     }
 }
