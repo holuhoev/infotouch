@@ -60,7 +60,7 @@ public class TagDatasource {
                 .where(qNews2Tag.newsId.in(ArrayUtils.toObject(newsIds)))
                 .fetch()
                 .stream()
-                .collect(Collectors.groupingBy(t -> (t).get(qNews2Tag.newsId),
+                .collect(Collectors.groupingBy(t -> t.get(qNews2Tag.newsId),
                         Collectors.mapping(t -> t.get(qTag), Collectors.toList())));
     }
 

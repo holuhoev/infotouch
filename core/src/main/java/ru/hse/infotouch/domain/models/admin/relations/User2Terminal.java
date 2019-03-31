@@ -1,6 +1,5 @@
 package ru.hse.infotouch.domain.models.admin.relations;
 
-import ru.hse.infotouch.domain.models.admin.User;
 import ru.hse.infotouch.domain.models.enums.AccessRight;
 
 import javax.persistence.*;
@@ -9,45 +8,18 @@ import java.util.Objects;
 @Entity
 @Table(name = "user2terminal")
 public class User2Terminal {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private Integer id;
-
-    @Column(name = "user_id")
-    private Integer userId;
-
-    @Column(name = "terminal_id")
-    private Integer terminalId;
+    @EmbeddedId
+    private User2TerminalId id;
 
     @Column(name = "access_right")
     private AccessRight accessRight;
 
-    @Transient
-    private User user;
-
-    public Integer getId() {
-        return id;
+    public User2Terminal() {
     }
 
-    public void setId(Integer id) {
+    public User2Terminal(User2TerminalId id, AccessRight accessRight) {
         this.id = id;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public Integer getTerminalId() {
-        return terminalId;
-    }
-
-    public void setTerminalId(Integer terminalId) {
-        this.terminalId = terminalId;
+        this.accessRight = accessRight;
     }
 
     public AccessRight getAccessRight() {
@@ -55,12 +27,6 @@ public class User2Terminal {
     }
 
     public void setAccessRight(AccessRight accessRight) {
-        this.accessRight = accessRight;
-    }
-
-    public User2Terminal(Integer userId, Integer terminalId, AccessRight accessRight) {
-        this.userId = userId;
-        this.terminalId = terminalId;
         this.accessRight = accessRight;
     }
 
@@ -77,11 +43,7 @@ public class User2Terminal {
         return Objects.hash(id);
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
+    public static User2Terminal createOf(int userId, int terminalId, AccessRight right) {
+        return new User2Terminal(new User2TerminalId(userId, terminalId), right);
     }
 }

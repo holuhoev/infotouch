@@ -1,22 +1,19 @@
 package ru.hse.infotouch.domain.models.admin;
 
+import ru.hse.infotouch.domain.dto.UserTerminalDTO;
 import ru.hse.infotouch.domain.models.enums.UserRole;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "user")
+@Table(name = "hse_user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column
     private Integer id;
 
     @Column(name = "first_name")
@@ -30,6 +27,9 @@ public class User {
 
     @Column(name = "role")
     private UserRole userRole;
+
+    @Transient
+    private List<UserTerminalDTO> terminals;
 
     public Integer getId() {
         return id;
@@ -82,5 +82,13 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public List<UserTerminalDTO> getTerminals() {
+        return terminals;
+    }
+
+    public void setTerminals(List<UserTerminalDTO> terminals) {
+        this.terminals = terminals;
     }
 }

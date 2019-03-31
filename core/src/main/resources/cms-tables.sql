@@ -1,15 +1,6 @@
--
-[
-]
-CRUD
-объявлений
-со
-всеми
-связями ,
-пагинация,
-фильтр-- Доменная модель
-DROP TABLE IF EXISTS "user" CASCADE;
-CREATE TABLE "user"
+-- Доменная модель
+DROP TABLE IF EXISTS "hse_user" CASCADE;
+CREATE TABLE "hse_user"
 (
   id         serial      not null primary key,
   first_name text default '',
@@ -64,7 +55,7 @@ CREATE TABLE "news"
   end_time   time   not null,
   start_date date,
   end_date   date,
-  created_by int references "user" (id)
+  created_by int references "hse_user" (id)
 );
 
 DROP TABLE IF EXISTS "ad" CASCADE;
@@ -80,7 +71,7 @@ CREATE TABLE "ad"
   end_time   time,
   start_date date,
   end_date   date,
-  created_by int references "user" (id)
+  created_by int references "hse_user" (id)
 );
 
 DROP TABLE IF EXISTS "announcement" CASCADE;
@@ -93,7 +84,7 @@ CREATE TABLE "announcement"
   priority        int    not null,
   hse_location_id int references "hse_location" (id),
   link            text default '',
-  created_by      int references "user" (id)
+  created_by      int references "hse_user" (id)
 );
 
 
@@ -101,17 +92,17 @@ CREATE TABLE "announcement"
 DROP TABLE IF EXISTS "user2terminal" CASCADE;
 CREATE TABLE "user2terminal"
 (
-  id           serial not null primary key,
-  user_id      int    not null references "user" (id),
-  terminal_id  int    not null references "terminal" (id),
-  access_right int    not null
+  user_id      int not null references "hse_user" (id),
+  terminal_id  int not null references "terminal" (id),
+  access_right int not null,
+  PRIMARY KEY (user_id, terminal_id)
 );
 
 DROP TABLE IF EXISTS "user2ad" CASCADE;
 CREATE TABLE "user2ad"
 (
   id           serial not null primary key,
-  user_id      int    not null references "user" (id),
+  user_id      int    not null references "hse_user" (id),
   ad_id        int    not null references "ad" (id),
   access_right int    not null
 );
@@ -120,7 +111,7 @@ DROP TABLE IF EXISTS "user2announcement" CASCADE;
 CREATE TABLE "user2announcement"
 (
   id              serial not null primary key,
-  user_id         int    not null references "user" (id),
+  user_id         int    not null references "hse_user" (id),
   announcement_id int    not null references "announcement" (id),
   access_right    int    not null
 );
@@ -129,7 +120,7 @@ DROP TABLE IF EXISTS "user2news" CASCADE;
 CREATE TABLE "user2news"
 (
   id           serial not null primary key,
-  user_id      int    not null references "user" (id),
+  user_id      int    not null references "hse_user" (id),
   news_id      int    not null references "news" (id),
   access_right int    not null
 );
@@ -139,17 +130,17 @@ CREATE TABLE "user2news"
 DROP TABLE IF EXISTS "terminal2ad" CASCADE;
 CREATE TABLE "terminal2ad"
 (
-  id          serial not null primary key,
-  terminal_id int    not null references "terminal" (id),
-  ad_id       int    not null references "ad" (id)
+  terminal_id int not null references "terminal" (id),
+  ad_id       int not null references "ad" (id),
+  PRIMARY KEY (terminal_id, ad_id)
 );
 
 DROP TABLE IF EXISTS "terminal2announcement" CASCADE;
 CREATE TABLE "terminal2announcement"
 (
-  id              serial not null primary key,
-  terminal_id     int    not null references "terminal" (id),
-  announcement_id int    not null references "announcement" (id)
+  terminal_id     int not null references "terminal" (id),
+  announcement_id int not null references "announcement" (id),
+  PRIMARY KEY (terminal_id, announcement_id)
 );
 
 DROP TABLE IF EXISTS "terminal2news" CASCADE;
