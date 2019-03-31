@@ -1,12 +1,12 @@
 package ru.hse.infotouch.admin.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.hse.infotouch.domain.models.admin.User;
 import ru.hse.infotouch.domain.service.UserService;
+
+import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("api/user")
@@ -24,4 +24,10 @@ public class UserController {
         return ResponseEntity.ok(userService.getOneById(id));
     }
 
+    @GetMapping
+    public ResponseEntity<List<User>> findAll(@RequestParam(value = "searchString", required = false) String searchString,
+                                              @RequestParam(value = "page", required = false) Integer page) {
+
+        return ResponseEntity.ok(userService.findAll(searchString, Objects.nonNull(page) ? page : 0));
+    }
 }
