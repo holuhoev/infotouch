@@ -1,5 +1,6 @@
 package ru.hse.infotouch.admin.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hse.infotouch.domain.dto.request.UserRequest;
@@ -37,13 +38,20 @@ public class UserController {
     @PostMapping
     public ResponseEntity<User> createUser(@Valid UserRequest userRequest) {
 
-        return ResponseEntity.ok(userService.create(userRequest));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(userService.create(userRequest));
     }
 
-    // TODO: require AdminRole
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable("id") int id, @Valid UserRequest userRequest) {
 
         return ResponseEntity.ok(userService.update(id, userRequest));
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUser(@PathVariable("id") int id) {
+
+        this.userService.delete(id);
     }
 }

@@ -73,6 +73,13 @@ public class UserService {
         return saved;
     }
 
+    public void delete(int id) {
+        final User user = this.getOneById(id);
+
+        this.deleteTerminalRelations(id);
+
+        this.repository.delete(user);
+    }
 
     private void deleteTerminalRelations(int userId) {
         Query query = em.createNativeQuery("delete from user2terminal ut where ut.user_id = :userId ");
