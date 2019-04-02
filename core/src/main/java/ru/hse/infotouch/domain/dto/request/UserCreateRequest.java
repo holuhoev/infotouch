@@ -5,7 +5,7 @@ import ru.hse.infotouch.domain.models.enums.UserRole;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-public class UserRequest {
+public class UserCreateRequest {
     @NotNull(message = "firstName must be specified")
     private String firstName;
     private String lastName;

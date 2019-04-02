@@ -4,8 +4,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.hse.infotouch.domain.datasource.TerminalDatasource;
 import ru.hse.infotouch.domain.datasource.UserDatasource;
-import ru.hse.infotouch.domain.dto.request.UserRequest;
+import ru.hse.infotouch.domain.dto.request.UserCreateRequest;
 import ru.hse.infotouch.domain.dto.request.UserTerminalRequest;
+import ru.hse.infotouch.domain.dto.request.UserUpdateRequest;
 import ru.hse.infotouch.domain.models.admin.User;
 import ru.hse.infotouch.domain.models.admin.relations.User2Terminal;
 import ru.hse.infotouch.domain.repo.User2TerminalRepository;
@@ -14,6 +15,7 @@ import ru.hse.infotouch.domain.repo.UserRepository;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,17 +23,24 @@ public class UserService {
 
     private final UserRepository repository;
     private final UserDatasource datasource;
-    private final TerminalDatasource terminalDatasource;
 
+    private final TerminalDatasource terminalDatasource;
     private final User2TerminalRepository user2TerminalRepository;
+    private final TerminalService terminalService;
 
     private final EntityManager em;
 
-    public UserService(UserRepository repository, UserDatasource datasource, TerminalDatasource terminalDatasource, User2TerminalRepository user2TerminalRepository, EntityManager em) {
+    public UserService(UserRepository repository,
+                       UserDatasource datasource,
+                       TerminalDatasource terminalDatasource,
+                       User2TerminalRepository user2TerminalRepository,
+                       TerminalService terminalService,
+                       EntityManager em) {
         this.repository = repository;
         this.datasource = datasource;
         this.terminalDatasource = terminalDatasource;
         this.user2TerminalRepository = user2TerminalRepository;
+        this.terminalService = terminalService;
         this.em = em;
     }
 
@@ -48,11 +57,13 @@ public class UserService {
     }
 
     @Transactional
-    public User create(UserRequest userRequest) {
-        User toSave = User.createFromRequest(userRequest);
+    public User create(UserCreateRequest createRequest) {
+        requireExistingTerminals(createRequest.getTerminals());
+
+        User toSave = User.createFromRequest(createRequest);
 
         User user = repository.save(toSave);
-        insertTerminalRelations(user.getId(), userRequest.getTerminals());
+        insertTerminalRelations(user.getId(), createRequest.getTerminals());
 
         user.setTerminals(terminalDatasource.findAllByUserId(user.getId()));
 
@@ -60,11 +71,14 @@ public class UserService {
     }
 
     @Transactional
-    public User update(int id, UserRequest userRequest) {
-        User user = this.getOneById(id).updateFromRequest(userRequest);
+    public User update(int id, UserUpdateRequest updateRequest) {
+        requireExistingTerminals(updateRequest.getTerminals());
+
+        User user = this.getOneById(id)
+                .updateFromRequest(updateRequest);
 
         deleteTerminalRelations(id);
-        insertTerminalRelations(user.getId(), userRequest.getTerminals());
+        insertTerminalRelations(user.getId(), updateRequest.getTerminals());
 
         User saved = this.repository.save(user);
 
@@ -73,6 +87,7 @@ public class UserService {
         return saved;
     }
 
+    @Transactional
     public void delete(int id) {
         final User user = this.getOneById(id);
 
@@ -92,5 +107,15 @@ public class UserService {
                 .collect(Collectors.toList());
 
         user2TerminalRepository.saveAll(toSave);
+    }
+
+    private void requireExistingTerminals(List<UserTerminalRequest> terminals) {
+        int[] terminalIds = terminals.stream()
+                .mapToInt(UserTerminalRequest::getTerminalId)
+                .toArray();
+
+        if (terminalService.isNotExistAll(terminalIds)) {
+            throw new IllegalArgumentException("Does not all terminals exist.");
+        }
     }
 }
