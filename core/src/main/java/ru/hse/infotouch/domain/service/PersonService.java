@@ -12,10 +12,12 @@ public class PersonService {
 
     private final PersonRepository repository;
     private final PersonDatasource datasource;
+    private final EmployeeService employeeService;
 
-    public PersonService(PersonRepository repository, PersonDatasource datasource) {
+    public PersonService(PersonRepository repository, PersonDatasource datasource, EmployeeService employeeService) {
         this.repository = repository;
         this.datasource = datasource;
+        this.employeeService = employeeService;
     }
 
     public void saveAll(List<Person> persons) {
@@ -31,6 +33,10 @@ public class PersonService {
     }
 
     public Person getById(UUID id) {
-        return repository.findById(id).orElseThrow(() -> new IllegalArgumentException(String.format("Сотрудника с id \"%s\" не существует", id)));
+        Person person = repository.findById(id).orElseThrow(() -> new IllegalArgumentException(String.format("Сотрудника с id \"%s\" не существует", id)));
+
+        person.setEmployees(employeeService.findAllByPersonId(id));
+
+        return person;
     }
 }

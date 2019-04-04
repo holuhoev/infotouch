@@ -38,12 +38,13 @@ public class NewsService {
         this.tagDatasource = tagDatasource;
     }
 
-    public List<News> findAll(String searchString,
+    public List<News> findAll(Integer terminalId,
+                              String searchString,
                               Integer topicId,
                               int[] tagIds,
                               int page) {
 
-        return newsDatasource.findAll(searchString, topicId, tagIds, page);
+        return newsDatasource.findAll(terminalId, searchString, topicId, tagIds, page);
     }
 
     public News getOneById(int id) {

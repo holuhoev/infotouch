@@ -36,7 +36,7 @@ public class NewsController {
                                               @RequestParam(value = "page", required = false) Integer page) {
 
         return ResponseEntity.ok(
-                newsService.findAll(
+                newsService.findAll(null,
                         searchString,
                         topicId,
                         tagIds,
