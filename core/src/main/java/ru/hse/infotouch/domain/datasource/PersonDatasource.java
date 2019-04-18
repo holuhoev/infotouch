@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import ru.hse.infotouch.domain.datasource.util.ToManyFetcher;
 import ru.hse.infotouch.domain.models.Person;
+import ru.hse.infotouch.domain.models.QChair;
 import ru.hse.infotouch.domain.models.QEmployee;
 import ru.hse.infotouch.domain.models.QPerson;
+import ru.hse.infotouch.domain.models.enums.CityType;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -25,6 +27,7 @@ public class PersonDatasource {
 
     private final QPerson qPerson = QPerson.person;
     private final QEmployee qEmployee = QEmployee.employee;
+    private final QChair qChair = QChair.chair;
 
     private final EntityManager entityManager;
 
@@ -37,15 +40,14 @@ public class PersonDatasource {
         BooleanBuilder whereClause = new BooleanBuilder();
 
         JPAQuery<Person> query = new JPAQuery<>(entityManager).select(qPerson)
-                .from(qPerson);
+                .from(qPerson)
+                .leftJoin(qEmployee).on(qPerson.id.eq(qEmployee.personId))
+                .leftJoin(qChair).on(qEmployee.chairId.eq(qChair.Id));
+
+        whereClause.and(qChair.city.eq(CityType.MOSCOW));
 
         if (StringUtils.isNotEmpty(fio)) {
             whereClause.and(qPerson.fio.containsIgnoreCase(removeRedundantSpace(fio)));
-        }
-
-        if (Objects.nonNull(employeesIds) && employeesIds.length > 0) {
-            whereClause.and(qEmployee.Id.in(employeesIds));
-            query = query.leftJoin(qEmployee).on(qPerson.id.eq(qEmployee.personId));
         }
 
         List<Person> persons = query.where(whereClause)

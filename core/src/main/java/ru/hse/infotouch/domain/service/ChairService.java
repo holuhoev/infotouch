@@ -6,6 +6,7 @@ import ru.hse.infotouch.domain.models.Chair;
 import ru.hse.infotouch.domain.models.QChair;
 import ru.hse.infotouch.domain.repo.ChairRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
 
@@ -30,5 +31,10 @@ public class ChairService {
                                 .and(qChair.facultyName.containsIgnoreCase(stripToEmpty(facultyName)))
                 ).spliterator(), false)
                 .findFirst();
+    }
+
+    public List<Chair> findAll() {
+
+        return repository.findAll();
     }
 }
