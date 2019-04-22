@@ -25,6 +25,26 @@ public class NewsRequest {
 
     private int[] terminalIds;
 
+    private String imageUrl;
+
+    private LocalDate eventDate;
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public LocalDate getEventDate() {
+        return eventDate;
+    }
+
+    public void setEventDate(LocalDate eventDate) {
+        this.eventDate = eventDate;
+    }
+
     public String getTitle() {
         return title;
     }

@@ -28,8 +28,14 @@ public class News {
     @Column
     private byte[] image;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @Column(name = "topic_id")
     private Integer topicId;
+
+    @Column(name = "event_date")
+    private LocalDate eventDate;
 
     @Column(name = "start_date")
     private LocalDate startDate;
@@ -124,6 +130,22 @@ public class News {
         this.endTime = endTime;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public LocalDate getEventDate() {
+        return eventDate;
+    }
+
+    public void setEventDate(LocalDate eventDate) {
+        this.eventDate = eventDate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -148,6 +170,8 @@ public class News {
         news.setEndDate(request.getEnd());
         news.setEndTime(request.getEndTime());
         news.setImage(request.getImage());
+        news.setImageUrl(request.getImageUrl());
+        news.setEventDate(request.getEventDate());
 
         news.setStartTime(request.getEndTime() != null ? request.getEndTime() : LocalTime.of(0, 0));
         news.setEndTime(request.getEndTime() != null ? request.getEndTime() : LocalTime.of(23, 0));
@@ -163,6 +187,9 @@ public class News {
 
         this.setEndDate(request.getEnd());
         this.setStartDate(request.getStart());
+
+        this.setEventDate(request.getEventDate());
+        this.setImageUrl(request.getImageUrl());
 
         this.setStartTime(request.getEndTime() != null ? request.getEndTime() : LocalTime.of(0, 0));
         this.setEndTime(request.getEndTime() != null ? request.getEndTime() : LocalTime.of(23, 0));

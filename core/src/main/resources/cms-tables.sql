@@ -50,9 +50,11 @@ CREATE TABLE "news"
   title      text   not null,
   content    text default '',
   image      bytea,
+  image_url  text default '',
+  event_date date,
   topic_id   int references "topic" (id),
-  start_time time   not null,
-  end_time   time   not null,
+  start_time time,
+  end_time   time,
   start_date date,
   end_date   date,
   created_by int references "hse_user" (id)
