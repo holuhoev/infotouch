@@ -23,8 +23,18 @@ public class Person {
     @Column(name = "emails")
     private String emails;
 
+    private String avatarUrl;
+
     @Transient
     private List<Employee> employees;
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
 
     public String getFio() {
         return fio;
@@ -74,6 +84,7 @@ public class Person {
         person.setFio(dto.getFio());
         person.setEmails(String.join(",", dto.getEmails()));
         person.setUrl(dto.getUrl());
+        person.setAvatarUrl(dto.getAvatarUrl());
 
         person.setEmployees(dto.getEmployees().stream()
                 .map(Employee::ofHseDto)

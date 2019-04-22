@@ -2,8 +2,8 @@ DROP TABLE IF EXISTS building CASCADE;
 CREATE TABLE building
 (
   ID            integer NOT NULL PRIMARY KEY,
-  address       color    NULL,
-  building_name color    NULL,
+  address       text    NULL,
+  building_name text    NULL,
   city          integer NULL,
   CONSTRAINT BUILDING_ID_uindex UNIQUE (ID)
 );
@@ -13,7 +13,7 @@ CREATE TABLE auditorium
 (
   ID              integer                          NOT NULL PRIMARY KEY,
   auditorium_type integer                          NULL,
-  number          color                             NULL,
+  number          text                             NULL,
   building_id     integer references building (ID) NOT NULL,
   CONSTRAINT AUDITORIUM_ID_uindex UNIQUE (ID)
 );
@@ -22,7 +22,7 @@ DROP TABLE IF EXISTS faculty CASCADE;
 CREATE TABLE faculty
 (
   ID           integer NOT NULL PRIMARY KEY,
-  faculty_name color    NULL,
+  faculty_name text    NULL,
   CONSTRAINT FACULTY_ID_uindex UNIQUE (ID)
 );
 
@@ -31,9 +31,9 @@ CREATE TABLE chair
 (
   ID           integer                         NOT NULL PRIMARY KEY,
   faculty_id   integer references faculty (ID) NULL,
-  code         color                            NULL,
-  chair_name   color                            NULL,
-  faculty_name color                            null default '',
+  code         text                            NULL,
+  chair_name   text                            NULL,
+  faculty_name text                            null default '',
   chair_city   integer                         NULL,
   CONSTRAINT CHAIR_ID_uindex UNIQUE (ID)
 );
@@ -43,22 +43,23 @@ CREATE TABLE lecturer
 (
   ID            integer                       NOT NULL PRIMARY KEY,
   chair_id      integer references chair (ID) NULL,
-  fio           color                          NULL,
-  short_fio     color                          NULL,
-  chair_name    color                          not null default '',
+  fio           text                          NULL,
+  short_fio     text                          NULL,
+  chair_name    text                          not null default '',
   lecturer_city integer                       NULL,
-  faculty_name  color                          not null default '',
-  url           color                          NULL,
+  faculty_name  text                          not null default '',
+  url           text                          NULL,
   CONSTRAINT LECTURER_ID_uindex UNIQUE (ID)
 );
 
 drop table if exists person CASCADE;
 create table person
 (
-  ID     uuid not null PRIMARY KEY,
-  fio    color not null default '',
-  url    color not null default '',
-  emails color null     default '',
+  ID        uuid not null PRIMARY KEY,
+  fio       text not null default '',
+  url       text not null default '',
+  emails    text null     default '',
+  avatarUrl text null     default '',
   CONSTRAINT person_ID_uindex UNIQUE (ID)
 );
 
@@ -71,7 +72,7 @@ create table employee
   ID          uuid                          not null PRIMARY KEY,
   person_id   uuid references person (id)   not null,
   chair_id    integer references chair (id) null,
-  position    color default ''               not null,
+  position    text default ''               not null,
   lecturer_id integer                       null,
   CONSTRAINT EMPLOYEE_ID_uindex UNIQUE (ID)
 );

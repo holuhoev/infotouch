@@ -1,6 +1,7 @@
 package ru.hse.infotouch.feed.site;
 
 import io.vertx.core.json.JsonArray;
+import org.apache.logging.log4j.util.Strings;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +13,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.StringJoiner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -22,6 +25,8 @@ public class PersonExtractor {
     @Value("${hse.site.url}")
     private String hseUrl;
 
+    private Pattern avatarUrlPattern = Pattern.compile("background-image: url\\((.*)\\);");
+
     List<PersonHseDTO> extractPersonDTOs(Document doc, PersonUrl url) {
         return doc.select(".post.person .post__content.post__content_person").stream()
                 .map(personElement -> {
@@ -29,6 +34,7 @@ public class PersonExtractor {
 
                     person.setFio(extractFio(personElement));
                     person.setUrl(extractUrl(personElement));
+                    person.setAvatarUrl(extractAvatarUrl(personElement));
                     person.setCity(url.getCity());
 
                     person.setEmails(extractEmails(personElement));
@@ -36,6 +42,20 @@ public class PersonExtractor {
 
                     return person;
                 }).collect(Collectors.toList());
+    }
+
+    private String extractAvatarUrl(Element personElement) {
+        String style = personElement.select(".link.link_dark.large.b")
+                .select(".g-pic.person-avatar-small2")
+                .attr("style");
+
+        Matcher matcher = avatarUrlPattern.matcher(style);
+
+        if (!matcher.find()) {
+            return Strings.EMPTY;
+        }
+
+        return hseUrl + matcher.group(1);
     }
 
     private String extractUrl(Element personElement) {

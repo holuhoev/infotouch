@@ -13,6 +13,7 @@ import ru.hse.infotouch.domain.dto.PersonHseDTO;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class HsePersonService {
@@ -40,7 +41,11 @@ public class HsePersonService {
     }
 
 
-    private List<PersonHseDTO> getPersonsByUrl(PersonUrl personUrl) {
+    public Stream<PersonUrl> getAllPersonUrlStream() {
+        return personUrlProvider.getPersonsUrl();
+    }
+
+    public List<PersonHseDTO> getPersonsByUrl(PersonUrl personUrl) {
         String url = personUrl.toString();
 
         try {

@@ -9,12 +9,20 @@ public class PersonHseDTO {
     private String url;
     private String[] emails;
     private CityType city;
+    private String avatarUrl;
 
     private List<EmployeeHseDTO> employees;
 
     public PersonHseDTO() {
     }
 
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
 
     public String getFio() {
         return fio;

@@ -13,3 +13,7 @@ hse:
           letter: "ltr"
           city: "udept"
     url: "https://www.hse.ru"
+
+entities:
+  page-size:
+    default: 30

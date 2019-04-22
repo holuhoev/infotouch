@@ -5,8 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import ru.hse.infotouch.domain.*;
-import ru.hse.infotouch.domain.dto.PersonHseDTO;
 import ru.hse.infotouch.domain.models.*;
 import ru.hse.infotouch.domain.models.enums.CityType;
 import ru.hse.infotouch.feed.site.HsePersonService;
@@ -17,6 +15,7 @@ import ru.hse.infotouch.domain.service.LecturerService;
 import ru.hse.infotouch.domain.service.PersonService;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -67,7 +66,7 @@ public class RuzDomainLoader implements CommandLineRunner {
 //        loadFaculties();
 //        loadChairs();
 //        loadLecturers();
-//        loadPersons();
+        loadPersons();
 
 //        loadBuildings();
 //        loadAuditoriums()
@@ -78,9 +77,9 @@ public class RuzDomainLoader implements CommandLineRunner {
         employeeService.deleteAll();
         personService.deleteAll();
 
-        List<PersonHseDTO> allHsePersons = portalService.getAllHsePersons();
-
-        List<Person> personsToSave = allHsePersons.stream()
+        List<Person> personsToSave =  portalService.getAllPersonUrlStream()
+                .map(portalService::getPersonsByUrl)
+                .flatMap(Collection::stream)
                 .map(lecturerService::fillEmployees)
                 .map(Person::ofHseDto)
                 .collect(Collectors.toList());
