@@ -15,7 +15,7 @@ import java.util.List;
 import static java.util.Objects.isNull;
 
 @RestController
-@RequestMapping("/news")
+@RequestMapping("api/news")
 public class TerminalNewsController {
 
     private final NewsService newsService;
