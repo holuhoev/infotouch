@@ -10,14 +10,9 @@ after_success:
   - chmod 600 ./deploy_key
   - echo -e "Host 62.109.23.105\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
   - ssh-add ./deploy_key
-  - ls ./terminal
   - scp -i ./deploy_key ./terminal/target/terminal.jar root@62.109.23.105:/opt/infotouch/terminal
-
-#deploy:
-#- provider: script
-#  script: bash ./deploy.sh
-#  on:
-#    branch: dev
+  - apt-get install systemd
+  - systemctl --v
 
 cache:
   directories:
