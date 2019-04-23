@@ -32,7 +32,6 @@ public class TerminalNewsController {
                                               @RequestParam(value = "tagIds", required = false) int[] tagIds,
                                               @RequestParam(value = "page", required = false) Integer page) {
         // 1. проверяем, может ли юзер смотреть данный терминал user2terminal
-        // 2. вытаскиваем по терминалу и остальным параметрам
 
         return ResponseEntity.ok(
                 newsService.findAll(terminalId,
