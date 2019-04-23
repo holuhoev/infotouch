@@ -1,2 +1,2 @@
 #!/bin/sh
-systemctl --v
+sudo systemctl --v
