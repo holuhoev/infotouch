@@ -1,7 +1,7 @@
 # infotouch
 The Client-Server Application for Content Management of Information Touch Device
 
-[![Build Status](https://travis-ci.org/holuhoev/infotouch.svg?branch=master)](https://travis-ci.org/holuhoev/infotouch)
+[![Build Status](https://travis-ci.com/holuhoev/infotouch.svg?token=DhUsE9KcbxHCqAsVEdDs&branch=master)](https://travis-ci.com/holuhoev/infotouch)
 
 ### Install
 ```shell
