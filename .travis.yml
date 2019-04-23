@@ -11,6 +11,7 @@ before_install:
   - echo -e "Host 62.109.23.105\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
   - ssh-add ./deploy_key
   - ssh -i ./deploy_key root@62.109.23.105 pwd
+  - ls -la
 
 deploy:
 - provider: script
