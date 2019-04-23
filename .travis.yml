@@ -3,21 +3,21 @@ language: java
 jdk:
 - oraclejdk8
 
-before_install:
+after_success:
   - openssl aes-256-cbc -K $encrypted_10a8c55e6349_key -iv $encrypted_10a8c55e6349_iv
     -in deploy_key.enc -out ./deploy_key -d
   - eval "$(ssh-agent -s)"
   - chmod 600 ./deploy_key
   - echo -e "Host 62.109.23.105\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
   - ssh-add ./deploy_key
-  - ssh -i ./deploy_key root@62.109.23.105 pwd
-  - ls -la
+  - ls ./terminal
+  - scp -i ./deploy_key ./terminal/target/terminal.jar root@62.109.23.105:/opt/infotouch/terminal
 
-deploy:
-- provider: script
-  script: bash ./deploy.sh
-  on:
-    branch: dev
+#deploy:
+#- provider: script
+#  script: bash ./deploy.sh
+#  on:
+#    branch: dev
 
 cache:
   directories:
