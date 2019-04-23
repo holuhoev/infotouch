@@ -3,6 +3,6 @@ jdk:
   - oraclejdk8
 deploy:
   - provider: script
-    script: systemctl --v
+    script: bash ./deploy.sh
     on:
       branch: dev
