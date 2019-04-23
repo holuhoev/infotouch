@@ -17,6 +17,7 @@ deploy:
   script: bash ./deploy.sh
   on:
     branch: dev
+
 cache:
   directories:
   - "$HOME/.m2"
