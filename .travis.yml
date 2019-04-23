@@ -7,6 +7,10 @@ deploy:
     on:
       branch: dev
 
+cache:
+  directories:
+    - $HOME/.m2
+
 before_deploy:
   - sudo apt-get update
   - sudo apt-get install systemd
