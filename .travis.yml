@@ -6,3 +6,7 @@ deploy:
     script: bash ./deploy.sh
     on:
       branch: dev
+
+before_deploy:
+  - sudo apt-get update
+  - sudo apt-get install systemd
