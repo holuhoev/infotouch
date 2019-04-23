@@ -3,6 +3,10 @@ language: java
 jdk:
 - oraclejdk8
 
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install systemd
+
 after_success:
   - openssl aes-256-cbc -K $encrypted_10a8c55e6349_key -iv $encrypted_10a8c55e6349_iv
     -in deploy_key.enc -out ./deploy_key -d
@@ -11,7 +15,6 @@ after_success:
   - echo -e "Host 62.109.23.105\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
   - ssh-add ./deploy_key
   - scp -i ./deploy_key ./terminal/target/terminal.jar root@62.109.23.105:/opt/infotouch/terminal
-  - apt-get install systemd
   - systemctl --v
 
 cache:
