@@ -12,7 +12,6 @@ cache:
   directories:
     - $HOME/.m2
 
-before_deploy:
-  - sudo apt-get update
-  - sudo apt-get install systemd
-  - sudo apt-get install sshpass
+#before_deploy:
+#  - sudo apt-get update
+#  - sudo apt-get install systemd
