@@ -15,7 +15,7 @@ after_success:
   - echo -e "Host 62.109.23.105\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
   - ssh-add ./deploy_key
   - scp -i ./deploy_key ./terminal/target/terminal.jar root@62.109.23.105:/opt/infotouch/terminal
-  - systemctl --v
+  - systemctl --host root@62.109.23.105 status terminal.service
 
 cache:
   directories:
