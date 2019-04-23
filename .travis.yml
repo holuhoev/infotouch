@@ -14,3 +14,4 @@ cache:
 before_deploy:
   - sudo apt-get update
   - sudo apt-get install systemd
+  - sudo apt-get install sshpass
