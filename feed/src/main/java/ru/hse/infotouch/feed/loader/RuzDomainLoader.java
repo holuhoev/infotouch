@@ -66,7 +66,7 @@ public class RuzDomainLoader implements CommandLineRunner {
 //        loadFaculties();
 //        loadChairs();
 //        loadLecturers();
-        loadPersons();
+//        loadPersons();
 
 //        loadBuildings();
 //        loadAuditoriums()
