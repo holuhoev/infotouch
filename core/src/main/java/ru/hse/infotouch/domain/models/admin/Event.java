@@ -6,9 +6,10 @@ import java.util.Set;
 public class Event {
     private String title;
     private String addInfo;
-    private String topic;
+    private Set<String> topics;
     private Set<String> tags;
-    private LocalTime time;
+    private String time;
+    private String url;
 
     public String getTitle() {
         return title;
@@ -26,12 +27,12 @@ public class Event {
         this.addInfo = addInfo;
     }
 
-    public String getTopic() {
-        return topic;
+    public Set<String> getTopics() {
+        return topics;
     }
 
-    public void setTopic(String topic) {
-        this.topic = topic;
+    public void setTopics(Set<String> topics) {
+        this.topics = topics;
     }
 
     public Set<String> getTags() {
@@ -42,11 +43,19 @@ public class Event {
         this.tags = tags;
     }
 
-    public LocalTime getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(LocalTime time) {
+    public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }
