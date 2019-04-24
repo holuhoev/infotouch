@@ -1,12 +1,11 @@
 package ru.hse.infotouch.domain.models.admin;
 
-import java.time.LocalTime;
 import java.util.Set;
 
 public class Event {
     private String title;
     private String addInfo;
-    private Set<String> topics;
+    private Set<Topic> topics;
     private Set<String> tags;
     private String time;
     private String url;
@@ -27,11 +26,11 @@ public class Event {
         this.addInfo = addInfo;
     }
 
-    public Set<String> getTopics() {
+    public Set<Topic> getTopics() {
         return topics;
     }
 
-    public void setTopics(Set<String> topics) {
+    public void setTopics(Set<Topic> topics) {
         this.topics = topics;
     }
 

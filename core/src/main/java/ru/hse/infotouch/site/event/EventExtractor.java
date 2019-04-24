@@ -3,8 +3,11 @@ package ru.hse.infotouch.site.event;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 import ru.hse.infotouch.domain.models.admin.Event;
+import ru.hse.infotouch.domain.models.admin.Topic;
+
 
 import java.util.List;
 import java.util.Set;
@@ -57,13 +60,21 @@ public class EventExtractor {
                 .text();
     }
 
-    private Set<String> extractTopics(Element event) {
+    private Set<Topic> extractTopics(Element event) {
 
-        return event.select(".b-events__body")
+        Elements topics = event.select(".b-events__body")
                 .select(".tag-set.smaller")
-                .select(".rubric")
-                .select("span").stream()
-                .map(Element::text)
+                .select(".rubric");
+
+        return topics.stream()
+                .map(elem -> {
+                    Topic topic = new Topic();
+
+                    topic.setTitle(elem.select("span").text());
+                    topic.setColor(Topic.getColorOfClassname(elem));
+
+                    return topic;
+                })
                 .collect(Collectors.toSet());
     }
 

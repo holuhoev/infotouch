@@ -1,5 +1,7 @@
 package ru.hse.infotouch.domain.models.admin;
 
+import org.jsoup.nodes.Element;
+
 import javax.persistence.*;
 
 import java.util.Objects;
@@ -18,6 +20,14 @@ public class Topic {
 
     @Column
     private String color;
+
+    public Topic(String title, String color) {
+        this.title = title;
+        this.color = color;
+    }
+
+    public Topic() {
+    }
 
     public Integer getId() {
         return id;
@@ -54,5 +64,20 @@ public class Topic {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public static String getColorOfClassname(Element topicElement) {
+        if (topicElement.hasClass("rubric_18")) {
+            return "#d8675b";
+        }
+        if (topicElement.hasClass("rubric_41")) {
+            return "#9472ae";
+        }
+
+        if (topicElement.hasClass("rubric_24")) {
+            return "#d4af79";
+        }
+
+        return "";
     }
 }
