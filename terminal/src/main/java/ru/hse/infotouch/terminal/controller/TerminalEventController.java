@@ -25,4 +25,10 @@ public class TerminalEventController {
         // cache with redis(key=terminal_Id + current_hour) with ttl;
         return ResponseEntity.ok(eventService.findAll(terminalId));
     }
+
+    @GetMapping("/today/{terminalId}")
+    public ResponseEntity<List<Event>> findTodayAllByTerminal(@PathVariable("terminalId") int terminalId) {
+        // cache with redis(key=terminal_Id + current_hour) with ttl;
+        return ResponseEntity.ok(eventService.findTodayAll(terminalId));
+    }
 }
