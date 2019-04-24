@@ -7,7 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import ru.hse.infotouch.domain.models.*;
 import ru.hse.infotouch.domain.models.enums.CityType;
-import ru.hse.infotouch.feed.site.HsePersonService;
+import ru.hse.infotouch.site.person.HsePersonService;
 import ru.hse.infotouch.domain.repo.*;
 import ru.hse.infotouch.ruz.api.RuzApiService;
 import ru.hse.infotouch.domain.service.EmployeeService;

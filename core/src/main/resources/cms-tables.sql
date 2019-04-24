@@ -129,6 +129,14 @@ CREATE TABLE "user2news"
 
 
 --  Связи терминалов
+DROP TABLE IF EXISTS "event_url" CASCADE;
+CREATE TABLE "event_url"
+(
+  id          serial not null primary key,
+  terminal_id int    not null references "terminal" (id),
+  url         text   not null
+);
+
 DROP TABLE IF EXISTS "terminal2ad" CASCADE;
 CREATE TABLE "terminal2ad"
 (
@@ -161,4 +169,7 @@ CREATE TABLE "news2tag"
   news_id int    not null references "news" (id),
   tag_id  int    not null references "tag" (id)
 );
+
+
+
 

@@ -1,4 +1,4 @@
-package ru.hse.infotouch.feed.site;
+package ru.hse.infotouch.site.person;
 
 import ru.hse.infotouch.domain.models.enums.CityType;
 

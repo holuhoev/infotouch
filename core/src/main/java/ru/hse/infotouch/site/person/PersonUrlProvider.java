@@ -1,4 +1,4 @@
-package ru.hse.infotouch.feed.site;
+package ru.hse.infotouch.site.person;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

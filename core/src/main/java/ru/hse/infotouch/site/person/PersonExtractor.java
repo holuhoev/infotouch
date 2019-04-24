@@ -1,4 +1,4 @@
-package ru.hse.infotouch.feed.site;
+package ru.hse.infotouch.site.person;
 
 import io.vertx.core.json.JsonArray;
 import org.apache.logging.log4j.util.Strings;

@@ -1,4 +1,4 @@
-package ru.hse.infotouch.feed.site;
+package ru.hse.infotouch.site.person;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
