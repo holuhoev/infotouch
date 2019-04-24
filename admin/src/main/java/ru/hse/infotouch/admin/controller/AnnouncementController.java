@@ -31,13 +31,14 @@ public class AnnouncementController {
 
     @GetMapping
     public ResponseEntity<List<Announcement>> findAll(@RequestParam(value = "searchString", required = false) String searchString,
-                                              @RequestParam(value = "hseLocationId", required = false) Integer hseLocationId,
-                                              @RequestParam(value = "page", required = false) Integer page) {
+                                                      @RequestParam(value = "page", required = false) Integer page) {
 
         return ResponseEntity.ok(
                 announcementService.findAll(
+                        null,
                         searchString,
-                        hseLocationId,
+                        null,
+                        null,
                         isNull(page) ? 0 : page
                 ));
     }

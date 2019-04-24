@@ -79,14 +79,14 @@ CREATE TABLE "ad"
 DROP TABLE IF EXISTS "announcement" CASCADE;
 CREATE TABLE "announcement"
 (
-  id              serial not null primary key,
-  title           text   not null,
-  content         text default '',
-  image           bytea,
-  priority        int    not null,
-  hse_location_id int references "hse_location" (id),
-  link            text default '',
-  created_by      int references "hse_user" (id)
+  id         serial not null primary key,
+  title      text   not null,
+  content    text default '',
+  priority   int    not null,
+  link       text default '',
+  start_date date   not null,
+  end_date   date   not null,
+  created_by int references "hse_user" (id)
 );
 
 

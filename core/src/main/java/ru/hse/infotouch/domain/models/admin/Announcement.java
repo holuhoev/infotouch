@@ -3,6 +3,7 @@ package ru.hse.infotouch.domain.models.admin;
 import ru.hse.infotouch.domain.dto.request.AnnouncementRequest;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
@@ -20,9 +21,6 @@ public class Announcement {
     private String content;
 
     @Column
-    private byte[] image;
-
-    @Column
     private int priority;
 
     @Column
@@ -31,11 +29,11 @@ public class Announcement {
     @Column(name = "created_by")
     private Integer createdBy;
 
-    @Column(name = "hse_location_id")
-    private Integer hseLocationId;
+    @Column(name = "start_date")
+    private LocalDate startDate;
 
-    @Transient
-    private HseLocation hseLocation;
+    @Column(name = "end_date")
+    private LocalDate endDate;
 
     public Integer getCreatedBy() {
         return createdBy;
@@ -69,13 +67,6 @@ public class Announcement {
         this.content = content;
     }
 
-    public byte[] getImage() {
-        return image;
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
-    }
 
     public int getPriority() {
         return priority;
@@ -106,31 +97,32 @@ public class Announcement {
         return Objects.hash(id);
     }
 
-    public Integer getHseLocationId() {
-        return hseLocationId;
+
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public void setHseLocationId(Integer hseLocationId) {
-        this.hseLocationId = hseLocationId;
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 
-    public HseLocation getHseLocation() {
-        return hseLocation;
+    public LocalDate getEndDate() {
+        return endDate;
     }
 
-    public void setHseLocation(HseLocation hseLocation) {
-        this.hseLocation = hseLocation;
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
     }
 
     public static Announcement createFromRequest(AnnouncementRequest request) {
         Announcement announcement = new Announcement();
 
-        announcement.setHseLocationId(request.getHseLocationId());
         announcement.setContent(request.getContent());
-        announcement.setImage(request.getImage());
         announcement.setLink(request.getLink());
         announcement.setTitle(request.getTitle());
         announcement.setPriority(request.getPriority());
+        announcement.setStartDate(request.getStartDate());
+        announcement.setEndDate(request.getEndDate());
 
         return announcement;
     }

@@ -1,22 +1,33 @@
 package ru.hse.infotouch.domain.dto.request;
 
+import java.time.LocalDate;
+
 public class AnnouncementRequest {
 
     private String title;
-
     private String content;
-
-    private byte[] image;
-
     private int priority = 0;
-
     private String link;
-
     private Integer createdBy;
-
-    private Integer hseLocationId;
-
     private int[] terminalIds;
+    private LocalDate startDate;
+    private LocalDate endDate;
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
 
     public String getTitle() {
         return title;
@@ -34,13 +45,6 @@ public class AnnouncementRequest {
         this.content = content;
     }
 
-    public byte[] getImage() {
-        return image;
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
-    }
 
     public int getPriority() {
         return priority;
@@ -66,13 +70,6 @@ public class AnnouncementRequest {
         this.createdBy = createdBy;
     }
 
-    public Integer getHseLocationId() {
-        return hseLocationId;
-    }
-
-    public void setHseLocationId(Integer hseLocationId) {
-        this.hseLocationId = hseLocationId;
-    }
 
     public int[] getTerminalIds() {
         return terminalIds;
