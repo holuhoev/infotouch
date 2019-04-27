@@ -3,10 +3,6 @@ language: java
 jdk:
 - oraclejdk8
 
-before_install:
-  - sudo apt-get update
-  - sudo apt-get install systemd
-
 after_success:
   - openssl aes-256-cbc -K $encrypted_10a8c55e6349_key -iv $encrypted_10a8c55e6349_iv
     -in deploy_key.enc -out ./deploy_key -d
