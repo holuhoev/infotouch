@@ -12,7 +12,7 @@ DROP TABLE IF EXISTS auditorium;
 CREATE TABLE auditorium
 (
   ID              integer                          NOT NULL PRIMARY KEY,
-  auditorium_type integer                          NULL,
+  auditorium_type text                          NULL,
   number          text                             NULL,
   building_id     integer references building (ID) NOT NULL,
   CONSTRAINT AUDITORIUM_ID_uindex UNIQUE (ID)

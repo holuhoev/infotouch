@@ -24,15 +24,15 @@ public class PersonPhotoLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        File f = new File("person_photos");
-        f.mkdirs();
-
-        personRepository.findAll()
-                .stream()
-                .filter(person -> StringUtils.isNotEmpty(person.getAvatarUrl()))
-                .forEach(this::fetchAndSaveAvatar);
-
-        log.info("FINISHED");
+//        File f = new File("person_photos");
+//        f.mkdirs();
+//
+//        personRepository.findAll()
+//                .stream()
+//                .filter(person -> StringUtils.isNotEmpty(person.getAvatarUrl()))
+//                .forEach(this::fetchAndSaveAvatar);
+//
+//        log.info("FINISHED");
     }
 
     private void fetchAndSaveAvatar(Person person) {
