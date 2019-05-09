@@ -25,11 +25,11 @@ public class EventUrl {
         this.id = id;
     }
 
-    public int getTerminalId() {
+    public int getDeviceId() {
         return terminalId;
     }
 
-    public void setTerminalId(int terminalId) {
+    public void setDeviceId(int terminalId) {
         this.terminalId = terminalId;
     }
 

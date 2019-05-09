@@ -6,48 +6,48 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
-public class Terminal2AdId implements Serializable {
+public class Device2NewsId implements Serializable {
     @Column(name = "terminalId")
     private int terminalId;
 
-    @Column(name = "adId")
-    private int adId;
+    @Column(name = "newsId")
+    private int newsId;
 
-    public Terminal2AdId() {
+    public Device2NewsId() {
     }
 
-    public Terminal2AdId(int terminalId, int adId) {
+    public Device2NewsId(int terminalId, int newsId) {
         this.terminalId = terminalId;
-        this.adId = adId;
+        this.newsId = newsId;
     }
 
-    public int getTerminalId() {
+    public int getDeviceId() {
         return terminalId;
     }
 
-    public void setTerminalId(int terminalId) {
+    public void setDeviceId(int terminalId) {
         this.terminalId = terminalId;
     }
 
-    public int getAdId() {
-        return adId;
+    public int getNewsId() {
+        return newsId;
     }
 
-    public void setAdId(int adId) {
-        this.adId = adId;
+    public void setNewsId(int newsId) {
+        this.newsId = newsId;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Terminal2AdId that = (Terminal2AdId) o;
+        Device2NewsId that = (Device2NewsId) o;
         return terminalId == that.terminalId &&
-                adId == that.adId;
+                newsId == that.newsId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(terminalId, adId);
+        return Objects.hash(terminalId, newsId);
     }
 }

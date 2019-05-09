@@ -14,7 +14,7 @@ public class UserUpdateRequest {
     private UserRole role;
 
     @NotNull(message = "terminals must be specified")
-    private List<UserTerminalRequest> terminals;
+    private List<UserDeviceRequest> terminals;
 
     public String getFirstName() {
         return firstName;
@@ -40,11 +40,11 @@ public class UserUpdateRequest {
         this.role = role;
     }
 
-    public List<UserTerminalRequest> getTerminals() {
+    public List<UserDeviceRequest> getDevices() {
         return terminals;
     }
 
-    public void setTerminals(List<UserTerminalRequest> terminals) {
+    public void setDevices(List<UserDeviceRequest> terminals) {
         this.terminals = terminals;
     }
 }

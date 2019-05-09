@@ -13,12 +13,12 @@ import static java.util.Objects.isNull;
 
 @RestController
 @RequestMapping("api/announcement")
-public class TerminalAnnouncementController {
+public class DeviceAnnouncementController {
 
     private final AnnouncementService announcementService;
 
     @Autowired
-    public TerminalAnnouncementController(AnnouncementService announcementService) {
+    public DeviceAnnouncementController(AnnouncementService announcementService) {
         this.announcementService = announcementService;
     }
 

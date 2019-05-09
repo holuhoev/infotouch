@@ -10,7 +10,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "auditorium")
-public class Auditorium extends RuzObject {
+public class Room extends RuzObject {
     @Id
     @JsonField(name = "auditoriumOid")
     @Column(name = "ID")
@@ -28,12 +28,24 @@ public class Auditorium extends RuzObject {
     @JsonField(name = "buildingOid")
     private Integer buildingId;
 
+    private String coordinates;
+
+    private Integer floor;
+
     public Integer getId() {
         return Id;
     }
 
     public void setId(Integer id) {
         Id = id;
+    }
+
+    public Integer getFloor() {
+        return floor;
+    }
+
+    public void setFloor(Integer floor) {
+        this.floor = floor;
     }
 
     public String getAuditoriumType() {
@@ -64,7 +76,7 @@ public class Auditorium extends RuzObject {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Auditorium that = (Auditorium) o;
+        Room that = (Room) o;
         return Objects.equals(Id, that.Id) &&
                 Objects.equals(auditoriumType, that.auditoriumType) &&
                 Objects.equals(number, that.number) &&
@@ -74,5 +86,13 @@ public class Auditorium extends RuzObject {
     @Override
     public int hashCode() {
         return Objects.hash(Id, auditoriumType, number, buildingId);
+    }
+
+    public String getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(String coordinates) {
+        this.coordinates = coordinates;
     }
 }

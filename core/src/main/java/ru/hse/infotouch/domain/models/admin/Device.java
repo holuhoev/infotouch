@@ -2,7 +2,7 @@ package ru.hse.infotouch.domain.models.admin;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.vividsolutions.jts.geom.Point;
-import ru.hse.infotouch.domain.dto.request.TerminalRequest;
+import ru.hse.infotouch.domain.dto.request.DeviceRequest;
 import ru.hse.infotouch.util.json.PointToJsonSerializer;
 
 import javax.persistence.Column;
@@ -16,7 +16,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "terminal")
-public class Terminal {
+public class Device {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -69,8 +69,8 @@ public class Terminal {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Terminal terminal = (Terminal) o;
-        return Objects.equals(id, terminal.id);
+        Device device = (Device) o;
+        return Objects.equals(id, device.id);
     }
 
     @Override
@@ -78,7 +78,7 @@ public class Terminal {
         return Objects.hash(id);
     }
 
-    public void updateFromRequest(TerminalRequest request) {
+    public void updateFromRequest(DeviceRequest request) {
         this.setTitle(request.getTitle());
         this.setDescription(request.getDescription());
     }

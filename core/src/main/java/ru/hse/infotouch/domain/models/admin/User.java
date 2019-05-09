@@ -1,6 +1,6 @@
 package ru.hse.infotouch.domain.models.admin;
 
-import ru.hse.infotouch.domain.dto.UserTerminalDTO;
+import ru.hse.infotouch.domain.dto.UserDeviceDTO;
 import ru.hse.infotouch.domain.dto.request.UserCreateRequest;
 import ru.hse.infotouch.domain.dto.request.UserUpdateRequest;
 import ru.hse.infotouch.domain.models.enums.UserRole;
@@ -31,7 +31,7 @@ public class User {
     private UserRole userRole;
 
     @Transient
-    private List<UserTerminalDTO> terminals;
+    private List<UserDeviceDTO> terminals;
 
     public Integer getId() {
         return id;
@@ -86,11 +86,11 @@ public class User {
         return Objects.hash(id);
     }
 
-    public List<UserTerminalDTO> getTerminals() {
+    public List<UserDeviceDTO> getDevices() {
         return terminals;
     }
 
-    public void setTerminals(List<UserTerminalDTO> terminals) {
+    public void setDevices(List<UserDeviceDTO> terminals) {
         this.terminals = terminals;
     }
 

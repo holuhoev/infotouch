@@ -14,9 +14,9 @@ import java.util.List;
 public class AnnouncementService {
     private final AnnouncementDatasource announcementDatasource;
     private final AnnouncementRepository repository;
-    private final TerminalService terminalService;
+    private final DeviceService terminalService;
 
-    public AnnouncementService(AnnouncementDatasource announcementDatasource, AnnouncementRepository repository, TerminalService terminalService) {
+    public AnnouncementService(AnnouncementDatasource announcementDatasource, AnnouncementRepository repository, DeviceService terminalService) {
         this.announcementDatasource = announcementDatasource;
         this.repository = repository;
         this.terminalService = terminalService;
@@ -44,7 +44,7 @@ public class AnnouncementService {
 
         Announcement announcement = repository.save(Announcement.createFromRequest(request));
 
-        terminalService.insertAnnouncementRelations(announcement.getId(), request.getTerminalIds());
+        terminalService.insertAnnouncementRelations(announcement.getId(), request.getDeviceIds());
 
 
         return announcement;
@@ -58,7 +58,7 @@ public class AnnouncementService {
                 .updateFromRequest(request);
 
         terminalService.deleteAllAnnouncementRelations(id);
-        terminalService.insertAnnouncementRelations(id, request.getTerminalIds());
+        terminalService.insertAnnouncementRelations(id, request.getDeviceIds());
 
         return repository.save(announcement);
     }
@@ -74,7 +74,7 @@ public class AnnouncementService {
 
     private void requireExistingRelations(AnnouncementRequest announcementRequest) {
 
-        if (terminalService.isNotExistAll(announcementRequest.getTerminalIds())) {
+        if (terminalService.isNotExistAll(announcementRequest.getDeviceIds())) {
             throw new IllegalArgumentException("Does not all terminals exist.");
         }
 

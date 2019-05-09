@@ -7,23 +7,23 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "terminal2news")
-public class Terminal2News {
+@Table(name = "device2ad")
+public class Device2Ad {
     @EmbeddedId
-    private Terminal2NewsId id;
+    private Device2AdId id;
 
-    public Terminal2News() {
+    public Device2Ad() {
     }
 
-    public Terminal2News(Terminal2NewsId id) {
+    public Device2Ad(Device2AdId id) {
         this.id = id;
     }
 
-    public Terminal2NewsId getId() {
+    public Device2AdId getId() {
         return id;
     }
 
-    public void setId(Terminal2NewsId id) {
+    public void setId(Device2AdId id) {
         this.id = id;
     }
 
@@ -31,7 +31,7 @@ public class Terminal2News {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Terminal2News that = (Terminal2News) o;
+        Device2Ad that = (Device2Ad) o;
         return Objects.equals(id, that.id);
     }
 
@@ -40,7 +40,7 @@ public class Terminal2News {
         return Objects.hash(id);
     }
 
-    public static Terminal2News createOf(int terminalId, int relationId) {
-        return new Terminal2News(new Terminal2NewsId(terminalId, relationId));
+    public static Device2Ad createOf(int terminalId, int relationId) {
+        return new Device2Ad(new Device2AdId(terminalId, relationId));
     }
 }

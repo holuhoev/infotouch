@@ -1,21 +1,21 @@
 package ru.hse.infotouch.domain.dto;
 
-import ru.hse.infotouch.domain.models.admin.Terminal;
+import ru.hse.infotouch.domain.models.admin.Device;
 import ru.hse.infotouch.domain.models.enums.AccessRight;
 
 import java.util.Objects;
 
-public class UserTerminalDTO {
+public class UserDeviceDTO {
     private int terminalId;
     private String title;
     private String description;
     private AccessRight accessRight;
 
-    public int getTerminalId() {
+    public int getDeviceId() {
         return terminalId;
     }
 
-    public void setTerminalId(int terminalId) {
+    public void setDeviceId(int terminalId) {
         this.terminalId = terminalId;
     }
 
@@ -43,19 +43,19 @@ public class UserTerminalDTO {
         this.accessRight = accessRight;
     }
 
-    public UserTerminalDTO() {
+    public UserDeviceDTO() {
     }
 
-    private UserTerminalDTO(int terminalId, String title, String description, AccessRight accessRight) {
+    private UserDeviceDTO(int terminalId, String title, String description, AccessRight accessRight) {
         this.terminalId = terminalId;
         this.title = title;
         this.description = description;
         this.accessRight = accessRight;
     }
 
-    public static UserTerminalDTO createOf(Terminal terminal, AccessRight accessRight) {
+    public static UserDeviceDTO createOf(Device device, AccessRight accessRight) {
         Objects.requireNonNull(accessRight);
-        Objects.requireNonNull(terminal.getId());
-        return new UserTerminalDTO(terminal.getId(), terminal.getTitle(), terminal.getDescription(), accessRight);
+        Objects.requireNonNull(device.getId());
+        return new UserDeviceDTO(device.getId(), device.getTitle(), device.getDescription(), accessRight);
     }
 }

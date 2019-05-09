@@ -2,15 +2,15 @@ package ru.hse.infotouch.domain.dto.request;
 
 import ru.hse.infotouch.domain.models.enums.AccessRight;
 
-public class UserTerminalRequest {
+public class UserDeviceRequest {
     private int terminalId;
     private AccessRight accessRight;
 
-    public int getTerminalId() {
+    public int getDeviceId() {
         return terminalId;
     }
 
-    public void setTerminalId(int terminalId) {
+    public void setDeviceId(int terminalId) {
         this.terminalId = terminalId;
     }
 

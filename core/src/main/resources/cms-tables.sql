@@ -9,8 +9,8 @@ CREATE TABLE "hse_user"
   role       integer
 );
 
-DROP TABLE IF EXISTS terminal CASCADE;
-CREATE TABLE terminal
+DROP TABLE IF EXISTS device CASCADE;
+CREATE TABLE device
 (
   id          serial not null primary key,
   title       text default '',
@@ -91,13 +91,13 @@ CREATE TABLE "announcement"
 
 
 -- Авторизация
-DROP TABLE IF EXISTS "user2terminal" CASCADE;
-CREATE TABLE "user2terminal"
+DROP TABLE IF EXISTS "user2device" CASCADE;
+CREATE TABLE "user2device"
 (
   user_id      int not null references "hse_user" (id),
-  terminal_id  int not null references "terminal" (id),
+  device_id  int not null references "device" (id),
   access_right int not null,
-  PRIMARY KEY (user_id, terminal_id)
+  PRIMARY KEY (user_id, device_id)
 );
 
 DROP TABLE IF EXISTS "user2ad" CASCADE;
@@ -133,32 +133,32 @@ DROP TABLE IF EXISTS "event_url" CASCADE;
 CREATE TABLE "event_url"
 (
   id          serial not null primary key,
-  terminal_id int    not null references "terminal" (id),
+  device_id int    not null references "device" (id),
   url         text   not null
 );
 
-DROP TABLE IF EXISTS "terminal2ad" CASCADE;
-CREATE TABLE "terminal2ad"
+DROP TABLE IF EXISTS "device2ad" CASCADE;
+CREATE TABLE "device2ad"
 (
-  terminal_id int not null references "terminal" (id),
+  device_id int not null references "device" (id),
   ad_id       int not null references "ad" (id),
-  PRIMARY KEY (terminal_id, ad_id)
+  PRIMARY KEY (device_id, ad_id)
 );
 
-DROP TABLE IF EXISTS "terminal2announcement" CASCADE;
-CREATE TABLE "terminal2announcement"
+DROP TABLE IF EXISTS "device2announcement" CASCADE;
+CREATE TABLE "device2announcement"
 (
-  terminal_id     int not null references "terminal" (id),
+  device_id     int not null references "device" (id),
   announcement_id int not null references "announcement" (id),
-  PRIMARY KEY (terminal_id, announcement_id)
+  PRIMARY KEY (device_id, announcement_id)
 );
 
-DROP TABLE IF EXISTS "terminal2news" CASCADE;
-CREATE TABLE "terminal2news"
+DROP TABLE IF EXISTS "device2news" CASCADE;
+CREATE TABLE "device2news"
 (
-  terminal_id int not null references "terminal" (id),
+  device_id int not null references "device" (id),
   news_id     int not null references "news" (id),
-  PRIMARY KEY (terminal_id, news_id)
+  PRIMARY KEY (device_id, news_id)
 );
 
 -- Связи новостей

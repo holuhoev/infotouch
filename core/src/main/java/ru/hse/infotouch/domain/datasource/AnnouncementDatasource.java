@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import ru.hse.infotouch.domain.models.admin.Announcement;
 import ru.hse.infotouch.domain.models.admin.QAnnouncement;
-import ru.hse.infotouch.domain.models.admin.relations.QTerminal2Announcement;
+import ru.hse.infotouch.domain.models.admin.relations.QDevice2Announcement;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
@@ -23,7 +23,7 @@ public class AnnouncementDatasource {
     private final EntityManager em;
 
     private final QAnnouncement qAnnouncement = QAnnouncement.announcement;
-    private final QTerminal2Announcement qTerminal2Announcement = QTerminal2Announcement.terminal2Announcement;
+    private final QDevice2Announcement qDevice2Announcement = QDevice2Announcement.device2Announcement;
 
     public AnnouncementDatasource(EntityManager em) {
         this.em = em;
@@ -39,8 +39,8 @@ public class AnnouncementDatasource {
                 .from(qAnnouncement);
 
         if (terminalId != null) {
-            query.leftJoin(qTerminal2Announcement).on(qAnnouncement.id.eq(qTerminal2Announcement.id.announcementId));
-            whereClause.and(qTerminal2Announcement.id.terminalId.eq(terminalId));
+            query.leftJoin(qDevice2Announcement).on(qAnnouncement.id.eq(qDevice2Announcement.id.announcementId));
+            whereClause.and(qDevice2Announcement.id.terminalId.eq(terminalId));
         }
 
         if (from != null && to != null) {

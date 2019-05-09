@@ -5,14 +5,14 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.PrecisionModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.hse.infotouch.domain.datasource.TerminalDatasource;
-import ru.hse.infotouch.domain.dto.request.TerminalRequest;
-import ru.hse.infotouch.domain.models.admin.Terminal;
+import ru.hse.infotouch.domain.datasource.DeviceDatasource;
+import ru.hse.infotouch.domain.dto.request.DeviceRequest;
+import ru.hse.infotouch.domain.models.admin.Device;
 import ru.hse.infotouch.domain.models.admin.relations.*;
-import ru.hse.infotouch.domain.repo.Terminal2AdRepository;
-import ru.hse.infotouch.domain.repo.Terminal2AnnouncementRepository;
-import ru.hse.infotouch.domain.repo.Terminal2NewsRepository;
-import ru.hse.infotouch.domain.repo.TerminalRepository;
+import ru.hse.infotouch.domain.repo.Device2AdRepository;
+import ru.hse.infotouch.domain.repo.Device2AnnouncementRepository;
+import ru.hse.infotouch.domain.repo.Device2NewsRepository;
+import ru.hse.infotouch.domain.repo.DeviceRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -22,18 +22,18 @@ import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 @Service
-public class TerminalService {
+public class DeviceService {
 
     private final EntityManager entityManager;
-    private final TerminalDatasource datasource;
-    private final TerminalRepository terminalRepository;
-    private final Terminal2NewsRepository terminal2NewsRepository;
-    private final Terminal2AnnouncementRepository terminal2AnnouncementRepository;
-    private final Terminal2AdRepository terminal2AdRepository;
+    private final DeviceDatasource datasource;
+    private final DeviceRepository terminalRepository;
+    private final Device2NewsRepository terminal2NewsRepository;
+    private final Device2AnnouncementRepository terminal2AnnouncementRepository;
+    private final Device2AdRepository terminal2AdRepository;
 
     private GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
 
-    public TerminalService(EntityManager entityManager, TerminalDatasource datasource, TerminalRepository terminalRepository, Terminal2NewsRepository terminal2NewsRepository, Terminal2AnnouncementRepository terminal2AnnouncementRepository, Terminal2AdRepository terminal2AdRepository) {
+    public DeviceService(EntityManager entityManager, DeviceDatasource datasource, DeviceRepository terminalRepository, Device2NewsRepository terminal2NewsRepository, Device2AnnouncementRepository terminal2AnnouncementRepository, Device2AdRepository terminal2AdRepository) {
         this.entityManager = entityManager;
         this.datasource = datasource;
         this.terminalRepository = terminalRepository;
@@ -43,41 +43,41 @@ public class TerminalService {
     }
 
 
-    public List<Terminal> findAll(String searchString, int page) {
+    public List<Device> findAll(String searchString, int page) {
 
         return datasource.findAll(searchString, page);
     }
 
-    public Terminal getOneById(int id) {
+    public Device getOneById(int id) {
         return this.terminalRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(String.format("Информационного устройства с id \"%d\" не существует", id)));
     }
 
     @Transactional
-    public Terminal create(TerminalRequest request) {
-        Terminal terminal = new Terminal();
+    public Device create(DeviceRequest request) {
+        Device device = new Device();
 
-        terminal.setLocation(geometryFactory.createPoint(new Coordinate(request.getX(), request.getY())));
+        device.setLocation(geometryFactory.createPoint(new Coordinate(request.getX(), request.getY())));
 
-        terminal.updateFromRequest(request);
+        device.updateFromRequest(request);
 
-        return terminalRepository.save(terminal);
+        return terminalRepository.save(device);
     }
 
     @Transactional
-    public Terminal update(int id, TerminalRequest request) {
-        Terminal terminal = this.getOneById(id);
+    public Device update(int id, DeviceRequest request) {
+        Device device = this.getOneById(id);
 
-        terminal.setLocation(geometryFactory.createPoint(new Coordinate(request.getX(), request.getY())));
-        terminal.updateFromRequest(request);
+        device.setLocation(geometryFactory.createPoint(new Coordinate(request.getX(), request.getY())));
+        device.updateFromRequest(request);
 
-        return terminalRepository.save(terminal);
+        return terminalRepository.save(device);
     }
 
     @Transactional
     public void delete(int id) {
-        Terminal terminal = this.getOneById(id);
+        Device device = this.getOneById(id);
 
-        terminalRepository.delete(terminal);
+        terminalRepository.delete(device);
     }
 
     public boolean isNotExistAll(int... ids) {
@@ -91,35 +91,35 @@ public class TerminalService {
     }
 
     public void deleteAllNewsRelations(int newsId) {
-        Query query = entityManager.createNativeQuery("delete from terminal2news tn where tn.news_id = :newsId ");
+        Query query = entityManager.createNativeQuery("delete from device2news tn where tn.news_id = :newsId ");
         query.setParameter("newsId", newsId).executeUpdate();
     }
 
     public void insertNewsRelations(int newsId, int[] terminalIds) {
-        List<Terminal2News> toSave = getRelations(newsId, terminalIds, Terminal2News::createOf);
+        List<Device2News> toSave = getRelations(newsId, terminalIds, Device2News::createOf);
 
         terminal2NewsRepository.saveAll(toSave);
     }
 
 
     public void deleteAllAnnouncementRelations(int announcementId) {
-        Query query = entityManager.createNativeQuery("delete from terminal2announcement tn where tn.announcement_id = :announcementId ");
+        Query query = entityManager.createNativeQuery("delete from device2announcement tn where tn.announcement_id = :announcementId ");
         query.setParameter("announcementId", announcementId).executeUpdate();
     }
 
     public void insertAnnouncementRelations(int announcementId, int[] terminalIds) {
-        List<Terminal2Announcement> toSave = getRelations(announcementId, terminalIds, Terminal2Announcement::createOf);
+        List<Device2Announcement> toSave = getRelations(announcementId, terminalIds, Device2Announcement::createOf);
 
         terminal2AnnouncementRepository.saveAll(toSave);
     }
 
     public void deleteAllAdRelations(int adId) {
-        Query query = entityManager.createNativeQuery("delete from terminal2ad tn where tn.ad_id = :adId ");
+        Query query = entityManager.createNativeQuery("delete from device2ad tn where tn.ad_id = :adId ");
         query.setParameter("adId", adId).executeUpdate();
     }
 
     public void insertAdRelations(int adId, int[] terminalIds) {
-        List<Terminal2Ad> toSave = getRelations(adId, terminalIds, Terminal2Ad::createOf);
+        List<Device2Ad> toSave = getRelations(adId, terminalIds, Device2Ad::createOf);
 
         terminal2AdRepository.saveAll(toSave);
     }

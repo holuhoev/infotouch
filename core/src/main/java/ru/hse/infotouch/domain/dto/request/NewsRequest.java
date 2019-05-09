@@ -117,11 +117,11 @@ public class NewsRequest {
         this.tagIds = tagIds;
     }
 
-    public int[] getTerminalIds() {
+    public int[] getDeviceIds() {
         return terminalIds;
     }
 
-    public void setTerminalIds(int[] terminalIds) {
+    public void setDeviceIds(int[] terminalIds) {
         this.terminalIds = terminalIds;
     }
 }

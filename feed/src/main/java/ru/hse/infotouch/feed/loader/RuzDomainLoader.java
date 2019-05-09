@@ -32,7 +32,7 @@ public class RuzDomainLoader implements CommandLineRunner {
     private final PersonService personService;
     private final EmployeeService employeeService;
     private final BuildingRepository buildingRepository;
-    private final AuditoriumRepository auditoriumRepository;
+    private final RoomRepository auditoriumRepository;
     private final FacultyRepository facultyRepository;
     private final ChairRepository chairRepository;
     private final HsePersonService portalService;
@@ -45,7 +45,7 @@ public class RuzDomainLoader implements CommandLineRunner {
     public RuzDomainLoader(RuzApiService ruzApi,
                            LecturerService lecturerService,
                            PersonService personService, EmployeeService employeeService, BuildingRepository buildingRepository,
-                           AuditoriumRepository auditoriumRepository,
+                           RoomRepository roomRepository,
                            FacultyRepository facultyRepository,
                            ChairRepository chairRepository,
                            HsePersonService portalService) {
@@ -54,7 +54,7 @@ public class RuzDomainLoader implements CommandLineRunner {
         this.personService = personService;
         this.employeeService = employeeService;
         this.buildingRepository = buildingRepository;
-        this.auditoriumRepository = auditoriumRepository;
+        this.auditoriumRepository = roomRepository;
         this.facultyRepository = facultyRepository;
         this.chairRepository = chairRepository;
         this.portalService = portalService;
@@ -69,7 +69,7 @@ public class RuzDomainLoader implements CommandLineRunner {
 //        loadPersons();
 
 //        loadBuildings();
-        loadAuditoriums();
+        loadRooms();
     }
 
     private void loadPersons() throws IOException {
@@ -199,13 +199,13 @@ public class RuzDomainLoader implements CommandLineRunner {
         logger.info("Save all buildings took: {} ms", end - t1_end);
     }
 
-    private void loadAuditoriums() {
+    private void loadRooms() {
         auditoriumRepository.deleteAll();
 
         logger.info("Auditoriums loader starts");
-        List<Auditorium> allAuditoriums = ruzApi.getAllAuditoriums();
+        List<Room> allRooms = ruzApi.getAllAuditoriums();
 
-        auditoriumRepository.saveAll(allAuditoriums);
+        auditoriumRepository.saveAll(allRooms);
         logger.info("Save all auditoriums");
     }
 }

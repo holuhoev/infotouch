@@ -14,9 +14,9 @@ import java.util.List;
 public class AdService {
     private final AdDatasource datasource;
     private final AdRepository repository;
-    private final TerminalService terminalService;
+    private final DeviceService terminalService;
 
-    public AdService(AdDatasource datasource, AdRepository repository, TerminalService terminalService) {
+    public AdService(AdDatasource datasource, AdRepository repository, DeviceService terminalService) {
         this.datasource = datasource;
         this.repository = repository;
         this.terminalService = terminalService;
@@ -57,7 +57,7 @@ public class AdService {
     }
 
     public void requireExistingRelations(AdRequest request) {
-        if (request.getTerminalIds() != null && terminalService.isNotExistAll(request.getTerminalIds())) {
+        if (request.getDeviceIds() != null && terminalService.isNotExistAll(request.getDeviceIds())) {
             throw new IllegalArgumentException("Does not all terminals exist.");
         }
     }

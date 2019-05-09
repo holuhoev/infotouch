@@ -12,22 +12,22 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/event")
-public class TerminalEventController {
+public class DeviceEventController {
 
     private final EventService eventService;
 
-    public TerminalEventController(EventService eventService) {
+    public DeviceEventController(EventService eventService) {
         this.eventService = eventService;
     }
 
     @GetMapping("/{terminalId}")
-    public ResponseEntity<List<Event>> findAllByTerminal(@PathVariable("terminalId") int terminalId) {
+    public ResponseEntity<List<Event>> findAllByDevice(@PathVariable("terminalId") int terminalId) {
         // cache with redis(key=terminal_Id + current_hour) with ttl;
         return ResponseEntity.ok(eventService.findAll(terminalId));
     }
 
     @GetMapping("/today/{terminalId}")
-    public ResponseEntity<List<Event>> findTodayAllByTerminal(@PathVariable("terminalId") int terminalId) {
+    public ResponseEntity<List<Event>> findTodayAllByDevice(@PathVariable("terminalId") int terminalId) {
         // cache with redis(key=terminal_Id + current_hour) with ttl;
         return ResponseEntity.ok(eventService.findTodayAll(terminalId));
     }

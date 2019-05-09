@@ -1,6 +1,6 @@
 package ru.hse.infotouch.domain.dto.request;
 
-public class TerminalRequest {
+public class DeviceRequest {
     private String title;
     private String description;
 

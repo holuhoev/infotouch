@@ -6,18 +6,18 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "user2terminal")
-public class User2Terminal {
+@Table(name = "user2device")
+public class User2Device {
     @EmbeddedId
-    private User2TerminalId id;
+    private User2DeviceId id;
 
     @Column(name = "access_right")
     private AccessRight accessRight;
 
-    public User2Terminal() {
+    public User2Device() {
     }
 
-    public User2Terminal(User2TerminalId id, AccessRight accessRight) {
+    public User2Device(User2DeviceId id, AccessRight accessRight) {
         this.id = id;
         this.accessRight = accessRight;
     }
@@ -34,7 +34,7 @@ public class User2Terminal {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User2Terminal that = (User2Terminal) o;
+        User2Device that = (User2Device) o;
         return Objects.equals(id, that.id);
     }
 
@@ -43,7 +43,7 @@ public class User2Terminal {
         return Objects.hash(id);
     }
 
-    public static User2Terminal createOf(int userId, int terminalId, AccessRight right) {
-        return new User2Terminal(new User2TerminalId(userId, terminalId), right);
+    public static User2Device createOf(int userId, int terminalId, AccessRight right) {
+        return new User2Device(new User2DeviceId(userId, terminalId), right);
     }
 }

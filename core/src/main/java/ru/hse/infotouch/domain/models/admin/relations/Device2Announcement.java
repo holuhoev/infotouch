@@ -7,23 +7,23 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "terminal2announcement")
-public class Terminal2Announcement {
+@Table(name = "device2announcement")
+public class Device2Announcement {
     @EmbeddedId
-    private Terminal2AnnouncementId id;
+    private Device2AnnouncementId id;
 
-    public Terminal2Announcement() {
+    public Device2Announcement() {
     }
 
-    public Terminal2Announcement(Terminal2AnnouncementId id) {
+    public Device2Announcement(Device2AnnouncementId id) {
         this.id = id;
     }
 
-    public Terminal2AnnouncementId getId() {
+    public Device2AnnouncementId getId() {
         return id;
     }
 
-    public void setId(Terminal2AnnouncementId id) {
+    public void setId(Device2AnnouncementId id) {
         this.id = id;
     }
 
@@ -31,7 +31,7 @@ public class Terminal2Announcement {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Terminal2Announcement that = (Terminal2Announcement) o;
+        Device2Announcement that = (Device2Announcement) o;
         return Objects.equals(id, that.id);
     }
 
@@ -40,7 +40,7 @@ public class Terminal2Announcement {
         return Objects.hash(id);
     }
 
-    public static Terminal2Announcement createOf(int terminalId, int relationId) {
-        return new Terminal2Announcement(new Terminal2AnnouncementId(terminalId, relationId));
+    public static Device2Announcement createOf(int terminalId, int relationId) {
+        return new Device2Announcement(new Device2AnnouncementId(terminalId, relationId));
     }
 }

@@ -6,17 +6,17 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
-public class User2TerminalId implements Serializable {
+public class User2DeviceId implements Serializable {
     @Column(name = "userId")
     private int userId;
 
     @Column(name = "terminalId")
     private int terminalId;
 
-    public User2TerminalId() {
+    public User2DeviceId() {
     }
 
-    public User2TerminalId(int userId, int terminalId) {
+    public User2DeviceId(int userId, int terminalId) {
         this.userId = userId;
         this.terminalId = terminalId;
     }
@@ -29,11 +29,11 @@ public class User2TerminalId implements Serializable {
         this.userId = userId;
     }
 
-    public int getTerminalId() {
+    public int getDeviceId() {
         return terminalId;
     }
 
-    public void setTerminalId(int terminalId) {
+    public void setDeviceId(int terminalId) {
         this.terminalId = terminalId;
     }
 
@@ -41,7 +41,7 @@ public class User2TerminalId implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User2TerminalId that = (User2TerminalId) o;
+        User2DeviceId that = (User2DeviceId) o;
         return userId == that.userId &&
                 terminalId == that.terminalId;
     }

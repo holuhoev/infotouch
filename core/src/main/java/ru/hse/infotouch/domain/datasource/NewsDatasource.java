@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import ru.hse.infotouch.domain.models.admin.*;
 import ru.hse.infotouch.domain.models.admin.relations.QNews2Tag;
-import ru.hse.infotouch.domain.models.admin.relations.QTerminal2News;
+import ru.hse.infotouch.domain.models.admin.relations.QDevice2News;
 
 import javax.persistence.EntityManager;
 
@@ -29,7 +29,7 @@ public class NewsDatasource {
 
     private final QNews qNews = QNews.news;
     private final QNews2Tag qNews2Tag = QNews2Tag.news2Tag;
-    private final QTerminal2News qTerminal2News = QTerminal2News.terminal2News;
+    private final QDevice2News qDevice2News = QDevice2News.device2News;
     private final QTopic qTopic = QTopic.topic;
 
     private final TagDatasource tagDatasource;
@@ -52,8 +52,8 @@ public class NewsDatasource {
                 .leftJoin(qTopic).on(qTopic.id.eq(qNews.topicId));
 
         if (Objects.nonNull(terminalId)) {
-            whereClause.and(qTerminal2News.id.terminalId.eq(terminalId));
-            query = query.leftJoin(qTerminal2News).on(qTerminal2News.id.newsId.eq(qNews.id));
+            whereClause.and(qDevice2News.id.terminalId.eq(terminalId));
+            query = query.leftJoin(qDevice2News).on(qDevice2News.id.newsId.eq(qNews.id));
         }
 
         if (StringUtils.isNotEmpty(searchString)) {

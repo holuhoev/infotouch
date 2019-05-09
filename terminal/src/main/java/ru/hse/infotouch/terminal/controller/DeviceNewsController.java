@@ -16,12 +16,12 @@ import static java.util.Objects.isNull;
 
 @RestController
 @RequestMapping("api/news")
-public class TerminalNewsController {
+public class DeviceNewsController {
 
     private final NewsService newsService;
 
     @Autowired
-    public TerminalNewsController(NewsService newsService) {
+    public DeviceNewsController(NewsService newsService) {
         this.newsService = newsService;
     }
 
@@ -31,7 +31,7 @@ public class TerminalNewsController {
                                               @RequestParam(value = "topicId", required = false) Integer topicId,
                                               @RequestParam(value = "tagIds", required = false) int[] tagIds,
                                               @RequestParam(value = "page", required = false) Integer page) {
-        // 1. проверяем, может ли юзер смотреть данный терминал user2terminal
+        // 1. проверяем, может ли юзер смотреть данный терминал user2device
 
         return ResponseEntity.ok(
                 newsService.findAll(terminalId,

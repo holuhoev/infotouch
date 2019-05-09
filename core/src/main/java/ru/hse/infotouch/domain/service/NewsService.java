@@ -17,7 +17,7 @@ public class NewsService {
 
     private final NewsRepository repository;
     private final TopicService topicService;
-    private final TerminalService terminalService;
+    private final DeviceService terminalService;
     private final TagService tagService;
 
     private final NewsDatasource newsDatasource;
@@ -26,7 +26,7 @@ public class NewsService {
     @Autowired
     public NewsService(NewsRepository repository,
                        TopicService topicService,
-                       TerminalService terminalService,
+                       DeviceService terminalService,
                        TagService tagService,
                        NewsDatasource newsDatasource,
                        TagDatasource tagDatasource) {
@@ -64,7 +64,7 @@ public class NewsService {
 
         News news = repository.save(News.createFromRequest(request));
 
-        terminalService.insertNewsRelations(news.getId(), request.getTerminalIds());
+        terminalService.insertNewsRelations(news.getId(), request.getDeviceIds());
         tagService.insertNewsRelations(news.getId(), request.getTagIds());
 
         return news;
@@ -80,7 +80,7 @@ public class NewsService {
         tagService.insertNewsRelations(id, request.getTagIds());
 
         terminalService.deleteAllNewsRelations(id);
-        terminalService.insertNewsRelations(id, request.getTerminalIds());
+        terminalService.insertNewsRelations(id, request.getDeviceIds());
 
         news.updateFromRequest(request);
 
@@ -112,7 +112,7 @@ public class NewsService {
             throw new IllegalArgumentException("Does not all tags exist.");
         }
 
-        if (terminalService.isNotExistAll(newsRequest.getTerminalIds())) {
+        if (terminalService.isNotExistAll(newsRequest.getDeviceIds())) {
             throw new IllegalArgumentException("Does not all terminals exist.");
         }
 
