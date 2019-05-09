@@ -5,12 +5,7 @@ import com.vividsolutions.jts.geom.Point;
 import ru.hse.infotouch.domain.dto.request.DeviceRequest;
 import ru.hse.infotouch.util.json.PointToJsonSerializer;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import java.util.Objects;
 
@@ -32,6 +27,31 @@ public class Device {
     @Column(columnDefinition = "geometry(Point,4326)")
     @JsonSerialize(using = PointToJsonSerializer.class)
     private Point location;
+
+    @Column(name = "point_id")
+    private Integer pointId;
+
+    @Transient
+    private Integer buildingId;
+
+    @Transient
+    private Integer roomId;
+
+    public Integer getPointId() {
+        return pointId;
+    }
+
+    public void setPointId(Integer pointId) {
+        this.pointId = pointId;
+    }
+
+    public Integer getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(Integer roomId) {
+        this.roomId = roomId;
+    }
 
     public Integer getId() {
         return id;
@@ -65,6 +85,14 @@ public class Device {
         this.location = location;
     }
 
+    public Integer getBuildingId() {
+        return buildingId;
+    }
+
+    public void setBuildingId(Integer buildingId) {
+        this.buildingId = buildingId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -81,5 +109,6 @@ public class Device {
     public void updateFromRequest(DeviceRequest request) {
         this.setTitle(request.getTitle());
         this.setDescription(request.getDescription());
+        this.setBuildingId(request.getBuildingId());
     }
 }

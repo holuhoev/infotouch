@@ -7,12 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.hse.infotouch.domain.datasource.DeviceDatasource;
 import ru.hse.infotouch.domain.dto.request.DeviceRequest;
+import ru.hse.infotouch.domain.models.Room;
 import ru.hse.infotouch.domain.models.admin.Device;
 import ru.hse.infotouch.domain.models.admin.relations.*;
-import ru.hse.infotouch.domain.repo.Device2AdRepository;
-import ru.hse.infotouch.domain.repo.Device2AnnouncementRepository;
-import ru.hse.infotouch.domain.repo.Device2NewsRepository;
-import ru.hse.infotouch.domain.repo.DeviceRepository;
+import ru.hse.infotouch.domain.repo.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -30,16 +28,20 @@ public class DeviceService {
     private final Device2NewsRepository device2NewsRepository;
     private final Device2AnnouncementRepository device2AnnouncementRepository;
     private final Device2AdRepository device2AdRepository;
+    private final PointRepository pointRepository;
+    private final RoomService roomService;
 
     private GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
 
-    public DeviceService(EntityManager entityManager, DeviceDatasource datasource, DeviceRepository deviceRepository, Device2NewsRepository device2NewsRepository, Device2AnnouncementRepository device2AnnouncementRepository, Device2AdRepository device2AdRepository) {
+    public DeviceService(EntityManager entityManager, DeviceDatasource datasource, DeviceRepository deviceRepository, Device2NewsRepository device2NewsRepository, Device2AnnouncementRepository device2AnnouncementRepository, Device2AdRepository device2AdRepository, PointRepository pointRepository, RoomService roomService) {
         this.entityManager = entityManager;
         this.datasource = datasource;
         this.deviceRepository = deviceRepository;
         this.device2NewsRepository = device2NewsRepository;
         this.device2AnnouncementRepository = device2AnnouncementRepository;
         this.device2AdRepository = device2AdRepository;
+        this.pointRepository = pointRepository;
+        this.roomService = roomService;
     }
 
 
@@ -49,7 +51,19 @@ public class DeviceService {
     }
 
     public Device getOneById(int id) {
-        return this.deviceRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(String.format("Информационного устройства с id \"%d\" не существует", id)));
+        Device device = this.deviceRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(String.format("Информационного устройства с id \"%d\" не существует", id)));
+
+        if (device.getPointId() != null) {
+            pointRepository.findById(device.getPointId()).ifPresent(point -> {
+                if (point.getRoomId() != null) {
+                    Room room = roomService.getOneById(point.getRoomId());
+                    device.setRoomId(point.getRoomId());
+                    device.setBuildingId(room.getBuildingId());
+                }
+            });
+        }
+
+        return device;
     }
 
     @Transactional
@@ -124,7 +138,8 @@ public class DeviceService {
         device2AdRepository.saveAll(toSave);
     }
 
-    private <T> List<T> getRelations(int relationId, int[] deviceIds, BiFunction<Integer, Integer, T> createMethod) {
+    private <T> List<T> getRelations(int relationId, int[] deviceIds, BiFunction<
+            Integer, Integer, T> createMethod) {
 
         return Arrays.stream(deviceIds).boxed()
                 .map(deviceId -> createMethod.apply(deviceId, relationId))
