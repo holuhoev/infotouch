@@ -26,20 +26,20 @@ public class DeviceService {
 
     private final EntityManager entityManager;
     private final DeviceDatasource datasource;
-    private final DeviceRepository terminalRepository;
-    private final Device2NewsRepository terminal2NewsRepository;
-    private final Device2AnnouncementRepository terminal2AnnouncementRepository;
-    private final Device2AdRepository terminal2AdRepository;
+    private final DeviceRepository deviceRepository;
+    private final Device2NewsRepository device2NewsRepository;
+    private final Device2AnnouncementRepository device2AnnouncementRepository;
+    private final Device2AdRepository device2AdRepository;
 
     private GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
 
-    public DeviceService(EntityManager entityManager, DeviceDatasource datasource, DeviceRepository terminalRepository, Device2NewsRepository terminal2NewsRepository, Device2AnnouncementRepository terminal2AnnouncementRepository, Device2AdRepository terminal2AdRepository) {
+    public DeviceService(EntityManager entityManager, DeviceDatasource datasource, DeviceRepository deviceRepository, Device2NewsRepository device2NewsRepository, Device2AnnouncementRepository device2AnnouncementRepository, Device2AdRepository device2AdRepository) {
         this.entityManager = entityManager;
         this.datasource = datasource;
-        this.terminalRepository = terminalRepository;
-        this.terminal2NewsRepository = terminal2NewsRepository;
-        this.terminal2AnnouncementRepository = terminal2AnnouncementRepository;
-        this.terminal2AdRepository = terminal2AdRepository;
+        this.deviceRepository = deviceRepository;
+        this.device2NewsRepository = device2NewsRepository;
+        this.device2AnnouncementRepository = device2AnnouncementRepository;
+        this.device2AdRepository = device2AdRepository;
     }
 
 
@@ -49,7 +49,7 @@ public class DeviceService {
     }
 
     public Device getOneById(int id) {
-        return this.terminalRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(String.format("Информационного устройства с id \"%d\" не существует", id)));
+        return this.deviceRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(String.format("Информационного устройства с id \"%d\" не существует", id)));
     }
 
     @Transactional
@@ -60,7 +60,7 @@ public class DeviceService {
 
         device.updateFromRequest(request);
 
-        return terminalRepository.save(device);
+        return deviceRepository.save(device);
     }
 
     @Transactional
@@ -70,19 +70,19 @@ public class DeviceService {
         device.setLocation(geometryFactory.createPoint(new Coordinate(request.getX(), request.getY())));
         device.updateFromRequest(request);
 
-        return terminalRepository.save(device);
+        return deviceRepository.save(device);
     }
 
     @Transactional
     public void delete(int id) {
         Device device = this.getOneById(id);
 
-        terminalRepository.delete(device);
+        deviceRepository.delete(device);
     }
 
     public boolean isNotExistAll(int... ids) {
         for (int id : ids) {
-            if (!terminalRepository.existsById(id)) {
+            if (!deviceRepository.existsById(id)) {
                 return true;
             }
         }
@@ -95,10 +95,10 @@ public class DeviceService {
         query.setParameter("newsId", newsId).executeUpdate();
     }
 
-    public void insertNewsRelations(int newsId, int[] terminalIds) {
-        List<Device2News> toSave = getRelations(newsId, terminalIds, Device2News::createOf);
+    public void insertNewsRelations(int newsId, int[] deviceIds) {
+        List<Device2News> toSave = getRelations(newsId, deviceIds, Device2News::createOf);
 
-        terminal2NewsRepository.saveAll(toSave);
+        device2NewsRepository.saveAll(toSave);
     }
 
 
@@ -107,10 +107,10 @@ public class DeviceService {
         query.setParameter("announcementId", announcementId).executeUpdate();
     }
 
-    public void insertAnnouncementRelations(int announcementId, int[] terminalIds) {
-        List<Device2Announcement> toSave = getRelations(announcementId, terminalIds, Device2Announcement::createOf);
+    public void insertAnnouncementRelations(int announcementId, int[] deviceIds) {
+        List<Device2Announcement> toSave = getRelations(announcementId, deviceIds, Device2Announcement::createOf);
 
-        terminal2AnnouncementRepository.saveAll(toSave);
+        device2AnnouncementRepository.saveAll(toSave);
     }
 
     public void deleteAllAdRelations(int adId) {
@@ -118,16 +118,16 @@ public class DeviceService {
         query.setParameter("adId", adId).executeUpdate();
     }
 
-    public void insertAdRelations(int adId, int[] terminalIds) {
-        List<Device2Ad> toSave = getRelations(adId, terminalIds, Device2Ad::createOf);
+    public void insertAdRelations(int adId, int[] deviceIds) {
+        List<Device2Ad> toSave = getRelations(adId, deviceIds, Device2Ad::createOf);
 
-        terminal2AdRepository.saveAll(toSave);
+        device2AdRepository.saveAll(toSave);
     }
 
-    private <T> List<T> getRelations(int relationId, int[] terminalIds, BiFunction<Integer, Integer, T> createMethod) {
+    private <T> List<T> getRelations(int relationId, int[] deviceIds, BiFunction<Integer, Integer, T> createMethod) {
 
-        return Arrays.stream(terminalIds).boxed()
-                .map(terminalId -> createMethod.apply(terminalId, relationId))
+        return Arrays.stream(deviceIds).boxed()
+                .map(deviceId -> createMethod.apply(deviceId, relationId))
                 .collect(Collectors.toList());
     }
 }

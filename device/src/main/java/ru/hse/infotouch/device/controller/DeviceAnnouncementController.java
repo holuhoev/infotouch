@@ -1,4 +1,4 @@
-package ru.hse.infotouch.terminal.controller;
+package ru.hse.infotouch.device.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ public class DeviceAnnouncementController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Announcement>> findAll(@RequestParam(value = "terminalId") Integer terminalId,
+    public ResponseEntity<List<Announcement>> findAll(@RequestParam(value = "deviceId") Integer deviceId,
                                                       @RequestParam(value = "searchString", required = false) String searchString,
                                                       @RequestParam(value = "from", required = false) LocalDate from,
                                                       @RequestParam(value = "to", required = false) LocalDate to,
@@ -33,7 +33,7 @@ public class DeviceAnnouncementController {
 
         return ResponseEntity.ok(
                 announcementService.findAll(
-                        terminalId,
+                        deviceId,
                         searchString,
                         from,
                         to,
@@ -42,13 +42,13 @@ public class DeviceAnnouncementController {
     }
 
     @GetMapping("/today")
-    public ResponseEntity<List<Announcement>> findTodayAll(@RequestParam(value = "terminalId") Integer terminalId,
+    public ResponseEntity<List<Announcement>> findTodayAll(@RequestParam(value = "deviceId") Integer deviceId,
                                                            @RequestParam(value = "searchString", required = false) String searchString,
                                                            @RequestParam(value = "page", required = false) Integer page) {
 
         return ResponseEntity.ok(
                 announcementService.findAll(
-                        terminalId,
+                        deviceId,
                         searchString,
                         LocalDate.now(),
                         LocalDate.now(),

@@ -11,8 +11,8 @@ public class EventUrl {
     @Column
     private Integer id;
 
-    @Column(name = "terminal_id")
-    private int terminalId;
+    @Column(name = "device_id")
+    private int deviceId;
 
     @Column(name = "url")
     private String url;
@@ -26,11 +26,11 @@ public class EventUrl {
     }
 
     public int getDeviceId() {
-        return terminalId;
+        return deviceId;
     }
 
-    public void setDeviceId(int terminalId) {
-        this.terminalId = terminalId;
+    public void setDeviceId(int deviceId) {
+        this.deviceId = deviceId;
     }
 
     public String getUrl() {

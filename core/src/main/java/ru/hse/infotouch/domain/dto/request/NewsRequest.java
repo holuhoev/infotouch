@@ -23,7 +23,7 @@ public class NewsRequest {
 
     private int[] tagIds;
 
-    private int[] terminalIds;
+    private int[] deviceIds;
 
     private String imageUrl;
 
@@ -118,10 +118,10 @@ public class NewsRequest {
     }
 
     public int[] getDeviceIds() {
-        return terminalIds;
+        return deviceIds;
     }
 
-    public void setDeviceIds(int[] terminalIds) {
-        this.terminalIds = terminalIds;
+    public void setDeviceIds(int[] deviceIds) {
+        this.deviceIds = deviceIds;
     }
 }

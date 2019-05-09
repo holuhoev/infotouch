@@ -1,4 +1,4 @@
-package ru.hse.infotouch.terminal.controller;
+package ru.hse.infotouch.device.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class DeviceNewsController {
     }
 
     @GetMapping
-    public ResponseEntity<List<News>> findAll(@RequestParam(value = "terminalId") Integer terminalId,
+    public ResponseEntity<List<News>> findAll(@RequestParam(value = "deviceId") Integer deviceId,
                                               @RequestParam(value = "searchString", required = false) String searchString,
                                               @RequestParam(value = "topicId", required = false) Integer topicId,
                                               @RequestParam(value = "tagIds", required = false) int[] tagIds,
@@ -34,7 +34,7 @@ public class DeviceNewsController {
         // 1. проверяем, может ли юзер смотреть данный терминал user2device
 
         return ResponseEntity.ok(
-                newsService.findAll(terminalId,
+                newsService.findAll(deviceId,
                         searchString,
                         topicId,
                         tagIds,

@@ -1,4 +1,4 @@
-package ru.hse.infotouch.terminal.controller;
+package ru.hse.infotouch.device.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

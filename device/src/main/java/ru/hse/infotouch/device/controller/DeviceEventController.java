@@ -1,4 +1,4 @@
-package ru.hse.infotouch.terminal.controller;
+package ru.hse.infotouch.device.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,15 +20,15 @@ public class DeviceEventController {
         this.eventService = eventService;
     }
 
-    @GetMapping("/{terminalId}")
-    public ResponseEntity<List<Event>> findAllByDevice(@PathVariable("terminalId") int terminalId) {
-        // cache with redis(key=terminal_Id + current_hour) with ttl;
-        return ResponseEntity.ok(eventService.findAll(terminalId));
+    @GetMapping("/{deviceId}")
+    public ResponseEntity<List<Event>> findAllByDevice(@PathVariable("deviceId") int deviceId) {
+        // cache with redis(key=device_Id + current_hour) with ttl;
+        return ResponseEntity.ok(eventService.findAll(deviceId));
     }
 
-    @GetMapping("/today/{terminalId}")
-    public ResponseEntity<List<Event>> findTodayAllByDevice(@PathVariable("terminalId") int terminalId) {
-        // cache with redis(key=terminal_Id + current_hour) with ttl;
-        return ResponseEntity.ok(eventService.findTodayAll(terminalId));
+    @GetMapping("/today/{deviceId}")
+    public ResponseEntity<List<Event>> findTodayAllByDevice(@PathVariable("deviceId") int deviceId) {
+        // cache with redis(key=device_Id + current_hour) with ttl;
+        return ResponseEntity.ok(eventService.findTodayAll(deviceId));
     }
 }

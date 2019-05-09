@@ -39,7 +39,7 @@ public class NewsDatasource {
         this.tagDatasource = tagDatasource;
     }
 
-    public List<News> findAll(Integer terminalId,
+    public List<News> findAll(Integer deviceId,
                               String searchString,
                               Integer topicId,
                               int[] tagIds,
@@ -51,8 +51,8 @@ public class NewsDatasource {
                 .from(qNews)
                 .leftJoin(qTopic).on(qTopic.id.eq(qNews.topicId));
 
-        if (Objects.nonNull(terminalId)) {
-            whereClause.and(qDevice2News.id.terminalId.eq(terminalId));
+        if (Objects.nonNull(deviceId)) {
+            whereClause.and(qDevice2News.id.deviceId.eq(deviceId));
             query = query.leftJoin(qDevice2News).on(qDevice2News.id.newsId.eq(qNews.id));
         }
 

@@ -1,7 +1,7 @@
 server:
   port: 8888
   servlet:
-    context-path: "/infotouch-terminal"
+    context-path: "/infotouch-device"
 spring:
   mvc:
     date-format: "yyyy.MM.dd"

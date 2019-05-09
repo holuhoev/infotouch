@@ -10,15 +10,15 @@ public class User2DeviceId implements Serializable {
     @Column(name = "userId")
     private int userId;
 
-    @Column(name = "terminalId")
-    private int terminalId;
+    @Column(name = "deviceId")
+    private int deviceId;
 
     public User2DeviceId() {
     }
 
-    public User2DeviceId(int userId, int terminalId) {
+    public User2DeviceId(int userId, int deviceId) {
         this.userId = userId;
-        this.terminalId = terminalId;
+        this.deviceId = deviceId;
     }
 
     public int getUserId() {
@@ -30,11 +30,11 @@ public class User2DeviceId implements Serializable {
     }
 
     public int getDeviceId() {
-        return terminalId;
+        return deviceId;
     }
 
-    public void setDeviceId(int terminalId) {
-        this.terminalId = terminalId;
+    public void setDeviceId(int deviceId) {
+        this.deviceId = deviceId;
     }
 
     @Override
@@ -43,11 +43,11 @@ public class User2DeviceId implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         User2DeviceId that = (User2DeviceId) o;
         return userId == that.userId &&
-                terminalId == that.terminalId;
+                deviceId == that.deviceId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, terminalId);
+        return Objects.hash(userId, deviceId);
     }
 }

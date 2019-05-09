@@ -12,20 +12,20 @@ import java.util.List;
 import static java.util.Objects.isNull;
 
 @RestController
-@RequestMapping("api/terminal")
+@RequestMapping("api/device")
 public class DeviceController {
 
-    private final DeviceService terminalService;
+    private final DeviceService deviceService;
 
-    public DeviceController(DeviceService terminalService) {
-        this.terminalService = terminalService;
+    public DeviceController(DeviceService deviceService) {
+        this.deviceService = deviceService;
     }
 
     @GetMapping
     public ResponseEntity<List<Device>> findAll(@RequestParam(value = "searchString", required = false) String searchString,
                                                 @RequestParam(value = "page", required = false) Integer page) {
 
-        return ResponseEntity.ok(terminalService.findAll(
+        return ResponseEntity.ok(deviceService.findAll(
                 searchString,
                 isNull(page) ? 0 : page
         ));
@@ -34,20 +34,20 @@ public class DeviceController {
     @GetMapping("/{id}")
     public ResponseEntity<Device> getOneById(@PathVariable("id") int id) {
 
-        return ResponseEntity.ok(terminalService.getOneById(id));
+        return ResponseEntity.ok(deviceService.getOneById(id));
     }
 
     @PostMapping
     public ResponseEntity<Device> createDevice(DeviceRequest request) {
 
-        return ResponseEntity.ok(terminalService.create(request));
+        return ResponseEntity.ok(deviceService.create(request));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Device> updateDevice(@PathVariable("id") int id,
                                                  DeviceRequest request) {
 
-        return ResponseEntity.ok(terminalService.update(id, request));
+        return ResponseEntity.ok(deviceService.update(id, request));
     }
 
 
@@ -55,6 +55,6 @@ public class DeviceController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteDevice(@PathVariable("id") int id) {
 
-        terminalService.delete(id);
+        deviceService.delete(id);
     }
 }

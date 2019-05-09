@@ -31,7 +31,7 @@ public class User {
     private UserRole userRole;
 
     @Transient
-    private List<UserDeviceDTO> terminals;
+    private List<UserDeviceDTO> devices;
 
     public Integer getId() {
         return id;
@@ -87,11 +87,11 @@ public class User {
     }
 
     public List<UserDeviceDTO> getDevices() {
-        return terminals;
+        return devices;
     }
 
-    public void setDevices(List<UserDeviceDTO> terminals) {
-        this.terminals = terminals;
+    public void setDevices(List<UserDeviceDTO> devices) {
+        this.devices = devices;
     }
 
     public static User createFromRequest(UserCreateRequest request) {

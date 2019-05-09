@@ -43,7 +43,7 @@ public class User2Device {
         return Objects.hash(id);
     }
 
-    public static User2Device createOf(int userId, int terminalId, AccessRight right) {
-        return new User2Device(new User2DeviceId(userId, terminalId), right);
+    public static User2Device createOf(int userId, int deviceId, AccessRight right) {
+        return new User2Device(new User2DeviceId(userId, deviceId), right);
     }
 }

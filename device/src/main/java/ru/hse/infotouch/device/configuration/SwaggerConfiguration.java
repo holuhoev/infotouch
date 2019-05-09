@@ -1,4 +1,4 @@
-package ru.hse.infotouch.terminal.configuration;
+package ru.hse.infotouch.device.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

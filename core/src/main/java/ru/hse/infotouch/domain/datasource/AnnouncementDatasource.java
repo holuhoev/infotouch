@@ -29,7 +29,7 @@ public class AnnouncementDatasource {
         this.em = em;
     }
 
-    public List<Announcement> findAll(Integer terminalId,
+    public List<Announcement> findAll(Integer deviceId,
                                       String searchString,
                                       LocalDate from,
                                       LocalDate to,
@@ -38,9 +38,9 @@ public class AnnouncementDatasource {
         JPAQuery<Announcement> query = new JPAQuery<>(em).select(qAnnouncement)
                 .from(qAnnouncement);
 
-        if (terminalId != null) {
+        if (deviceId != null) {
             query.leftJoin(qDevice2Announcement).on(qAnnouncement.id.eq(qDevice2Announcement.id.announcementId));
-            whereClause.and(qDevice2Announcement.id.terminalId.eq(terminalId));
+            whereClause.and(qDevice2Announcement.id.deviceId.eq(deviceId));
         }
 
         if (from != null && to != null) {

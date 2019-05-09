@@ -6,17 +6,17 @@ import ru.hse.infotouch.domain.models.enums.AccessRight;
 import java.util.Objects;
 
 public class UserDeviceDTO {
-    private int terminalId;
+    private int deviceId;
     private String title;
     private String description;
     private AccessRight accessRight;
 
     public int getDeviceId() {
-        return terminalId;
+        return deviceId;
     }
 
-    public void setDeviceId(int terminalId) {
-        this.terminalId = terminalId;
+    public void setDeviceId(int deviceId) {
+        this.deviceId = deviceId;
     }
 
     public String getTitle() {
@@ -46,8 +46,8 @@ public class UserDeviceDTO {
     public UserDeviceDTO() {
     }
 
-    private UserDeviceDTO(int terminalId, String title, String description, AccessRight accessRight) {
-        this.terminalId = terminalId;
+    private UserDeviceDTO(int deviceId, String title, String description, AccessRight accessRight) {
+        this.deviceId = deviceId;
         this.title = title;
         this.description = description;
         this.accessRight = accessRight;

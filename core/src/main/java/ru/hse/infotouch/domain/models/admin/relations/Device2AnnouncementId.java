@@ -7,8 +7,8 @@ import java.util.Objects;
 
 @Embeddable
 public class Device2AnnouncementId implements Serializable {
-    @Column(name = "terminalId")
-    private int terminalId;
+    @Column(name = "deviceId")
+    private int deviceId;
 
     @Column(name = "announcementId")
     private int announcementId;
@@ -16,17 +16,17 @@ public class Device2AnnouncementId implements Serializable {
     public Device2AnnouncementId() {
     }
 
-    public Device2AnnouncementId(int terminalId, int announcementId) {
-        this.terminalId = terminalId;
+    public Device2AnnouncementId(int deviceId, int announcementId) {
+        this.deviceId = deviceId;
         this.announcementId = announcementId;
     }
 
     public int getDeviceId() {
-        return terminalId;
+        return deviceId;
     }
 
-    public void setDeviceId(int terminalId) {
-        this.terminalId = terminalId;
+    public void setDeviceId(int deviceId) {
+        this.deviceId = deviceId;
     }
 
     public int getAnnouncementId() {
@@ -42,12 +42,12 @@ public class Device2AnnouncementId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Device2AnnouncementId that = (Device2AnnouncementId) o;
-        return terminalId == that.terminalId &&
+        return deviceId == that.deviceId &&
                 announcementId == that.announcementId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(terminalId, announcementId);
+        return Objects.hash(deviceId, announcementId);
     }
 }

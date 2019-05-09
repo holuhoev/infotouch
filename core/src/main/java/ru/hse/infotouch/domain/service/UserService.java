@@ -24,29 +24,29 @@ public class UserService {
     private final UserRepository repository;
     private final UserDatasource datasource;
 
-    private final DeviceDatasource terminalDatasource;
+    private final DeviceDatasource deviceDatasource;
     private final User2DeviceRepository user2DeviceRepository;
-    private final DeviceService terminalService;
+    private final DeviceService deviceService;
 
     private final EntityManager em;
 
     public UserService(UserRepository repository,
                        UserDatasource datasource,
-                       DeviceDatasource terminalDatasource,
+                       DeviceDatasource deviceDatasource,
                        User2DeviceRepository user2DeviceRepository,
-                       DeviceService terminalService,
+                       DeviceService deviceService,
                        EntityManager em) {
         this.repository = repository;
         this.datasource = datasource;
-        this.terminalDatasource = terminalDatasource;
+        this.deviceDatasource = deviceDatasource;
         this.user2DeviceRepository = user2DeviceRepository;
-        this.terminalService = terminalService;
+        this.deviceService = deviceService;
         this.em = em;
     }
 
     public User getOneById(int id) {
         User user = this.repository.findById(id).orElseThrow(() -> new IllegalArgumentException(String.format("Пользователя с id \"%d\" не существует", id)));
-        user.setDevices(terminalDatasource.findAllByUserId(id));
+        user.setDevices(deviceDatasource.findAllByUserId(id));
 
         return user;
     }
@@ -65,7 +65,7 @@ public class UserService {
         User user = repository.save(toSave);
         insertDeviceRelations(user.getId(), createRequest.getDevices());
 
-        user.setDevices(terminalDatasource.findAllByUserId(user.getId()));
+        user.setDevices(deviceDatasource.findAllByUserId(user.getId()));
 
         return user;
     }
@@ -82,7 +82,7 @@ public class UserService {
 
         User saved = this.repository.save(user);
 
-        saved.setDevices(terminalDatasource.findAllByUserId(id));
+        saved.setDevices(deviceDatasource.findAllByUserId(id));
 
         return saved;
     }
@@ -101,21 +101,21 @@ public class UserService {
         query.setParameter("userId", userId).executeUpdate();
     }
 
-    private void insertDeviceRelations(int userId, List<UserDeviceRequest> terminals) {
-        List<User2Device> toSave = terminals.stream()
-                .map(terminal -> User2Device.createOf(userId, terminal.getDeviceId(), terminal.getAccessRight()))
+    private void insertDeviceRelations(int userId, List<UserDeviceRequest> devices) {
+        List<User2Device> toSave = devices.stream()
+                .map(device -> User2Device.createOf(userId, device.getDeviceId(), device.getAccessRight()))
                 .collect(Collectors.toList());
 
         user2DeviceRepository.saveAll(toSave);
     }
 
-    private void requireExistingDevices(List<UserDeviceRequest> terminals) {
-        int[] terminalIds = terminals.stream()
+    private void requireExistingDevices(List<UserDeviceRequest> devices) {
+        int[] deviceIds = devices.stream()
                 .mapToInt(UserDeviceRequest::getDeviceId)
                 .toArray();
 
-        if (terminalService.isNotExistAll(terminalIds)) {
-            throw new IllegalArgumentException("Does not all terminals exist.");
+        if (deviceService.isNotExistAll(deviceIds)) {
+            throw new IllegalArgumentException("Does not all devices exist.");
         }
     }
 }

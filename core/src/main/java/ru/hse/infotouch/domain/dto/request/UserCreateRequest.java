@@ -16,8 +16,8 @@ public class UserCreateRequest {
     @NotNull(message = "role must be specified")
     private UserRole role;
 
-    @NotNull(message = "terminals must be specified")
-    private List<UserDeviceRequest> terminals;
+    @NotNull(message = "devices must be specified")
+    private List<UserDeviceRequest> devices;
 
     public String getFirstName() {
         return firstName;
@@ -52,10 +52,10 @@ public class UserCreateRequest {
     }
 
     public List<UserDeviceRequest> getDevices() {
-        return terminals;
+        return devices;
     }
 
-    public void setDevices(List<UserDeviceRequest> terminals) {
-        this.terminals = terminals;
+    public void setDevices(List<UserDeviceRequest> devices) {
+        this.devices = devices;
     }
 }

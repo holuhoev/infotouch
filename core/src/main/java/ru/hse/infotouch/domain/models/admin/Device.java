@@ -15,7 +15,7 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "terminal")
+@Table(name = "device")
 public class Device {
 
     @Id

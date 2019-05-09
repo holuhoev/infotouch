@@ -1,4 +1,4 @@
-package ru.hse.infotouch.terminal.controller;
+package ru.hse.infotouch.device.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

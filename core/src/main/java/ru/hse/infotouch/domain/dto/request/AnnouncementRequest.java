@@ -9,7 +9,7 @@ public class AnnouncementRequest {
     private int priority = 0;
     private String link;
     private Integer createdBy;
-    private int[] terminalIds;
+    private int[] deviceIds;
     private LocalDate startDate;
     private LocalDate endDate;
 
@@ -72,10 +72,10 @@ public class AnnouncementRequest {
 
 
     public int[] getDeviceIds() {
-        return terminalIds;
+        return deviceIds;
     }
 
-    public void setDeviceIds(int[] terminalIds) {
-        this.terminalIds = terminalIds;
+    public void setDeviceIds(int[] deviceIds) {
+        this.deviceIds = deviceIds;
     }
 }

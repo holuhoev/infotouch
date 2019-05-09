@@ -55,13 +55,13 @@ public class DeviceDatasource {
 
     public List<UserDeviceDTO> findAllByUserId(int userId) {
 
-        List<Tuple> terminalAndRight = new JPAQuery<>(entityManager).select(qUser2Device.accessRight, qDevice)
+        List<Tuple> deviceAndRight = new JPAQuery<>(entityManager).select(qUser2Device.accessRight, qDevice)
                 .from(qUser2Device)
                 .where(qUser2Device.id.userId.eq(userId))
-                .leftJoin(qDevice).on(qDevice.id.eq(qUser2Device.id.terminalId))
+                .leftJoin(qDevice).on(qDevice.id.eq(qUser2Device.id.deviceId))
                 .fetch();
 
-        return terminalAndRight.stream()
+        return deviceAndRight.stream()
                 .filter(tuple -> Objects.nonNull(tuple.get(qDevice)))
                 .map(tuple -> UserDeviceDTO.createOf(tuple.get(qDevice), tuple.get(qUser2Device.accessRight)))
                 .collect(Collectors.toList());

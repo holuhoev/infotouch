@@ -40,7 +40,7 @@ public class Device2Ad {
         return Objects.hash(id);
     }
 
-    public static Device2Ad createOf(int terminalId, int relationId) {
-        return new Device2Ad(new Device2AdId(terminalId, relationId));
+    public static Device2Ad createOf(int deviceId, int relationId) {
+        return new Device2Ad(new Device2AdId(deviceId, relationId));
     }
 }

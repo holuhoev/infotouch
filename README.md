@@ -10,6 +10,6 @@ The Client-Server Application for Content Management of Information Touch Device
 ### Run
 ```shell
 ./mvnw spring-boot:run -pl feed
-./mvnw spring-boot:run -pl terminal
+./mvnw spring-boot:run -pl device
 ```
 

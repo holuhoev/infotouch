@@ -28,14 +28,14 @@ public class EventService {
         this.siteEventService = siteEventService;
     }
 
-    public List<Event> findAll(int terminalId) {
-        Set<String> urls = getUrls(terminalId);
+    public List<Event> findAll(int deviceId) {
+        Set<String> urls = getUrls(deviceId);
 
         return siteEventService.getEventsByUrls(urls);
     }
 
-    public List<Event> findTodayAll(int terminalId) {
-        Set<String> urls = getUrls(terminalId);
+    public List<Event> findTodayAll(int deviceId) {
+        Set<String> urls = getUrls(deviceId);
 
         LocalDate now = LocalDate.now();
 
@@ -46,9 +46,9 @@ public class EventService {
         return siteEventService.getEventsByUrls(todayUrls);
     }
 
-    private Set<String> getUrls(int terminalId) {
+    private Set<String> getUrls(int deviceId) {
         return StreamSupport.stream(
-                eventUrlRepository.findAll(qEventUrl.terminalId.eq(terminalId)).spliterator(),
+                eventUrlRepository.findAll(qEventUrl.deviceId.eq(deviceId)).spliterator(),
                 false)
                 .map(EventUrl::getUrl)
                 .collect(Collectors.toSet());
