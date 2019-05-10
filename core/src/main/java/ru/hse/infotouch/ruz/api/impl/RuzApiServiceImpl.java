@@ -38,8 +38,8 @@ public class RuzApiServiceImpl implements RuzApiService {
     }
 
     @Override
-    public List<Auditorium> getAllAuditoriums() {
-        return jsonParser.mapStringToList(readRuz(Endpoint.AUDITORIUMS, Collections.emptyMap()), Auditorium.class);
+    public List<Room> getAllAuditoriums() {
+        return jsonParser.mapStringToList(readRuz(Endpoint.AUDITORIUMS, Collections.emptyMap()), Room.class);
     }
 
     @Autowired

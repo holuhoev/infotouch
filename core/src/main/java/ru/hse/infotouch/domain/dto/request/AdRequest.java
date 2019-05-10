@@ -23,7 +23,7 @@ public class AdRequest {
 
     private LocalTime endTime;
 
-    private int[] terminalIds;
+    private int[] deviceIds;
 
     public String getTitle() {
         return title;
@@ -97,11 +97,11 @@ public class AdRequest {
         this.endTime = endTime;
     }
 
-    public int[] getTerminalIds() {
-        return terminalIds;
+    public int[] getDeviceIds() {
+        return deviceIds;
     }
 
-    public void setTerminalIds(int[] terminalIds) {
-        this.terminalIds = terminalIds;
+    public void setDeviceIds(int[] deviceIds) {
+        this.deviceIds = deviceIds;
     }
 }

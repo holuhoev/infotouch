@@ -1,0 +1,10 @@
+server:
+  port: 8888
+  servlet:
+    context-path: "/infotouch-device"
+spring:
+  mvc:
+    date-format: "yyyy.MM.dd"
+entities:
+  page-size:
+    default: 30

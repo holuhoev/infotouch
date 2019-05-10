@@ -17,7 +17,7 @@ public class NewsService {
 
     private final NewsRepository repository;
     private final TopicService topicService;
-    private final TerminalService terminalService;
+    private final DeviceService deviceService;
     private final TagService tagService;
 
     private final NewsDatasource newsDatasource;
@@ -26,25 +26,25 @@ public class NewsService {
     @Autowired
     public NewsService(NewsRepository repository,
                        TopicService topicService,
-                       TerminalService terminalService,
+                       DeviceService deviceService,
                        TagService tagService,
                        NewsDatasource newsDatasource,
                        TagDatasource tagDatasource) {
         this.repository = repository;
         this.topicService = topicService;
-        this.terminalService = terminalService;
+        this.deviceService = deviceService;
         this.tagService = tagService;
         this.newsDatasource = newsDatasource;
         this.tagDatasource = tagDatasource;
     }
 
-    public List<News> findAll(Integer terminalId,
+    public List<News> findAll(Integer deviceId,
                               String searchString,
                               Integer topicId,
                               int[] tagIds,
                               int page) {
 
-        return newsDatasource.findAll(terminalId, searchString, topicId, tagIds, page);
+        return newsDatasource.findAll(deviceId, searchString, topicId, tagIds, page);
     }
 
     public News getOneById(int id) {
@@ -64,7 +64,7 @@ public class NewsService {
 
         News news = repository.save(News.createFromRequest(request));
 
-        terminalService.insertNewsRelations(news.getId(), request.getTerminalIds());
+        deviceService.insertNewsRelations(news.getId(), request.getDeviceIds());
         tagService.insertNewsRelations(news.getId(), request.getTagIds());
 
         return news;
@@ -79,8 +79,8 @@ public class NewsService {
         tagService.deleteAllRelationsByNewsId(id);
         tagService.insertNewsRelations(id, request.getTagIds());
 
-        terminalService.deleteAllNewsRelations(id);
-        terminalService.insertNewsRelations(id, request.getTerminalIds());
+        deviceService.deleteAllNewsRelations(id);
+        deviceService.insertNewsRelations(id, request.getDeviceIds());
 
         news.updateFromRequest(request);
 
@@ -97,7 +97,7 @@ public class NewsService {
         final News news = this.getOneById(id);
 
         tagService.deleteAllRelationsByNewsId(id);
-        terminalService.deleteAllNewsRelations(id);
+        deviceService.deleteAllNewsRelations(id);
 
         this.repository.delete(news);
     }
@@ -112,8 +112,8 @@ public class NewsService {
             throw new IllegalArgumentException("Does not all tags exist.");
         }
 
-        if (terminalService.isNotExistAll(newsRequest.getTerminalIds())) {
-            throw new IllegalArgumentException("Does not all terminals exist.");
+        if (deviceService.isNotExistAll(newsRequest.getDeviceIds())) {
+            throw new IllegalArgumentException("Does not all devices exist.");
         }
 
     }

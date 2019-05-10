@@ -10,7 +10,7 @@
 
     <modules>
         <module>core</module>
-        <module>terminal</module>
+        <module>device</module>
         <module>feed</module>
         <module>admin</module>
     </modules>

@@ -14,12 +14,12 @@ import java.util.List;
 public class AdService {
     private final AdDatasource datasource;
     private final AdRepository repository;
-    private final TerminalService terminalService;
+    private final DeviceService deviceService;
 
-    public AdService(AdDatasource datasource, AdRepository repository, TerminalService terminalService) {
+    public AdService(AdDatasource datasource, AdRepository repository, DeviceService deviceService) {
         this.datasource = datasource;
         this.repository = repository;
-        this.terminalService = terminalService;
+        this.deviceService = deviceService;
     }
 
     public Ad getOneById(int id) {
@@ -57,8 +57,8 @@ public class AdService {
     }
 
     public void requireExistingRelations(AdRequest request) {
-        if (request.getTerminalIds() != null && terminalService.isNotExistAll(request.getTerminalIds())) {
-            throw new IllegalArgumentException("Does not all terminals exist.");
+        if (request.getDeviceIds() != null && deviceService.isNotExistAll(request.getDeviceIds())) {
+            throw new IllegalArgumentException("Does not all devices exist.");
         }
     }
 }
