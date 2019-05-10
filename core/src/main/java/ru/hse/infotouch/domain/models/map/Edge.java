@@ -13,7 +13,7 @@ public class Edge {
     @Column(name = "left_point_id")
     private Integer leftPointId;
 
-    @Column(name = "left_point_id")
+    @Column(name = "right_point_id")
     private Integer rightPointId;
 
     @Column(name = "weight")
