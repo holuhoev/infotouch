@@ -10,7 +10,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "auditorium")
-public class Room extends RuzObject {
+public class Room extends RuzObject implements DomainObject {
     @Id
     @JsonField(name = "auditoriumOid")
     @Column(name = "ID")

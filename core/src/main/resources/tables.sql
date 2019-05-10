@@ -89,3 +89,11 @@ create table point
   y          integer                            not null,
   CONSTRAINT point_id_uindex unique (id)
 );
+
+create table edge
+(
+  id             serial                    not null primary key,
+  left_point_id  int references point (id) not null,
+  right_point_id int references point (id) not null,
+  weight         int default 1             null
+);

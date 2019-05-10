@@ -1,6 +1,5 @@
 package ru.hse.infotouch.domain.datasource;
 
-import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.stereotype.Repository;

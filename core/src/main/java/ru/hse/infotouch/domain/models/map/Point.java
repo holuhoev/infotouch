@@ -1,5 +1,6 @@
 package ru.hse.infotouch.domain.models.map;
 
+import ru.hse.infotouch.domain.models.DomainObject;
 import ru.hse.infotouch.domain.models.enums.PointType;
 
 import javax.persistence.*;
@@ -7,7 +8,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "point")
-public class Point {
+public class Point implements DomainObject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
