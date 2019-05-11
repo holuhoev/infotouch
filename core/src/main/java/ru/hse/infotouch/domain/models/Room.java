@@ -28,6 +28,9 @@ public class Room extends RuzObject implements DomainObject {
     @JsonField(name = "buildingOid")
     private Integer buildingId;
 
+    @Column(name="map_element_id")
+    private Integer mapElementId;
+
     public Integer getId() {
         return Id;
     }
@@ -74,5 +77,13 @@ public class Room extends RuzObject implements DomainObject {
     @Override
     public int hashCode() {
         return Objects.hash(Id, auditoriumType, number, buildingId);
+    }
+
+    public Integer getMapElementId() {
+        return mapElementId;
+    }
+
+    public void setMapElementId(Integer mapElementId) {
+        this.mapElementId = mapElementId;
     }
 }
