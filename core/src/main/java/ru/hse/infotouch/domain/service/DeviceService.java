@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.hse.infotouch.domain.datasource.DeviceDatasource;
 import ru.hse.infotouch.domain.dto.request.DeviceRequest;
-import ru.hse.infotouch.domain.models.Room;
 import ru.hse.infotouch.domain.models.admin.Device;
 import ru.hse.infotouch.domain.models.admin.relations.*;
+import ru.hse.infotouch.domain.models.map.MapElement;
 import ru.hse.infotouch.domain.repo.*;
 
 import javax.persistence.EntityManager;
@@ -29,11 +29,11 @@ public class DeviceService {
     private final Device2AnnouncementRepository device2AnnouncementRepository;
     private final Device2AdRepository device2AdRepository;
     private final PointRepository pointRepository;
-    private final RoomService roomService;
+    private final MapElementService mapElementService;
 
     private GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
 
-    public DeviceService(EntityManager entityManager, DeviceDatasource datasource, DeviceRepository deviceRepository, Device2NewsRepository device2NewsRepository, Device2AnnouncementRepository device2AnnouncementRepository, Device2AdRepository device2AdRepository, PointRepository pointRepository, RoomService roomService) {
+    public DeviceService(EntityManager entityManager, DeviceDatasource datasource, DeviceRepository deviceRepository, Device2NewsRepository device2NewsRepository, Device2AnnouncementRepository device2AnnouncementRepository, Device2AdRepository device2AdRepository, PointRepository pointRepository, MapElementService mapElementService) {
         this.entityManager = entityManager;
         this.datasource = datasource;
         this.deviceRepository = deviceRepository;
@@ -41,7 +41,7 @@ public class DeviceService {
         this.device2AnnouncementRepository = device2AnnouncementRepository;
         this.device2AdRepository = device2AdRepository;
         this.pointRepository = pointRepository;
-        this.roomService = roomService;
+        this.mapElementService = mapElementService;
     }
 
 
@@ -55,10 +55,10 @@ public class DeviceService {
 
         if (device.getPointId() != null) {
             pointRepository.findById(device.getPointId()).ifPresent(point -> {
-                if (point.getRoomId() != null) {
-                    Room room = roomService.getOneById(point.getRoomId());
-                    device.setRoomId(point.getRoomId());
-                    device.setBuildingId(room.getBuildingId());
+                if (point.getElementId() != null) {
+                    MapElement element = mapElementService.getOneById(point.getElementId());
+                    device.setMapElementId(point.getElementId());
+                    device.setBuildingId(element.getBuildingId());
                 }
             });
         }

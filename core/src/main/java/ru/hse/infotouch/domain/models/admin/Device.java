@@ -35,7 +35,7 @@ public class Device {
     private Integer buildingId;
 
     @Transient
-    private Integer roomId;
+    private Integer mapElementId;
 
     public Integer getPointId() {
         return pointId;
@@ -45,12 +45,12 @@ public class Device {
         this.pointId = pointId;
     }
 
-    public Integer getRoomId() {
-        return roomId;
+    public Integer getMapElementId() {
+        return mapElementId;
     }
 
-    public void setRoomId(Integer roomId) {
-        this.roomId = roomId;
+    public void setMapElementId(Integer mapElementId) {
+        this.mapElementId = mapElementId;
     }
 
     public Integer getId() {

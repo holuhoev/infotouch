@@ -1,7 +1,7 @@
 package ru.hse.infotouch.domain.dto;
 
-import ru.hse.infotouch.domain.models.Room;
 import ru.hse.infotouch.domain.models.map.Edge;
+import ru.hse.infotouch.domain.models.map.MapElement;
 import ru.hse.infotouch.domain.models.map.Point;
 
 import java.util.List;
@@ -10,7 +10,7 @@ public class BuildingMapDTO {
     private int buildingId;
     private List<Point> points;
     private List<Edge> edges;
-    private List<Room> rooms;
+    private List<MapElement> elements;
 
     public int getBuildingId() {
         return buildingId;
@@ -36,11 +36,11 @@ public class BuildingMapDTO {
         this.edges = edges;
     }
 
-    public List<Room> getRooms() {
-        return rooms;
+    public List<MapElement> getElements() {
+        return elements;
     }
 
-    public void setRooms(List<Room> rooms) {
-        this.rooms = rooms;
+    public void setElements(List<MapElement> elements) {
+        this.elements = elements;
     }
 }

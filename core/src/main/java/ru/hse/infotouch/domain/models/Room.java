@@ -28,24 +28,12 @@ public class Room extends RuzObject implements DomainObject {
     @JsonField(name = "buildingOid")
     private Integer buildingId;
 
-    private String coordinates;
-
-    private Integer floor;
-
     public Integer getId() {
         return Id;
     }
 
     public void setId(Integer id) {
         Id = id;
-    }
-
-    public Integer getFloor() {
-        return floor;
-    }
-
-    public void setFloor(Integer floor) {
-        this.floor = floor;
     }
 
     public String getAuditoriumType() {
@@ -86,13 +74,5 @@ public class Room extends RuzObject implements DomainObject {
     @Override
     public int hashCode() {
         return Objects.hash(Id, auditoriumType, number, buildingId);
-    }
-
-    public String getCoordinates() {
-        return coordinates;
-    }
-
-    public void setCoordinates(String coordinates) {
-        this.coordinates = coordinates;
     }
 }

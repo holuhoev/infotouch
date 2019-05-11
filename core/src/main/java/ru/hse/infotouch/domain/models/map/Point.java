@@ -20,8 +20,8 @@ public class Point implements DomainObject {
     @Column(name = "y")
     private Integer y;
 
-    @Column(name = "room_id")
-    private Integer roomId;
+    @Column(name = "element_id")
+    private Integer elementId;
 
     @Column(name = "point_type")
     private PointType pointType;
@@ -50,12 +50,12 @@ public class Point implements DomainObject {
         this.y = y;
     }
 
-    public Integer getRoomId() {
-        return roomId;
+    public Integer getElementId() {
+        return elementId;
     }
 
-    public void setRoomId(Integer roomId) {
-        this.roomId = roomId;
+    public void setElementId(Integer elementId) {
+        this.elementId = elementId;
     }
 
     public PointType getPointType() {
