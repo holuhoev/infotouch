@@ -26,6 +26,9 @@ public class SchemeElement implements DomainObject {
     @Column(name = "building_scheme_id")
     private Integer buildingSchemeId;
 
+    @Column(name = "point_id")
+    private Integer pointId;
+
     public Integer getBuildingSchemeId() {
         return buildingSchemeId;
     }
@@ -33,6 +36,7 @@ public class SchemeElement implements DomainObject {
     public void setBuildingSchemeId(Integer buildingSchemeId) {
         this.buildingSchemeId = buildingSchemeId;
     }
+
     public Integer getId() {
         return id;
     }
@@ -86,5 +90,13 @@ public class SchemeElement implements DomainObject {
                 ", label='" + label + '\'' +
                 ", coordinates='" + coordinates + '\'' +
                 '}';
+    }
+
+    public Integer getPointId() {
+        return pointId;
+    }
+
+    public void setPointId(Integer pointId) {
+        this.pointId = pointId;
     }
 }
