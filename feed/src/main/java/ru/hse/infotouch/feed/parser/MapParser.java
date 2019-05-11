@@ -5,8 +5,8 @@ import org.jsoup.nodes.Document;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import ru.hse.infotouch.domain.models.enums.MapElementType;
-import ru.hse.infotouch.domain.models.map.MapElement;
-import ru.hse.infotouch.domain.repo.MapElementRepository;
+import ru.hse.infotouch.domain.models.map.SchemeElement;
+import ru.hse.infotouch.domain.repo.SchemeElementRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,10 +14,10 @@ import java.util.stream.Collectors;
 @Component
 public class MapParser implements CommandLineRunner {
 
-    private final MapElementRepository mapElementRepository;
+    private final SchemeElementRepository schemeElementRepository;
 
-    public MapParser(MapElementRepository mapElementRepository) {
-        this.mapElementRepository = mapElementRepository;
+    public MapParser(SchemeElementRepository schemeElementRepository) {
+        this.schemeElementRepository = schemeElementRepository;
     }
 
     @Override
@@ -35,25 +35,24 @@ public class MapParser implements CommandLineRunner {
 
         Document doc = Jsoup.parse(elements);
 
-        List<MapElement> mapElementList = doc.select("polygon")
+        List<SchemeElement> schemeElementList = doc.select("polygon")
                 .stream()
                 .map(polygon -> {
-                    MapElement mapElement = new MapElement();
+                    SchemeElement schemeElement = new SchemeElement();
 
                     String info = polygon.attr("id");
                     String points = polygon.attr("points");
 
-                    mapElement.setBuildingId(2167);
-                    mapElement.setCoordinates(mapPointsToCoordinates(points));
-                    mapElement.setLabel(info);
-                    mapElement.setFloor(3);
-                    mapElement.setType(MapElementType.ofString(info));
+                    schemeElement.setBuildingSchemeId(1);
+                    schemeElement.setCoordinates(mapPointsToCoordinates(points));
+                    schemeElement.setLabel(info);
+                    schemeElement.setType(MapElementType.ofString(info));
 
-                    return mapElement;
+                    return schemeElement;
                 }).collect(Collectors.toList());
 
 
-        mapElementRepository.saveAll(mapElementList);
+        schemeElementRepository.saveAll(schemeElementList);
     }
 
     private String mapPointsToCoordinates(String points) {

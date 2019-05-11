@@ -78,29 +78,36 @@ create table employee
 );
 
 
-create table map_element
+create table building_scheme
 (
-  id           serial          not null primary key unique,
-  coordinates  text            not null,
-  floor        integer         not null,
-  label        text default '' null,
-  building_id  int             not null references building (id),
-  --   corridor, room, stairs, door
-  element_type int             not null,
-  CONSTRAINT map_element_id_uindex UNIQUE (id)
+  id          serial not null primary key,
+  floor       int    not null,
+  building_id int    not null references building (id),
+  CONSTRAINT building_scheme_id_uindex unique (id)
 );
 
 create table point
 (
-  id         serial                          not null primary key,
-  room_id    int references auditorium (id)  not null,
-  element_id int references map_element (id) not null,
-  --   center,inward,outward
-  point_type int                             not null,
-  x          int                             not null,
-  y          int                             not null,
+  id                 serial not null primary key,
+  x                  int    not null,
+  y                  int    not null,
+  building_scheme_id int    not null references building_scheme (id),
   CONSTRAINT point_id_uindex unique (id)
 );
+
+
+create table map_element
+(
+  id                 serial not null primary key unique,
+  coordinates        text   not null,
+  label              text   null default '',
+  building_scheme_id int    not null references building_scheme (id),
+  point_id           int    null references point (id),
+  --   corridor, room, stairs, door
+  element_type       int    not null,
+  CONSTRAINT map_element_id_uindex UNIQUE (id)
+);
+
 
 create table edge
 (
@@ -109,4 +116,3 @@ create table edge
   right_point_id int references point (id) not null,
   weight         int default 1             null
 );
-

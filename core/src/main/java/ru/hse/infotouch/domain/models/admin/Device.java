@@ -34,23 +34,12 @@ public class Device {
     @Transient
     private Integer buildingId;
 
-    @Transient
-    private Integer mapElementId;
-
     public Integer getPointId() {
         return pointId;
     }
 
     public void setPointId(Integer pointId) {
         this.pointId = pointId;
-    }
-
-    public Integer getMapElementId() {
-        return mapElementId;
-    }
-
-    public void setMapElementId(Integer mapElementId) {
-        this.mapElementId = mapElementId;
     }
 
     public Integer getId() {

@@ -20,11 +20,8 @@ public class Point implements DomainObject {
     @Column(name = "y")
     private Integer y;
 
-    @Column(name = "element_id")
-    private Integer elementId;
-
-    @Column(name = "point_type")
-    private PointType pointType;
+    @Column(name = "building_scheme_id")
+    private Integer buildingSchemeId;
 
     public Integer getId() {
         return id;
@@ -50,22 +47,6 @@ public class Point implements DomainObject {
         this.y = y;
     }
 
-    public Integer getElementId() {
-        return elementId;
-    }
-
-    public void setElementId(Integer elementId) {
-        this.elementId = elementId;
-    }
-
-    public PointType getPointType() {
-        return pointType;
-    }
-
-    public void setPointType(PointType pointType) {
-        this.pointType = pointType;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -77,5 +58,13 @@ public class Point implements DomainObject {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public Integer getBuildingSchemeId() {
+        return buildingSchemeId;
+    }
+
+    public void setBuildingSchemeId(Integer buildingSchemeId) {
+        this.buildingSchemeId = buildingSchemeId;
     }
 }

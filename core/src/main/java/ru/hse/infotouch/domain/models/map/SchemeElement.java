@@ -8,7 +8,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "map_element")
-public class MapElement implements DomainObject {
+public class SchemeElement implements DomainObject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -20,15 +20,19 @@ public class MapElement implements DomainObject {
     @Column(name = "label")
     private String label;
 
-    @Column(name = "building_id")
-    private Integer buildingId;
-
     @Column(name = "coordinates")
     private String coordinates;
 
-    @Column(name = "floor")
-    private Integer floor;
+    @Column(name = "building_scheme_id")
+    private Integer buildingSchemeId;
 
+    public Integer getBuildingSchemeId() {
+        return buildingSchemeId;
+    }
+
+    public void setBuildingSchemeId(Integer buildingSchemeId) {
+        this.buildingSchemeId = buildingSchemeId;
+    }
     public Integer getId() {
         return id;
     }
@@ -53,14 +57,6 @@ public class MapElement implements DomainObject {
         this.label = label;
     }
 
-    public Integer getBuildingId() {
-        return buildingId;
-    }
-
-    public void setBuildingId(Integer buildingId) {
-        this.buildingId = buildingId;
-    }
-
     public String getCoordinates() {
         return coordinates;
     }
@@ -69,19 +65,11 @@ public class MapElement implements DomainObject {
         this.coordinates = coordinates;
     }
 
-    public Integer getFloor() {
-        return floor;
-    }
-
-    public void setFloor(Integer floor) {
-        this.floor = floor;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MapElement that = (MapElement) o;
+        SchemeElement that = (SchemeElement) o;
         return Objects.equals(id, that.id);
     }
 
@@ -96,9 +84,7 @@ public class MapElement implements DomainObject {
                 "id=" + id +
                 ", type=" + type +
                 ", label='" + label + '\'' +
-                ", buildingId=" + buildingId +
                 ", coordinates='" + coordinates + '\'' +
-                ", floor=" + floor +
                 '}';
     }
 }
