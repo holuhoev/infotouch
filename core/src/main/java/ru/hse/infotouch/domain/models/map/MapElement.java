@@ -3,21 +3,19 @@ package ru.hse.infotouch.domain.models.map;
 import ru.hse.infotouch.domain.models.DomainObject;
 import ru.hse.infotouch.domain.models.enums.MapElementType;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "map_element")
 public class MapElement implements DomainObject {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
     @Column(name = "element_type")
-    private MapElementType elementType;
+    private MapElementType type;
 
     @Column(name = "label")
     private String label;
@@ -39,12 +37,12 @@ public class MapElement implements DomainObject {
         this.id = id;
     }
 
-    public MapElementType getElementType() {
-        return elementType;
+    public MapElementType getType() {
+        return type;
     }
 
-    public void setElementType(MapElementType elementType) {
-        this.elementType = elementType;
+    public void setType(MapElementType type) {
+        this.type = type;
     }
 
     public String getLabel() {
@@ -90,5 +88,17 @@ public class MapElement implements DomainObject {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "MapElement{" +
+                "id=" + id +
+                ", type=" + type +
+                ", label='" + label + '\'' +
+                ", buildingId=" + buildingId +
+                ", coordinates='" + coordinates + '\'' +
+                ", floor=" + floor +
+                '}';
     }
 }
