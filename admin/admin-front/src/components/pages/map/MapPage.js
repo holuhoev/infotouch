@@ -1,7 +1,13 @@
 import React, { Component, Fragment } from 'react'
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { loadBuildingMap, MAP_ELEMENTS_TYPES } from "../../../store/reducers/map";
+import {
+    cancelCreatedPoints,
+    createPoint,
+    loadBuildingMap,
+    MAP_ELEMENTS_TYPES,
+    saveCreatedPoints
+} from "../../../store/reducers/map";
 import {
     selectCurrentSchemeElements,
     selectCurrentSchemePoints
@@ -46,15 +52,66 @@ function Element(item) {
 class MapPage extends Component {
 
     componentDidMount() {
-        this.props.loadMap(2167)
+        this.props.loadBuildingMap(2167)
     }
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            isAddPointMode: false
+        }
+    }
+
+    cursorPoint = event => {
+        let cursorPoint = this.svgElem.createSVGPoint();
+
+        cursorPoint.x = event.clientX;
+        cursorPoint.y = event.clientY;
+
+        cursorPoint = cursorPoint.matrixTransform(this.svgElem.getScreenCTM().inverse());
+
+        this.created_point.setAttribute('cx', cursorPoint.x.toString());
+        this.created_point.setAttribute('cy', cursorPoint.y.toString());
+    };
+
+
+    addPointModeOn = () => {
+        this.setState({ isAddPointMode: true });
+        this.svgElem.addEventListener('mousemove', this.cursorPoint)
+    };
+
+    cancelAddPointMode = () => {
+        this.setState({ isAddPointMode: false });
+        this.svgElem.removeEventListener('mousemove', this.cursorPoint);
+        this.props.cancelCreatedPoints();
+    };
+
+    createPoint = () => {
+        const x = this.created_point.getAttribute('cx');
+        const y = this.created_point.getAttribute('cy');
+
+        this.props.createPoint({ x, y });
+    };
+
+    saveAll = () => {
+        this.cancelAddPointMode();
+        this.props.saveCreatedPoints();
+    };
 
     render() {
         const { elements, points } = this.props;
+        const { isAddPointMode }   = this.state;
 
         return (
             <div>
-                <svg height="600" width="600">
+                <button onClick={ this.addPointModeOn }>Добавить точки</button>
+                <button onClick={ this.cancelAddPointMode }>Отмена</button>
+                <button onClick={ this.saveAll }>Сохранить</button>
+                <svg
+                    height="330" width="600"
+                    ref={ (e) => this.svgElem = e }
+                >
                     {
                         elements.map((element, index) => (
                             <Element
@@ -63,6 +120,23 @@ class MapPage extends Component {
                             />
                         ))
                     }
+                    {
+                        points.map((point, index) => (
+                            <circle
+                                key={ index }
+                                cx={ point.x }
+                                cy={ point.y }
+                                r="1.5"
+                            />
+                        ))
+                    }
+                    { isAddPointMode && (
+                        <circle cx="75" cy="60" r="1.5"
+                                id="created_point"
+                                onClick={ this.createPoint }
+                                ref={ (e) => this.created_point = e }
+                        />
+                    ) }
                 </svg>
             </div>
         )
@@ -79,7 +153,10 @@ const mapStateToProps = (state) => {
 
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    loadMap: loadBuildingMap
+    loadBuildingMap,
+    createPoint,
+    saveCreatedPoints,
+    cancelCreatedPoints
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapPage);

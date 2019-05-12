@@ -1,14 +1,23 @@
 import { filter, propEq } from "ramda";
 
 
-export const selectCurrentSchemeElements = state => filterByCurrentFloor(state)(selectSchemeElements(state));
-export const selectCurrentSchemePoints   = state => filterByCurrentFloor(state)(selectSchemePoints(state));
+export const selectCurrentSchemeElements = state => filterByCurrentSchemeId(state)(selectSchemeElements(state));
+export const selectCurrentSchemePoints   = state => [
+    ...filterByCurrentSchemeId(state)(selectSchemePoints(state)),
+    ...selectSchemeCreatedPoints(state)
+];
 
-const selectSchemeElements = state => selectMapData(state).elements;
-const selectSchemePoints   = state => selectMapData(state).points;
+const selectSchemeCreatedPoints = state => state.map.createdData.points.map(point => {
+    return {
+        x: point[ 0 ],
+        y: point[ 1 ]
+    }
+});
+const selectSchemeElements      = state => selectMapData(state).elements;
+const selectSchemePoints        = state => selectMapData(state).points;
 
-const selectMapData         = state => state.map.data;
-const selectMapCurrentFloor = state => state.map.floor;
+const selectMapData            = state => state.map.data;
+const selectMapCurrentSchemeId = state => state.map.buildingSchemeId;
 
-const filterByCurrentFloor = state => filterByFloor(selectMapCurrentFloor(state));
-const filterByFloor        = floor => array => filter(propEq('floor', floor), array);
+const filterByCurrentSchemeId = state => filterBySchemeId(selectMapCurrentSchemeId(state));
+const filterBySchemeId        = buildingSchemeId => array => filter(propEq('buildingSchemeId', buildingSchemeId), array);

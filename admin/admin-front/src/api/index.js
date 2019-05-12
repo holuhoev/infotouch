@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { propOr } from 'ramda';
 
-import { GET_BUILDING_MAP } from "../utils/url";
+import { GET_BUILDING_MAP, getPostCreatePointUrl } from "../utils/url";
 
 
 const responseData = response => propOr([], 'data', response);
@@ -17,4 +17,16 @@ export const getBuildingMap = buildingId => {
         .get(`${ GET_BUILDING_MAP }/${ buildingId }`)
         .then(responseData)
         .catch(error('GET', GET_BUILDING_MAP));
+};
+
+export const createNewPoints = data => {
+    const { points, buildingSchemeId } = data;
+
+    return axios
+        .post(getPostCreatePointUrl(buildingSchemeId), {
+            data: {
+                points
+            }
+        }).then(responseData)
+        .catch(error('POST', getPostCreatePointUrl(buildingSchemeId)));
 };

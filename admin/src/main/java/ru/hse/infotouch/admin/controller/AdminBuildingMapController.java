@@ -26,10 +26,10 @@ public class AdminBuildingMapController {
         this.edgeService = edgeService;
     }
 
-    // 1. Save new points and remove all edges
-    @PostMapping("/{schemeId}/points")
-    public ResponseEntity<List<Point>> createPoints(@PathVariable("schemeId") int schemeId,
-                                                    CreatePointsRequest request) {
+    // 1. Save points and remove all edges
+    @PutMapping("/{schemeId}/points")
+    public ResponseEntity<List<Point>> savePoints(@PathVariable("schemeId") int schemeId,
+                                                  CreatePointsRequest request) {
         return ResponseEntity.ok(pointService.saveAll(schemeId, request.getPoints()));
     }
 
@@ -45,6 +45,15 @@ public class AdminBuildingMapController {
 
         return ResponseEntity.ok(buildingMapService.getOne(buildingId));
     }
+
+
+    // 4. Create new points
+    @PostMapping("/{schemeId}/points")
+    public ResponseEntity<List<Point>> createNewPoints(@PathVariable("schemeId") int schemeId,
+                                                       CreatePointsRequest request) {
+        return ResponseEntity.ok(pointService.saveAll(schemeId, request.getPoints()));
+    }
+
 
     // 4. создание схемы и карты пока не предусмотрено
 }

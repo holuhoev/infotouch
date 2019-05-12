@@ -26,6 +26,15 @@ public class PointService {
         this.entityManager = entityManager;
     }
 
+    public List<Point> createNew(int buildingSchemeId, List<CreatePointDTO> createPointDTOS) {
+        List<Point> toSave = createPointDTOS.stream()
+                .map(toCreate -> Point.createFromRequest(toCreate, buildingSchemeId))
+                .collect(Collectors.toList());
+
+        return pointRepository.saveAll(toSave);
+    }
+
+
     @Transactional
     public List<Point> saveAll(int buildingSchemeId, List<CreatePointDTO> createPointDTOS) {
         removePointsAndRelations(buildingSchemeId);

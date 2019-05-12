@@ -1,4 +1,4 @@
-import { indexBy, prop, map, find, propEq } from "ramda";
+import { prop, map, find, propEq } from "ramda";
 
 import { calculateCentroid } from "../../utils/map";
 import { createAction } from "../../utils/action";
@@ -8,21 +8,55 @@ export const LOAD         = 'admin/map/LOAD';
 export const LOAD_SUCCESS = 'admin/map/LOAD_SUCCESS';
 export const LOAD_FAILED  = 'admin/map/LOAD_FAILED';
 
-export const loadBuildingMap = createAction(LOAD);
+export const CREATE_POINT = 'admin/map/CREATE_POINT';
+
+export const SAVE_CREATED_POINTS         = 'admin/map/SAVE_CREATED_POINTS';
+export const CANCEL_CREATED_POINTS       = 'admin/map/CANCEL_CREATED_POINTS';
+export const SAVE_CREATED_POINTS_SUCCESS = 'admin/map/SAVE_CREATED_POINTS_SUCCESS';
+export const SAVE_CREATED_POINTS_FAILED  = 'admin/map/SAVE_CREATED_POINTS_FAILED';
+
+export const loadBuildingMap   = createAction(LOAD);
+export const createPoint       = createAction(CREATE_POINT);
+export const saveCreatedPoints = createAction(SAVE_CREATED_POINTS);
+export const cancelCreatedPoints = createAction(CANCEL_CREATED_POINTS);
 
 const initialState = {
-    loading: false,
-    error:   null,
-    data:    {
+    loading:          false,
+    error:            null,
+    data:             {
+        schemes:  [],
         points:   [],
         elements: [],
         edged:    []
     },
-    floor:   2
+    createdData:      {
+        points: []
+    },
+    buildingSchemeId: 3
 };
 
 const reducer = (state = initialState, action = {}) => {
     switch (action.type) {
+
+        case CANCEL_CREATED_POINTS:
+
+            return {
+                ...state,
+                createdData: {
+                    points: []
+                }
+            };
+        case CREATE_POINT:
+
+            return {
+                ...state,
+                createdData: {
+                    points: [
+                        ...state.createdData.points,
+                        [action.payload.x, action.payload.y]
+                    ]
+                }
+            };
 
         case LOAD:
 
@@ -60,7 +94,8 @@ const mapFromServer = data => {
     return {
         points:   map(mapPoint(getFloor), points),
         elements: map(mapElement(getFloor), elements),
-        edges:    map(mapEdge, edges)
+        edges:    map(mapEdge, edges),
+        schemes:  schemes || []
     }
 };
 
@@ -73,7 +108,8 @@ const mapPoint = getFloor => point => {
         x,
         y,
         id,
-        floor
+        floor,
+        buildingSchemeId
     }
 };
 
@@ -91,7 +127,8 @@ const mapElement = getFloor => element => {
         label,
         pointId,
         floor,
-        textCentroid
+        textCentroid,
+        buildingSchemeId
     }
 };
 
