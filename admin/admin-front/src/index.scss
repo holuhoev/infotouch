@@ -1,0 +1,15 @@
+@import './_vars.scss';
+@import './reset.scss';
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: $light-grey;
+  color: black;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+  monospace;
+}
+
