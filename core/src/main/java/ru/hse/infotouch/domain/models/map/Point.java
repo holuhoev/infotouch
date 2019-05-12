@@ -1,5 +1,6 @@
 package ru.hse.infotouch.domain.models.map;
 
+import ru.hse.infotouch.domain.dto.request.CreatePointDTO;
 import ru.hse.infotouch.domain.models.DomainObject;
 import ru.hse.infotouch.domain.models.enums.PointType;
 
@@ -22,6 +23,9 @@ public class Point implements DomainObject {
 
     @Column(name = "building_scheme_id")
     private Integer buildingSchemeId;
+
+    @Transient
+    private Integer schemeElementId;
 
     public Integer getId() {
         return id;
@@ -66,5 +70,24 @@ public class Point implements DomainObject {
 
     public void setBuildingSchemeId(Integer buildingSchemeId) {
         this.buildingSchemeId = buildingSchemeId;
+    }
+
+    public static Point createFromRequest(CreatePointDTO createPointDTO, int buildingSchemeId) {
+        Point point = new Point();
+
+        point.setX(createPointDTO.getX());
+        point.setY(createPointDTO.getY());
+        point.setBuildingSchemeId(buildingSchemeId);
+        point.setSchemeElementId(createPointDTO.getSchemeElementId());
+
+        return point;
+    }
+
+    public Integer getSchemeElementId() {
+        return schemeElementId;
+    }
+
+    public void setSchemeElementId(Integer schemeElementId) {
+        this.schemeElementId = schemeElementId;
     }
 }
