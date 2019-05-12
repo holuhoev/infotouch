@@ -13,7 +13,11 @@ export const loadBuildingMap = createAction(LOAD);
 const initialState = {
     loading: false,
     error:   null,
-    data:    {},
+    data:    {
+        points:   [],
+        elements: [],
+        edged:    []
+    },
     floor:   2
 };
 
@@ -54,8 +58,8 @@ const mapFromServer = data => {
     const getFloor = getFloorByScheme(schemes);
 
     return {
-        points:   indexBy(prop('id'), map(mapPoint(getFloor), points)),
-        elements: indexBy(prop('id'), map(mapElement(getFloor), elements)),
+        points:   map(mapPoint(getFloor), points),
+        elements: map(mapElement(getFloor), elements),
         edges:    map(mapEdge, edges)
     }
 };

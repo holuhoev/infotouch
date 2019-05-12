@@ -1,7 +1,47 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { loadBuildingMap } from "../../../store/reducers/map";
+import { loadBuildingMap, MAP_ELEMENTS_TYPES } from "../../../store/reducers/map";
+import {
+    selectCurrentSchemeElements,
+    selectCurrentSchemePoints
+} from "../../../store/selectors/map";
+
+
+const isElementHasLabel = element => {
+
+    return element.type === MAP_ELEMENTS_TYPES.ROOM
+        && !!element.textCentroid
+        && !!element.label;
+};
+
+function Element(item) {
+
+    return (
+        <Fragment>
+            <polygon
+                points={ item.coordinates }
+                fill="#D8D8D8"
+                stroke="#979797"
+                strokeWidth={ 1 }
+                opacity={ 0.5 }
+            />
+            { isElementHasLabel(item) && (
+                <text
+                    fill="white"
+                    fontWeight="bold"
+                    x={ item.textCentroid[ 0 ] }
+                    y={ item.textCentroid[ 1 ] }
+                    fontSize="6"
+                    textAnchor={ "middle" }
+                >
+                    { item.label }
+                </text>
+            ) }
+        </Fragment>
+    )
+}
+
 
 class MapPage extends Component {
 
@@ -10,14 +50,20 @@ class MapPage extends Component {
     }
 
     render() {
-        const { map } = this.props;
+        const { elements, points } = this.props;
 
         return (
             <div>
-                Map page
-                <div>
-                    Edges count: { map.data.edges ? map.data.edges.length : 0 }
-                </div>
+                <svg height="600" width="600">
+                    {
+                        elements.map((element, index) => (
+                            <Element
+                                key={ index }
+                                { ...element }
+                            />
+                        ))
+                    }
+                </svg>
             </div>
         )
     }
@@ -26,7 +72,8 @@ class MapPage extends Component {
 const mapStateToProps = (state) => {
 
     return {
-        map: state.map
+        points:   selectCurrentSchemePoints(state),
+        elements: selectCurrentSchemeElements(state)
     }
 };
 
