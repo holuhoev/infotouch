@@ -1,7 +1,15 @@
 package ru.hse.infotouch.admin.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
+
+
 import ru.hse.infotouch.domain.dto.BuildingMapDTO;
 import ru.hse.infotouch.domain.dto.request.CreateEdgesRequest;
 import ru.hse.infotouch.domain.dto.request.CreatePointsRequest;
@@ -26,8 +34,15 @@ public class AdminBuildingMapController {
         this.edgeService = edgeService;
     }
 
+    // 4. Create new points
+    @PostMapping("/points/create")
+    public ResponseEntity<List<Point>> createNewPoints(@RequestBody CreatePointsRequest request) {
+
+        return ResponseEntity.ok(pointService.createNew(request.getBuildingSchemeId(), request.getPoints()));
+    }
+
     // 1. Save points and remove all edges
-    @PutMapping("/{schemeId}/points")
+    @PutMapping("/points/{schemeId}")
     public ResponseEntity<List<Point>> savePoints(@PathVariable("schemeId") int schemeId,
                                                   CreatePointsRequest request) {
         return ResponseEntity.ok(pointService.saveAll(schemeId, request.getPoints()));
@@ -44,14 +59,6 @@ public class AdminBuildingMapController {
     public ResponseEntity<BuildingMapDTO> getOne(@PathVariable("buildingId") int buildingId) {
 
         return ResponseEntity.ok(buildingMapService.getOne(buildingId));
-    }
-
-
-    // 4. Create new points
-    @PostMapping("/{schemeId}/points")
-    public ResponseEntity<List<Point>> createNewPoints(@PathVariable("schemeId") int schemeId,
-                                                       CreatePointsRequest request) {
-        return ResponseEntity.ok(pointService.saveAll(schemeId, request.getPoints()));
     }
 
 

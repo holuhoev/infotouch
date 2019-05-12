@@ -8,16 +8,22 @@ export const LOAD         = 'admin/map/LOAD';
 export const LOAD_SUCCESS = 'admin/map/LOAD_SUCCESS';
 export const LOAD_FAILED  = 'admin/map/LOAD_FAILED';
 
-export const CREATE_POINT = 'admin/map/CREATE_POINT';
+export const UNDO_CREATE_POINT = 'admin/map/UNDO_CREATE_POINT';
+export const REDO_CREATE_POINT = 'admin/map/REDO_CREATE_POINT';
 
+export const CREATE_POINT                = 'admin/map/CREATE_POINT';
 export const SAVE_CREATED_POINTS         = 'admin/map/SAVE_CREATED_POINTS';
 export const CANCEL_CREATED_POINTS       = 'admin/map/CANCEL_CREATED_POINTS';
 export const SAVE_CREATED_POINTS_SUCCESS = 'admin/map/SAVE_CREATED_POINTS_SUCCESS';
 export const SAVE_CREATED_POINTS_FAILED  = 'admin/map/SAVE_CREATED_POINTS_FAILED';
 
-export const loadBuildingMap   = createAction(LOAD);
-export const createPoint       = createAction(CREATE_POINT);
-export const saveCreatedPoints = createAction(SAVE_CREATED_POINTS);
+export const loadBuildingMap = createAction(LOAD);
+export const createPoint     = createAction(CREATE_POINT);
+export const undoCreatePoint = createPoint(UNDO_CREATE_POINT);
+export const redoCreatePoint = createPoint(REDO_CREATE_POINT);
+
+
+export const saveCreatedPoints   = createAction(SAVE_CREATED_POINTS);
 export const cancelCreatedPoints = createAction(CANCEL_CREATED_POINTS);
 
 const initialState = {
@@ -32,34 +38,53 @@ const initialState = {
     createdData:      {
         points: []
     },
+    createdPoints:    [],
     buildingSchemeId: 3
+};
+
+const createdPoints = (state = [], action = {}) => {
+    switch (action.type) {
+        case CANCEL_CREATED_POINTS:
+
+            return [];
+
+        case CREATE_POINT:
+
+            return [
+                ...state,
+                [action.payload.x, action.payload.y]
+            ]
+    }
 };
 
 const reducer = (state = initialState, action = {}) => {
     switch (action.type) {
 
         case CANCEL_CREATED_POINTS:
-
-            return {
-                ...state,
-                createdData: {
-                    points: []
-                }
-            };
         case CREATE_POINT:
 
             return {
                 ...state,
-                createdData: {
+                createdPoints: createdPoints(state.createdPoints, action)
+            };
+
+        case SAVE_CREATED_POINTS_SUCCESS:
+            const getFloor = getFloorByScheme(state.data.schemes);
+
+            return {
+                ...state,
+                loading: false,
+                data:    {
+                    ...state.data,
                     points: [
-                        ...state.createdData.points,
-                        [action.payload.x, action.payload.y]
+                        ...state.data.points,
+                        [...map(mapPoint(getFloor), action.payload)]
                     ]
                 }
             };
 
         case LOAD:
-
+        case SAVE_CREATED_POINTS:
             return {
                 ...state,
                 loading: true
@@ -74,6 +99,7 @@ const reducer = (state = initialState, action = {}) => {
             };
 
         case LOAD_FAILED:
+        case SAVE_CREATED_POINTS_FAILED:
 
             return {
                 ...state,

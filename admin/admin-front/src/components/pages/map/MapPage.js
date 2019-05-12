@@ -1,12 +1,15 @@
 import React, { Component, Fragment } from 'react'
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
+
 import {
     cancelCreatedPoints,
     createPoint,
     loadBuildingMap,
     MAP_ELEMENTS_TYPES,
-    saveCreatedPoints
+    saveCreatedPoints,
+    undoCreatePoint,
+    redoCreatePoint
 } from "../../../store/reducers/map";
 import {
     selectCurrentSchemeElements,
@@ -64,27 +67,31 @@ class MapPage extends Component {
     }
 
     cursorPoint = event => {
-        let cursorPoint = this.svgElem.createSVGPoint();
+        if (this.created_point) {
+            let cursorPoint = this.svgElem.createSVGPoint();
 
-        cursorPoint.x = event.clientX;
-        cursorPoint.y = event.clientY;
+            cursorPoint.x = event.clientX;
+            cursorPoint.y = event.clientY;
 
-        cursorPoint = cursorPoint.matrixTransform(this.svgElem.getScreenCTM().inverse());
+            cursorPoint = cursorPoint.matrixTransform(this.svgElem.getScreenCTM().inverse());
 
-        this.created_point.setAttribute('cx', cursorPoint.x.toString());
-        this.created_point.setAttribute('cy', cursorPoint.y.toString());
+            this.created_point.setAttribute('cx', cursorPoint.x.toString());
+            this.created_point.setAttribute('cy', cursorPoint.y.toString());
+        }
     };
 
 
-    addPointModeOn = () => {
-        this.setState({ isAddPointMode: true });
-        this.svgElem.addEventListener('mousemove', this.cursorPoint)
-    };
+    toggleAddPointMode = () => {
+        const { isAddPointMode } = this.state;
 
-    cancelAddPointMode = () => {
-        this.setState({ isAddPointMode: false });
-        this.svgElem.removeEventListener('mousemove', this.cursorPoint);
-        this.props.cancelCreatedPoints();
+        if (isAddPointMode) {
+            this.svgElem.removeEventListener('mousemove', this.cursorPoint);
+            this.props.cancelCreatedPoints();
+        } else {
+            this.svgElem.addEventListener('mousemove', this.cursorPoint);
+        }
+
+        this.setState({ isAddPointMode: !isAddPointMode });
     };
 
     createPoint = () => {
@@ -95,7 +102,8 @@ class MapPage extends Component {
     };
 
     saveAll = () => {
-        this.cancelAddPointMode();
+        this.svgElem.addEventListener('mousemove', this.cursorPoint);
+        this.setState({ isAddPointMode: false });
         this.props.saveCreatedPoints();
     };
 
@@ -105,8 +113,11 @@ class MapPage extends Component {
 
         return (
             <div>
-                <button onClick={ this.addPointModeOn }>Добавить точки</button>
-                <button onClick={ this.cancelAddPointMode }>Отмена</button>
+                <button
+                    onClick={ this.toggleAddPointMode }
+                >
+                    { isAddPointMode ? 'Отменить все' : 'Добавить точки' }
+                </button>
                 <button onClick={ this.saveAll }>Сохранить</button>
                 <svg
                     height="330" width="600"

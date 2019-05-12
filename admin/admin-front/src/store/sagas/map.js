@@ -1,4 +1,4 @@
-import { takeLatest, put, call, select} from "redux-saga/effects";
+import { takeLatest, put, call, select } from "redux-saga/effects";
 
 import {
     LOAD,
@@ -8,7 +8,8 @@ import {
     SAVE_CREATED_POINTS_FAILED,
     SAVE_CREATED_POINTS_SUCCESS
 } from "../reducers/map";
-import { getBuildingMap } from "../../api";
+import { createNewPoints, getBuildingMap } from "../../api";
+import { selectMapCurrentSchemeId, selectSchemeCreatedPoints } from "../selectors/map";
 
 
 export default function* main() {
@@ -29,8 +30,14 @@ function* fetchBuildingMap(action) {
 
 function* saveCreatedPoints() {
     try {
+        const state = yield select();
+        const data  = {
+            points:           selectSchemeCreatedPoints(state),
+            buildingSchemeId: selectMapCurrentSchemeId(state)
+        };
 
-        yield put({ type: SAVE_CREATED_POINTS_SUCCESS, payload: [] })
+        const saved = yield call(createNewPoints, data);
+        yield put({ type: SAVE_CREATED_POINTS_SUCCESS, payload: saved })
     } catch (error) {
         yield put({ type: SAVE_CREATED_POINTS_FAILED, payload: error })
     }
