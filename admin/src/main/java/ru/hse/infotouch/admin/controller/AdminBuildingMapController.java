@@ -8,9 +8,9 @@ import ru.hse.infotouch.domain.dto.request.CreatePointsRequest;
 import ru.hse.infotouch.domain.models.map.Edge;
 import ru.hse.infotouch.domain.models.map.Point;
 import ru.hse.infotouch.domain.service.BuildingMapService;
+import ru.hse.infotouch.domain.service.EdgeService;
 import ru.hse.infotouch.domain.service.PointService;
 
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -18,10 +18,12 @@ import java.util.List;
 public class AdminBuildingMapController {
     private final BuildingMapService buildingMapService;
     private final PointService pointService;
+    private final EdgeService edgeService;
 
-    public AdminBuildingMapController(BuildingMapService buildingMapService, PointService pointService) {
+    public AdminBuildingMapController(BuildingMapService buildingMapService, PointService pointService, EdgeService edgeService) {
         this.buildingMapService = buildingMapService;
         this.pointService = pointService;
+        this.edgeService = edgeService;
     }
 
     // 1. Save new points and remove all edges
@@ -34,7 +36,7 @@ public class AdminBuildingMapController {
     // 2. Create edges
     @PostMapping("/edges")
     public ResponseEntity<List<Edge>> createEdges(CreateEdgesRequest request) {
-        return ResponseEntity.ok(Collections.emptyList());
+        return ResponseEntity.ok(edgeService.create(request.getEdges()));
     }
 
     // 3. Get BuildingMapDTO
@@ -43,7 +45,6 @@ public class AdminBuildingMapController {
 
         return ResponseEntity.ok(buildingMapService.getOne(buildingId));
     }
-    // сохранение scheme element
-    // сохранение hse location object id
+
     // 4. создание схемы и карты пока не предусмотрено
 }

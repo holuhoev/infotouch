@@ -1,13 +1,15 @@
 package ru.hse.infotouch.domain.dto.request;
 
-public class CreateEdgesRequest {
-    private EdgeDTO[] edges;
+import java.util.List;
 
-    public EdgeDTO[] getEdges() {
+public class CreateEdgesRequest {
+    private List<EdgeDTO> edges;
+
+    public List<EdgeDTO> getEdges() {
         return edges;
     }
 
-    public void setEdges(EdgeDTO[] edges) {
+    public void setEdges(List<EdgeDTO> edges) {
         this.edges = edges;
     }
 }
