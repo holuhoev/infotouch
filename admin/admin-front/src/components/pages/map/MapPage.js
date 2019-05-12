@@ -98,13 +98,22 @@ class MapPage extends Component {
         const x = this.created_point.getAttribute('cx');
         const y = this.created_point.getAttribute('cy');
 
-        this.props.createPoint({ x, y });
+        this.props.createPoint({ x: parseInt(x, 10), y: parseInt(y, 10) });
     };
 
     saveAll = () => {
         this.svgElem.addEventListener('mousemove', this.cursorPoint);
         this.setState({ isAddPointMode: false });
         this.props.saveCreatedPoints();
+    };
+
+    undoCreate = (e) => {
+        // e.preventDefault()
+        this.props.undoCreatePoint()
+    };
+
+    redoCreate = e => {
+        this.props.redoCreatePoint()
     };
 
     render() {
@@ -119,6 +128,8 @@ class MapPage extends Component {
                     { isAddPointMode ? 'Отменить все' : 'Добавить точки' }
                 </button>
                 <button onClick={ this.saveAll }>Сохранить</button>
+                <button onClick={ this.undoCreate }>Отмена</button>
+                <button onClick={ this.redoCreate }>Вернуть</button>
                 <svg
                     height="330" width="600"
                     ref={ (e) => this.svgElem = e }
@@ -167,7 +178,9 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     loadBuildingMap,
     createPoint,
     saveCreatedPoints,
-    cancelCreatedPoints
+    cancelCreatedPoints,
+    undoCreatePoint,
+    redoCreatePoint
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapPage);

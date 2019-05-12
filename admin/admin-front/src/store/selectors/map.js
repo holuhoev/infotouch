@@ -7,7 +7,7 @@ export const selectCurrentSchemePoints   = state => [
     ...selectSchemeCreatedPoints(state)
 ];
 
-export const selectSchemeCreatedPoints = state => state.map.createdPoints.map(point => {
+export const selectSchemeCreatedPoints = state => state.createdPoints.present.map(point => {
     return {
         x: point[ 0 ],
         y: point[ 1 ]
