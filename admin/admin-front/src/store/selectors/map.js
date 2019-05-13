@@ -1,6 +1,22 @@
-import { filter, propEq } from "ramda";
+import { filter, propEq, map, has, prop, indexBy, __ } from "ramda";
 
+export const selectCurrentSchemeEdges    = state => {
+    const pointsObj = indexBy(prop('id'), selectCurrentSchemePoints(state));
+    const pointsHas = has(__, pointsObj);
 
+    const edges = selectSchemeEdges(state);
+
+    const filteredEdges = filter(edge => pointsHas(edge[ 0 ]), edges);
+
+    return map(edge => ({
+        p1: edge[ 0 ], // for id
+        p2: edge[ 1 ], // for id
+        x1: pointsObj[ edge[ 0 ] ].x,
+        y1: pointsObj[ edge[ 0 ] ].y,
+        x2: pointsObj[ edge[ 1 ] ].x,
+        y2: pointsObj[ edge[ 1 ] ].y,
+    }), filteredEdges);
+};
 export const selectCurrentSchemeElements = state => filterByCurrentSchemeId(state)(selectSchemeElements(state));
 export const selectCurrentSchemePoints   = state => [
     ...filterByCurrentSchemeId(state)(selectSchemePoints(state)),
@@ -13,8 +29,10 @@ export const selectSchemeCreatedPoints = state => state.createdPoints.present.ma
         y: point[ 1 ]
     }
 });
-const selectSchemeElements             = state => selectMapData(state).elements;
-const selectSchemePoints               = state => selectMapData(state).points;
+
+const selectSchemeEdges    = state => selectMapData(state).edges;
+const selectSchemeElements = state => selectMapData(state).elements;
+const selectSchemePoints   = state => selectMapData(state).points;
 
 const selectMapData                   = state => state.map.data;
 export const selectMapCurrentSchemeId = state => state.map.buildingSchemeId;

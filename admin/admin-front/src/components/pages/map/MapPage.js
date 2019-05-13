@@ -9,12 +9,14 @@ import {
     MAP_ELEMENTS_TYPES,
     saveCreatedPoints,
     undoCreatePoint,
-    redoCreatePoint
+    redoCreatePoint, addEdge
 } from "../../../store/reducers/map";
 import {
+    selectCurrentSchemeEdges,
     selectCurrentSchemeElements,
     selectCurrentSchemePoints
 } from "../../../store/selectors/map";
+import { find, isNil, propEq } from "ramda";
 
 
 const isElementHasLabel = element => {
@@ -30,18 +32,18 @@ function Element(item) {
         <Fragment>
             <polygon
                 points={ item.coordinates }
-                fill="#D8D8D8"
-                stroke="#979797"
+                fill="#FFF"
+                stroke="#236481"
                 strokeWidth={ 1 }
-                opacity={ 0.5 }
+                opacity={ 0.8 }
             />
             { isElementHasLabel(item) && (
                 <text
-                    fill="white"
-                    fontWeight="bold"
+                    fill="#507b8f"
+                    // fontWeight="bold"
                     x={ item.textCentroid[ 0 ] }
                     y={ item.textCentroid[ 1 ] }
-                    fontSize="6"
+                    fontSize="8"
                     textAnchor={ "middle" }
                 >
                     { item.label }
@@ -51,6 +53,11 @@ function Element(item) {
     )
 }
 
+const MODE = {
+    NONE:      'NONE',
+    ADD_POINT: 'ADD_POINT',
+    ADD_EDGE:  'ADD_EDGE'
+};
 
 class MapPage extends Component {
 
@@ -62,36 +69,61 @@ class MapPage extends Component {
         super(props);
 
         this.state = {
-            isAddPointMode: false
+            mode:             MODE.NONE,
+            startEdgePointId: null
         }
     }
 
     cursorPoint = event => {
         if (this.created_point) {
-            let cursorPoint = this.svgElem.createSVGPoint();
+            const [ x, y ] = this.getSvgCursorCoordinates(event);
 
-            cursorPoint.x = event.clientX;
-            cursorPoint.y = event.clientY;
-
-            cursorPoint = cursorPoint.matrixTransform(this.svgElem.getScreenCTM().inverse());
-
-            this.created_point.setAttribute('cx', cursorPoint.x.toString());
-            this.created_point.setAttribute('cy', cursorPoint.y.toString());
+            this.created_point.setAttribute('cx', x);
+            this.created_point.setAttribute('cy', y);
         }
     };
 
+    drawEdge = event => {
+        if (this.drawing_edge) {
+            const [ x, y ] = this.getSvgCursorCoordinates(event);
+
+            this.drawing_edge.setAttribute('x2', x);
+            this.drawing_edge.setAttribute('y2', y);
+        }
+    };
+
+    getSvgCursorCoordinates = event => {
+        let cursorPoint = this.svgElem.createSVGPoint();
+
+        cursorPoint.x = event.clientX;
+        cursorPoint.y = event.clientY;
+
+        cursorPoint = cursorPoint.matrixTransform(this.svgElem.getScreenCTM().inverse());
+
+        return [ cursorPoint.x.toString(), cursorPoint.y.toString() ]
+    };
 
     toggleAddPointMode = () => {
-        const { isAddPointMode } = this.state;
+        const { mode } = this.state;
 
-        if (isAddPointMode) {
+        if (mode === MODE.ADD_POINT) {
             this.svgElem.removeEventListener('mousemove', this.cursorPoint);
             this.props.cancelCreatedPoints();
+            this.setState({ mode: MODE.NONE });
         } else {
             this.svgElem.addEventListener('mousemove', this.cursorPoint);
+            this.setState({ mode: MODE.ADD_POINT });
         }
+    };
 
-        this.setState({ isAddPointMode: !isAddPointMode });
+    toggleAddEdgeMode = () => {
+        const { mode } = this.state;
+
+        if (mode === MODE.ADD_EDGE) {
+            this.setState({ mode: MODE.NONE });
+        } else {
+            this.setState({ mode: MODE.ADD_EDGE });
+        }
     };
 
     createPoint = () => {
@@ -102,13 +134,12 @@ class MapPage extends Component {
     };
 
     saveAll = () => {
-        this.svgElem.addEventListener('mousemove', this.cursorPoint);
-        this.setState({ isAddPointMode: false });
+        this.svgElem.removeEventListener('mousemove', this.cursorPoint);
+        this.setState({ mode: MODE.NONE });
         this.props.saveCreatedPoints();
     };
 
-    undoCreate = (e) => {
-        // e.preventDefault()
+    undoCreate = e => {
         this.props.undoCreatePoint()
     };
 
@@ -116,16 +147,116 @@ class MapPage extends Component {
         this.props.redoCreatePoint()
     };
 
+    onPointClick = point => e => {
+        if (this.selectingFirstPoint) {
+            this.startDrawEdge(point);
+        } else if (this.isDrawingEdge) {
+            this.endDrawEdge(point)
+        }
+    };
+
+    startDrawEdge = point => {
+        this.svgElem.addEventListener('mousemove', this.drawEdge);
+        this.setState({ startEdgePointId: point.id })
+    };
+
+    endDrawEdge = secondPoint => {
+        const { startEdgePointId } = this.state;
+        const { id }               = secondPoint;
+
+        if (id !== startEdgePointId) {
+            this.svgElem.removeEventListener('mousemove', this.drawEdge);
+            this.props.addEdge([ startEdgePointId, id ]);
+            this.setState({ startEdgePointId: null });
+        }
+    };
+
+    get selectingFirstPoint() {
+        const { mode, startEdgePointId } = this.state;
+
+        return mode === MODE.ADD_EDGE && isNil(startEdgePointId)
+    }
+
+    get isDrawingEdge() {
+        const { mode, startEdgePointId } = this.state;
+
+        return mode === MODE.ADD_EDGE && !isNil(startEdgePointId)
+    }
+
+    renderPoints() {
+        const { points } = this.props;
+
+        return points.map((point, index) => (
+            <circle
+                onClick={ this.onPointClick(point) }
+                key={ index }
+                cx={ point.x }
+                cy={ point.y }
+                r="1.5"
+                fill={ "#26c2ed" }
+                stroke={ "#26c2ed" }
+            />
+        ));
+    }
+
+    renderEdges() {
+        const { edges } = this.props;
+
+        return edges.map((edge, index) => (
+            <line
+                key={ index }
+                x1={ edge.x1 }
+                y1={ edge.y1 }
+                x2={ edge.x2 }
+                y2={ edge.y2 }
+                stroke={ "#26c2ed" }
+            />
+        ));
+    }
+
+    renderDrawingEdge = () => {
+        if (!this.isDrawingEdge)
+            return null;
+
+        return (
+            <line
+                id="edge"
+                x1={ this.startEdgePoint.x }
+                y1={ this.startEdgePoint.y }
+                x2={ this.startEdgePoint.x }
+                y2={ this.startEdgePoint.y }
+                ref={ (e) => this.drawing_edge = e }
+                stroke="black"
+            />
+        );
+    };
+
+    get startEdgePoint() {
+        const { startEdgePointId } = this.state;
+        const { points }           = this.props;
+
+        return find(propEq('id', startEdgePointId))(points)
+    }
+
     render() {
-        const { elements, points } = this.props;
-        const { isAddPointMode }   = this.state;
+        const { elements, edges } = this.props;
+        const { mode }            = this.state;
+
+        console.log(edges);
 
         return (
             <div>
                 <button
                     onClick={ this.toggleAddPointMode }
+                    disabled={ mode === MODE.ADD_EDGE }
                 >
-                    { isAddPointMode ? 'Отменить все' : 'Добавить точки' }
+                    { mode === MODE.ADD_POINT ? 'Отменить все' : 'Добавить точки' }
+                </button>
+                <button
+                    onClick={ this.toggleAddEdgeMode }
+                    disabled={ mode === MODE.ADD_POINT }
+                >
+                    { mode === MODE.ADD_EDGE ? 'Отменить все' : 'Добавить ребра' }
                 </button>
                 <button onClick={ this.saveAll }>Сохранить</button>
                 <button onClick={ this.undoCreate }>Отмена</button>
@@ -143,22 +274,22 @@ class MapPage extends Component {
                         ))
                     }
                     {
-                        points.map((point, index) => (
-                            <circle
-                                key={ index }
-                                cx={ point.x }
-                                cy={ point.y }
-                                r="1.5"
-                            />
-                        ))
+                        this.renderDrawingEdge()
                     }
-                    { isAddPointMode && (
+                    {
+                        this.renderEdges()
+                    }
+                    {
+                        this.renderPoints()
+                    }
+                    { mode === MODE.ADD_POINT && (
                         <circle cx="75" cy="60" r="1.5"
                                 id="created_point"
                                 onClick={ this.createPoint }
                                 ref={ (e) => this.created_point = e }
                         />
                     ) }
+
                 </svg>
             </div>
         )
@@ -169,7 +300,8 @@ const mapStateToProps = (state) => {
 
     return {
         points:   selectCurrentSchemePoints(state),
-        elements: selectCurrentSchemeElements(state)
+        elements: selectCurrentSchemeElements(state),
+        edges:    selectCurrentSchemeEdges(state)
     }
 };
 
@@ -180,7 +312,8 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     saveCreatedPoints,
     cancelCreatedPoints,
     undoCreatePoint,
-    redoCreatePoint
+    redoCreatePoint,
+    addEdge
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapPage);
