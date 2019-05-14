@@ -8,8 +8,8 @@ import {
     loadBuildingMap,
     MAP_ELEMENTS_TYPES,
     saveCreatedPoints,
-    undoCreatePoint,
-    redoCreatePoint, addEdge, saveCreatedEdges, cancelCreatedEdges
+    undo,
+    redo, addEdge, saveCreatedEdges, cancelCreatedEdges
 } from "../../../store/reducers/map";
 import {
     selectCurrentSchemeEdges,
@@ -74,7 +74,7 @@ class MapPage extends Component {
         }
     }
 
-    cursorPoint = event => {
+    moveAddingPoint = event => {
         if (this.created_point) {
             const [ x, y ] = this.getSvgCursorCoordinates(event);
 
@@ -107,11 +107,11 @@ class MapPage extends Component {
         const { mode } = this.state;
 
         if (mode === MODE.ADD_POINT) {
-            this.svgElem.removeEventListener('mousemove', this.cursorPoint);
+            this.svgElem.removeEventListener('mousemove', this.moveAddingPoint);
             this.props.cancelCreatedPoints();
             this.setState({ mode: MODE.NONE });
         } else {
-            this.svgElem.addEventListener('mousemove', this.cursorPoint);
+            this.svgElem.addEventListener('mousemove', this.moveAddingPoint);
             this.setState({ mode: MODE.ADD_POINT });
         }
     };
@@ -137,7 +137,7 @@ class MapPage extends Component {
         const { mode } = this.state;
 
         if (mode === MODE.ADD_POINT) {
-            this.svgElem.removeEventListener('mousemove', this.cursorPoint);
+            this.svgElem.removeEventListener('mousemove', this.moveAddingPoint);
             this.props.saveCreatedPoints();
         } else if (mode === MODE.ADD_EDGE) {
             this.svgElem.removeEventListener('mousemove', this.drawEdge);
@@ -149,11 +149,11 @@ class MapPage extends Component {
     };
 
     undoCreate = e => {
-        this.props.undoCreatePoint()
+        this.props.undo()
     };
 
     redoCreate = e => {
-        this.props.redoCreatePoint()
+        this.props.redo()
     };
 
     onPointClick = point => e => {
@@ -295,7 +295,7 @@ class MapPage extends Component {
                         this.renderPoints()
                     }
                     { mode === MODE.ADD_POINT && (
-                        <circle cx="75" cy="60" r="1.5"
+                        <circle cx="-5" cy="-5" r="1.5"
                                 id="created_point"
                                 onClick={ this.createPoint }
                                 ref={ (e) => this.created_point = e }
@@ -323,8 +323,8 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     createPoint,
     saveCreatedPoints,
     cancelCreatedPoints,
-    undoCreatePoint,
-    redoCreatePoint,
+    undo,
+    redo,
     addEdge,
     saveCreatedEdges,
     cancelCreatedEdges

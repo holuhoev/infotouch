@@ -4,7 +4,7 @@ import undoable, { includeAction } from 'redux-undo'
 import {
     SAVE_CREATED_EDGES_SUCCESS,
     ADD_EDGE,
-    CANCEL_CREATED_POINTS
+    CANCEL_CREATED_POINTS, UNDO, REDO
 } from "./map";
 
 
@@ -25,11 +25,11 @@ const reducer = (state = [], action = {}) => {
             return state;
     }
 };
-//
-// const undoablePoints = undoable(reducer, {
-//     filter:   includeAction(CREATE_POINT),
-//     undoType: UNDO_CREATE_POINT,
-//     redoType: REDO_CREATE_POINT
-// });
 
-export default reducer;
+const undoableEdges = undoable(reducer, {
+    filter:   includeAction(ADD_EDGE),
+    undoType: UNDO,
+    redoType: REDO
+});
+
+export default undoableEdges;

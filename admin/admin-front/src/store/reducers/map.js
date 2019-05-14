@@ -8,8 +8,8 @@ export const LOAD         = 'admin/map/LOAD';
 export const LOAD_SUCCESS = 'admin/map/LOAD_SUCCESS';
 export const LOAD_FAILED  = 'admin/map/LOAD_FAILED';
 
-export const UNDO_CREATE_POINT = 'admin/map/UNDO_CREATE_POINT';
-export const REDO_CREATE_POINT = 'admin/map/REDO_CREATE_POINT';
+export const UNDO = 'admin/map/UNDO';
+export const REDO = 'admin/map/REDO';
 
 
 export const CREATE_POINT                = 'admin/map/CREATE_POINT';
@@ -26,8 +26,8 @@ export const SAVE_CREATED_EDGES_FAILED  = 'admin/map/SAVE_CREATED_EDGES_FAILED';
 
 export const loadBuildingMap     = createAction(LOAD);
 export const createPoint         = createAction(CREATE_POINT);
-export const undoCreatePoint     = createAction(UNDO_CREATE_POINT);
-export const redoCreatePoint     = createAction(REDO_CREATE_POINT);
+export const undo                = createAction(UNDO);
+export const redo                = createAction(REDO);
 export const saveCreatedPoints   = createAction(SAVE_CREATED_POINTS);
 export const cancelCreatedPoints = createAction(CANCEL_CREATED_POINTS);
 export const addEdge             = createAction(ADD_EDGE);

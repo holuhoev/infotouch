@@ -30,11 +30,11 @@ export const selectSchemeCreatedPoints = state => state.createdPoints.present.ma
     }
 });
 
-export const selectSchemeCreatedEdges = state => state.createdEdges;
+export const selectSchemeCreatedEdges = state => state.createdEdges.present;
 export const selectSchemeEdgesForSave = state => selectSchemeCreatedEdges(state).map(edge => ({
-    leftPointId:   edge[ 0 ],
+    leftPointId:  edge[ 0 ],
     rightPointId: edge[ 1 ],
-    weight:        1
+    weight:       1
 }));
 
 const selectSchemeEdges    = state => selectMapData(state).edges;

@@ -3,9 +3,9 @@ import undoable, { includeAction } from 'redux-undo'
 import {
     CANCEL_CREATED_POINTS,
     CREATE_POINT,
-    REDO_CREATE_POINT,
+    REDO,
     SAVE_CREATED_POINTS_SUCCESS,
-    UNDO_CREATE_POINT
+    UNDO
 } from "./map";
 
 
@@ -29,8 +29,8 @@ const reducer = (state = [], action = {}) => {
 
 const undoablePoints = undoable(reducer, {
     filter:   includeAction(CREATE_POINT),
-    undoType: UNDO_CREATE_POINT,
-    redoType: REDO_CREATE_POINT
+    undoType: UNDO,
+    redoType: REDO
 });
 
 export default undoablePoints;
