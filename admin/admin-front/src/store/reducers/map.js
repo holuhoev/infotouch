@@ -171,4 +171,10 @@ export const MAP_ELEMENTS_TYPES = {
     DOOR:     'DOOR',
     STAIRS:   'STAIRS'
 };
+
+export const isRoomOrCorridor = element =>
+    element.type === MAP_ELEMENTS_TYPES.ROOM ||
+    element.type === MAP_ELEMENTS_TYPES.CORRIDOR;
+
+
 export default reducer;

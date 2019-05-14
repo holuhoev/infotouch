@@ -9,7 +9,12 @@ import {
     SAVE_CREATED_POINTS_SUCCESS, SAVE_CREATED_EDGES_SUCCESS, SAVE_CREATED_EDGES_FAILED, SAVE_CREATED_EDGES
 } from "../reducers/map";
 import { createNewEdges, createNewPoints, getBuildingMap } from "../../api";
-import { selectMapCurrentSchemeId, selectSchemeCreatedPoints, selectSchemeEdgesForSave } from "../selectors/map";
+import {
+    selectMapCurrentSchemeId,
+    selectRoomId,
+    selectSchemeCreatedPoints,
+    selectSchemeEdgesForSave
+} from "../selectors/map";
 
 
 export default function* main() {
@@ -31,9 +36,14 @@ function* fetchBuildingMap(action) {
 
 function* saveCreatedPoints() {
     try {
-        const state = yield select();
-        const data  = {
-            points:           selectSchemeCreatedPoints(state),
+        const state  = yield select();
+        const points = selectSchemeCreatedPoints(state);
+
+        const data = {
+            points:           points.map(point => ({
+                ...point,
+                schemeElementId: selectRoomId(state, [ point.x, point.y ])
+            })),
             buildingSchemeId: selectMapCurrentSchemeId(state)
         };
 

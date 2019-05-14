@@ -1,4 +1,6 @@
-import { filter, propEq, map, has, prop, indexBy, __ } from "ramda";
+import { filter, propEq, map, has, prop, indexBy, __, find, isNil } from "ramda";
+import { isRoomOrCorridor } from "../reducers/map";
+import { isPointInPolygon } from "../../utils/map";
 
 export const selectCurrentSchemeEdges    = state => {
     const pointsObj = indexBy(prop('id'), selectCurrentSchemePoints(state));
@@ -46,3 +48,21 @@ export const selectMapCurrentSchemeId = state => state.map.buildingSchemeId;
 
 const filterByCurrentSchemeId = state => filterBySchemeId(selectMapCurrentSchemeId(state));
 const filterBySchemeId        = buildingSchemeId => array => filter(propEq('buildingSchemeId', buildingSchemeId), array);
+
+
+export const selectRoomId = (state, [ x, y ]) => {
+    const room = selectRoomOrCorridorByCoordinates(state, [ x, y ]);
+
+    return room ? room.id : room
+};
+
+const selectRoomOrCorridorByCoordinates = (state, [ x, y ]) => {
+    const all = selectCurrentSchemeElements(state).filter(isRoomOrCorridor);
+
+    return getElementByCoordinates(all, [ x, y ]);
+};
+
+const getElementByCoordinates = (elements, [ x, y ]) => {
+    return find(el => isNil(el.pointId) && isPointInPolygon(el.coordinates, [ x, y ]))(elements)
+};
+

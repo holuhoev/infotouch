@@ -248,10 +248,8 @@ class MapPage extends Component {
     }
 
     render() {
-        const { elements, edges } = this.props;
-        const { mode }            = this.state;
-
-        console.log(edges);
+        const { elements } = this.props;
+        const { mode }     = this.state;
 
         return (
             <div>
