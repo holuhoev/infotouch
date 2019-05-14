@@ -4,7 +4,7 @@ export const selectCurrentSchemeEdges    = state => {
     const pointsObj = indexBy(prop('id'), selectCurrentSchemePoints(state));
     const pointsHas = has(__, pointsObj);
 
-    const edges = selectSchemeEdges(state);
+    const edges = [ ...selectSchemeEdges(state), ...selectSchemeCreatedEdges(state) ];
 
     const filteredEdges = filter(edge => pointsHas(edge[ 0 ]), edges);
 
@@ -29,6 +29,13 @@ export const selectSchemeCreatedPoints = state => state.createdPoints.present.ma
         y: point[ 1 ]
     }
 });
+
+export const selectSchemeCreatedEdges = state => state.createdEdges;
+export const selectSchemeEdgesForSave = state => selectSchemeCreatedEdges(state).map(edge => ({
+    leftPointId:   edge[ 0 ],
+    rightPointId: edge[ 1 ],
+    weight:        1
+}));
 
 const selectSchemeEdges    = state => selectMapData(state).edges;
 const selectSchemeElements = state => selectMapData(state).elements;

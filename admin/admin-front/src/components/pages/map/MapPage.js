@@ -9,7 +9,7 @@ import {
     MAP_ELEMENTS_TYPES,
     saveCreatedPoints,
     undoCreatePoint,
-    redoCreatePoint, addEdge
+    redoCreatePoint, addEdge, saveCreatedEdges, cancelCreatedEdges
 } from "../../../store/reducers/map";
 import {
     selectCurrentSchemeEdges,
@@ -134,9 +134,18 @@ class MapPage extends Component {
     };
 
     saveAll = () => {
-        this.svgElem.removeEventListener('mousemove', this.cursorPoint);
+        const { mode } = this.state;
+
+        if (mode === MODE.ADD_POINT) {
+            this.svgElem.removeEventListener('mousemove', this.cursorPoint);
+            this.props.saveCreatedPoints();
+        } else if (mode === MODE.ADD_EDGE) {
+            this.svgElem.removeEventListener('mousemove', this.drawEdge);
+            this.props.saveCreatedEdges();
+        }
+
+
         this.setState({ mode: MODE.NONE });
-        this.props.saveCreatedPoints();
     };
 
     undoCreate = e => {
@@ -264,6 +273,9 @@ class MapPage extends Component {
                 <svg
                     height="330" width="600"
                     ref={ (e) => this.svgElem = e }
+                    style={ {
+                        userSelect: 'none'
+                    } }
                 >
                     {
                         elements.map((element, index) => (
@@ -313,7 +325,9 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     cancelCreatedPoints,
     undoCreatePoint,
     redoCreatePoint,
-    addEdge
+    addEdge,
+    saveCreatedEdges,
+    cancelCreatedEdges
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapPage);

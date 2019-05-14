@@ -11,13 +11,18 @@ export const LOAD_FAILED  = 'admin/map/LOAD_FAILED';
 export const UNDO_CREATE_POINT = 'admin/map/UNDO_CREATE_POINT';
 export const REDO_CREATE_POINT = 'admin/map/REDO_CREATE_POINT';
 
+
 export const CREATE_POINT                = 'admin/map/CREATE_POINT';
 export const SAVE_CREATED_POINTS         = 'admin/map/SAVE_CREATED_POINTS';
 export const CANCEL_CREATED_POINTS       = 'admin/map/CANCEL_CREATED_POINTS';
 export const SAVE_CREATED_POINTS_SUCCESS = 'admin/map/SAVE_CREATED_POINTS_SUCCESS';
 export const SAVE_CREATED_POINTS_FAILED  = 'admin/map/SAVE_CREATED_POINTS_FAILED';
 
-export const ADD_EDGE = 'admin/map/ADD_EDGE';
+export const ADD_EDGE                   = 'admin/map/ADD_EDGE';
+export const SAVE_CREATED_EDGES         = 'admin/map/SAVE_CREATED_EDGES';
+export const CANCEL_CREATED_EDGES       = 'admin/map/CANCEL_CREATED_EDGES';
+export const SAVE_CREATED_EDGES_SUCCESS = 'admin/map/SAVE_CREATED_EDGES_SUCCESS';
+export const SAVE_CREATED_EDGES_FAILED  = 'admin/map/SAVE_CREATED_EDGES_FAILED';
 
 export const loadBuildingMap     = createAction(LOAD);
 export const createPoint         = createAction(CREATE_POINT);
@@ -26,6 +31,8 @@ export const redoCreatePoint     = createAction(REDO_CREATE_POINT);
 export const saveCreatedPoints   = createAction(SAVE_CREATED_POINTS);
 export const cancelCreatedPoints = createAction(CANCEL_CREATED_POINTS);
 export const addEdge             = createAction(ADD_EDGE);
+export const saveCreatedEdges    = createAction(SAVE_CREATED_EDGES);
+export const cancelCreatedEdges  = createAction(CANCEL_CREATED_EDGES);
 
 const initialState = {
     loading:          false,
@@ -42,15 +49,16 @@ const initialState = {
 const reducer = (state = initialState, action = {}) => {
     switch (action.type) {
 
-        case ADD_EDGE:
+        case SAVE_CREATED_EDGES_SUCCESS:
 
             return {
                 ...state,
-                data: {
+                loading: false,
+                data:    {
                     ...state.data,
                     edges: [
                         ...state.data.edges,
-                        action.payload
+                        ...map(edge => [ edge.leftPointId, edge.rightPointId ], action.payload)
                     ]
                 }
             };

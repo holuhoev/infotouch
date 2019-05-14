@@ -50,7 +50,7 @@ public class AdminBuildingMapController {
 
     // 2. Create edges
     @PostMapping("/edges")
-    public ResponseEntity<List<Edge>> createEdges(CreateEdgesRequest request) {
+    public ResponseEntity<List<Edge>> createEdges(@RequestBody CreateEdgesRequest request) {
         return ResponseEntity.ok(edgeService.create(request.getEdges()));
     }
 
