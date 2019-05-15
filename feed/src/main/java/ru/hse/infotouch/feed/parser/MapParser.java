@@ -99,7 +99,7 @@ public class MapParser implements CommandLineRunner {
                     String info = polygon.attr("id");
                     String points = polygon.attr("points");
 
-                    schemeElement.setBuildingSchemeId(1);
+                    schemeElement.setBuildingSchemeId(5);
                     schemeElement.setCoordinates(mapPointsToCoordinates(points));
                     schemeElement.setLabel(info);
                     schemeElement.setType(MapElementType.ofString(info));
