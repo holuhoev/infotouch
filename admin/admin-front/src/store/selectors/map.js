@@ -6,20 +6,21 @@ export const selectSchemes    = state => selectMapData(state).schemes;
 export const selectBuildingId = state => state.map.buildingId;
 
 export const selectCurrentSchemeEdges    = state => {
-    const pointsObj = indexBy(prop('id'), selectCurrentSchemePoints(state));
-    const pointsHas = has(__, pointsObj);
+    const currentSchemePointsObj = indexBy(prop('id'), selectCurrentSchemePoints(state));
+    const pointHas               = has(__, currentSchemePointsObj);
+    const edgeOnThisFloor        = edge => pointHas(edge[ 0 ]) && pointHas(edge[ 1 ]);
 
     const edges = [ ...selectSchemeEdges(state), ...selectSchemeCreatedEdges(state) ];
 
-    const filteredEdges = filter(edge => pointsHas(edge[ 0 ]), edges);
+    const filteredEdges = filter(edgeOnThisFloor, edges);
 
     return map(edge => ({
         p1: edge[ 0 ], // for id
         p2: edge[ 1 ], // for id
-        x1: pointsObj[ edge[ 0 ] ].x,
-        y1: pointsObj[ edge[ 0 ] ].y,
-        x2: pointsObj[ edge[ 1 ] ].x,
-        y2: pointsObj[ edge[ 1 ] ].y,
+        x1: currentSchemePointsObj[ edge[ 0 ] ].x,
+        y1: currentSchemePointsObj[ edge[ 0 ] ].y,
+        x2: currentSchemePointsObj[ edge[ 1 ] ].x,
+        y2: currentSchemePointsObj[ edge[ 1 ] ].y,
     }), filteredEdges);
 };
 export const selectCurrentSchemeElements = state => filterByCurrentSchemeId(state)(selectSchemeElements(state));
@@ -30,8 +31,9 @@ export const selectCurrentSchemePoints   = state => [
 
 export const selectSchemeCreatedPoints = state => state.createdPoints.present.map(point => {
     return {
-        x: point[ 0 ],
-        y: point[ 1 ]
+        x:     point[ 0 ],
+        y:     point[ 1 ],
+        isNew: true
     }
 });
 

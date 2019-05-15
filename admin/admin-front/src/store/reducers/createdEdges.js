@@ -4,14 +4,14 @@ import undoable, { includeAction } from 'redux-undo'
 import {
     SAVE_CREATED_EDGES_SUCCESS,
     ADD_EDGE,
-    CANCEL_CREATED_POINTS, UNDO, REDO
+    UNDO, REDO, CANCEL_CREATED_EDGES
 } from "./map";
 
 
 const reducer = (state = [], action = {}) => {
     switch (action.type) {
         case SAVE_CREATED_EDGES_SUCCESS:
-        case CANCEL_CREATED_POINTS:
+        case CANCEL_CREATED_EDGES:
 
             return [];
 

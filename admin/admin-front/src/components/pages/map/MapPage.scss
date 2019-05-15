@@ -17,3 +17,11 @@
 .map-page__scheme-menu {
   padding-top: 20px;
 }
+
+.map-page__point-ring {
+  cursor: pointer;
+}
+
+.map-page__point-ring:hover {
+  fill: #26c2ed;
+}

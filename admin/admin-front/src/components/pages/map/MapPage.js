@@ -84,9 +84,10 @@ function Element(item) {
 }
 
 const MODE = {
-    NONE:      'NONE',
-    ADD_POINT: 'ADD_POINT',
-    ADD_EDGE:  'ADD_EDGE'
+    NONE:       'NONE',
+    ADD_POINT:  'ADD_POINT',
+    ADD_EDGE:   'ADD_EDGE',
+    ADD_STAIRS: 'ADD_STAIRS'
 };
 
 class MapPage extends Component {
@@ -145,6 +146,12 @@ class MapPage extends Component {
     };
 
     cancelDrawingEdges = () => {
+        this.svgElem.removeEventListener('mousemove', this.moveAddingPoint);
+        this.props.cancelCreatedEdges()
+        this.setState({ mode: MODE.NONE, startEdgePointId: null });
+    };
+
+    cancelAddStairs = () => {
         this.setState({ mode: MODE.NONE, startEdgePointId: null });
     };
 
@@ -158,11 +165,18 @@ class MapPage extends Component {
             case MODE.ADD_POINT:
                 this.cancelDrawingPoint();
                 break;
+            case MODE.ADD_STAIRS:
+                this.cancelAddStairs();
+                break;
         }
     };
 
     startDrawingEdges = () => {
         this.setState({ mode: MODE.ADD_EDGE });
+    };
+
+    startDrawingStairs = () => {
+        this.setState({ mode: MODE.ADD_STAIRS });
     };
 
     createPoint = () => {
@@ -196,16 +210,33 @@ class MapPage extends Component {
     };
 
     onPointClick = point => e => {
+        const { mode } = this.state;
+
+        switch (mode) {
+            case MODE.ADD_EDGE:
+                this.pointClickWithDrawingEdge(point);
+                break;
+            case MODE.ADD_STAIRS:
+                this.pointClickWithDrawingStair(point);
+                break;
+        }
+    };
+
+    pointClickWithDrawingEdge = point => {
         if (this.selectingFirstPoint) {
-            this.startDrawEdge(point);
+            this.svgElem.addEventListener('mousemove', this.drawEdge);
+            this.setState({ startEdgePointId: point.id })
         } else if (this.isDrawingEdge) {
             this.endDrawEdge(point)
         }
     };
 
-    startDrawEdge = point => {
-        this.svgElem.addEventListener('mousemove', this.drawEdge);
-        this.setState({ startEdgePointId: point.id })
+    pointClickWithDrawingStair = point => {
+        if (this.selectingFirstPoint) {
+            this.setState({ startEdgePointId: point.id })
+        } else if (this.isDrawingStair) {
+            this.endDrawEdge(point)
+        }
     };
 
     endDrawEdge = secondPoint => {
@@ -220,31 +251,59 @@ class MapPage extends Component {
     };
 
     get selectingFirstPoint() {
-        const { mode, startEdgePointId } = this.state;
+        const { startEdgePointId } = this.state;
 
-        return mode === MODE.ADD_EDGE && isNil(startEdgePointId)
+        return this.modeEdgeOrStair && isNil(startEdgePointId)
     }
 
     get isDrawingEdge() {
-        const { mode, startEdgePointId } = this.state;
+        const { startEdgePointId, mode } = this.state;
 
         return mode === MODE.ADD_EDGE && !isNil(startEdgePointId)
     }
 
+
+    get isDrawingStair() {
+        const { startEdgePointId, mode } = this.state;
+
+        return mode === MODE.ADD_STAIRS && !isNil(startEdgePointId)
+    }
+
+    get modeEdgeOrStair() {
+        const { mode } = this.state;
+
+        return mode === MODE.ADD_EDGE || mode === MODE.ADD_STAIRS;
+    }
+
+
     renderPoints() {
         const { points } = this.props;
+        const active     = this.modeEdgeOrStair;
 
-        return points.map((point, index) => (
+        return points.map((point, index) => ([
             <circle
+                className={ "map-page__point-ring" }
                 onClick={ this.onPointClick(point) }
                 key={ index }
                 cx={ point.x }
                 cy={ point.y }
-                r="1.5"
+                r="1"
                 fill={ "#26c2ed" }
                 stroke={ "#26c2ed" }
-            />
-        ));
+            />,
+            (active || point.isNew) && (
+                <circle
+                    className={ "map-page__point-ring" }
+                    onClick={ this.onPointClick(point) }
+                    key={ index + "_" }
+                    cx={ point.x }
+                    cy={ point.y }
+                    r="3"
+                    fill={ "none" }
+                    stroke={ "#26c2ed" }
+                    strokeWidth={ "0.5" }
+                />
+            ) ]));
     }
 
     renderEdges() {
@@ -296,6 +355,9 @@ class MapPage extends Component {
                 </Menu.Item>
                 <Menu.Item disabled={ loading } onClick={ this.startDrawingEdges }>
                     Ребра
+                </Menu.Item>
+                <Menu.Item disabled={ loading } onClick={ this.startDrawingStairs }>
+                    Лестницу
                 </Menu.Item>
             </Menu>
         )
