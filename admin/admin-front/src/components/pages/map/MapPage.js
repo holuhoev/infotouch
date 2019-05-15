@@ -6,10 +6,9 @@ import {
     cancelCreatedPoints,
     createPoint,
     loadBuildingMap,
-    MAP_ELEMENTS_TYPES,
     saveCreatedPoints,
     undo,
-    redo, addEdge, saveCreatedEdges, cancelCreatedEdges
+    redo, addEdge, saveCreatedEdges, cancelCreatedEdges, isElementHasLabel, isElementIsStair
 } from "../../../store/reducers/map";
 import {
     selectCurrentSchemeEdges,
@@ -19,11 +18,35 @@ import {
 import { find, isNil, propEq } from "ramda";
 
 
-const isElementHasLabel = element => {
+const renderStairs = element => {
+    const { lines } = element;
 
-    return element.type === MAP_ELEMENTS_TYPES.ROOM
-        && !!element.textCentroid
-        && !!element.label;
+    if (!lines)
+        return null;
+
+    return (
+        <Fragment>
+            <clipPath id={ `stairsPath_${ element.id }` }>
+                <polygon points={ element.coordinates }/>
+            </clipPath>
+            <g clipPath={ `url(#stairsPath_${ element.id })` }>
+                {
+                    lines.map((line, i) => (
+                        <line
+                            key={ i }
+                            x1={ line.x1 }
+                            y1={ line.y1 }
+                            x2={ line.x2 }
+                            y2={ line.y2 }
+                            stroke={ "#236481" }
+                        />
+                    ))
+                }
+            </g>
+        </Fragment>
+
+    )
+
 };
 
 function Element(item) {
@@ -33,7 +56,7 @@ function Element(item) {
             <polygon
                 points={ item.coordinates }
                 fill="#FFF"
-                stroke="#236481"
+                stroke={ "#236481" }
                 strokeWidth={ 1 }
                 opacity={ 0.8 }
             />
@@ -48,6 +71,10 @@ function Element(item) {
                 >
                     { item.label }
                 </text>
+            ) }
+
+            { isElementIsStair(item) && (
+                renderStairs(item)
             ) }
         </Fragment>
     )

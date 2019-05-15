@@ -1,6 +1,6 @@
 import { prop, map, find, propEq } from "ramda";
 
-import { calculateCentroid } from "../../utils/map";
+import { calculateCentroid, calculateStairsLines } from "../../utils/map";
 import { createAction } from "../../utils/action";
 
 
@@ -140,6 +140,7 @@ const mapElement = getFloor => element => {
 
     const floor        = getFloor(buildingSchemeId);
     const textCentroid = calculateCentroid(coordinates);
+    const stairLines   = getStairLines(element)
 
     return {
         id,
@@ -149,8 +150,16 @@ const mapElement = getFloor => element => {
         pointId,
         floor,
         textCentroid,
-        buildingSchemeId
+        buildingSchemeId,
+        lines: stairLines
     }
+};
+
+const getStairLines    = element => {
+    if (!isElementIsStair(element))
+        return [];
+
+    return calculateStairsLines(element.coordinates)
 };
 
 const getFloorByScheme = schemes => schemeId => prop('floor')(find(propEq('id', schemeId))(schemes));
@@ -171,6 +180,15 @@ export const MAP_ELEMENTS_TYPES = {
     DOOR:     'DOOR',
     STAIRS:   'STAIRS'
 };
+
+export const isElementHasLabel = element => {
+
+    return element.type === MAP_ELEMENTS_TYPES.ROOM
+        && !!element.textCentroid
+        && !!element.label;
+};
+
+export const isElementIsStair = element => element.type === MAP_ELEMENTS_TYPES.STAIRS;
 
 export const isRoomOrCorridor = element =>
     element.type === MAP_ELEMENTS_TYPES.ROOM ||
