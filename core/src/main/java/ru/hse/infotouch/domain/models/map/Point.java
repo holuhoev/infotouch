@@ -1,5 +1,6 @@
 package ru.hse.infotouch.domain.models.map;
 
+import ru.hse.infotouch.domain.dto.request.CreatePointDTO;
 import ru.hse.infotouch.domain.models.DomainObject;
 import ru.hse.infotouch.domain.models.enums.PointType;
 
@@ -20,11 +21,11 @@ public class Point implements DomainObject {
     @Column(name = "y")
     private Integer y;
 
-    @Column(name = "room_id")
-    private Integer roomId;
+    @Column(name = "building_scheme_id")
+    private Integer buildingSchemeId;
 
-    @Column(name = "point_type")
-    private PointType pointType;
+    @Transient
+    private Integer schemeElementId;
 
     public Integer getId() {
         return id;
@@ -50,22 +51,6 @@ public class Point implements DomainObject {
         this.y = y;
     }
 
-    public Integer getRoomId() {
-        return roomId;
-    }
-
-    public void setRoomId(Integer roomId) {
-        this.roomId = roomId;
-    }
-
-    public PointType getPointType() {
-        return pointType;
-    }
-
-    public void setPointType(PointType pointType) {
-        this.pointType = pointType;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -77,5 +62,32 @@ public class Point implements DomainObject {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public Integer getBuildingSchemeId() {
+        return buildingSchemeId;
+    }
+
+    public void setBuildingSchemeId(Integer buildingSchemeId) {
+        this.buildingSchemeId = buildingSchemeId;
+    }
+
+    public static Point createFromRequest(CreatePointDTO createPointDTO, int buildingSchemeId) {
+        Point point = new Point();
+
+        point.setX(createPointDTO.getX());
+        point.setY(createPointDTO.getY());
+        point.setBuildingSchemeId(buildingSchemeId);
+        point.setSchemeElementId(createPointDTO.getSchemeElementId());
+
+        return point;
+    }
+
+    public Integer getSchemeElementId() {
+        return schemeElementId;
+    }
+
+    public void setSchemeElementId(Integer schemeElementId) {
+        this.schemeElementId = schemeElementId;
     }
 }

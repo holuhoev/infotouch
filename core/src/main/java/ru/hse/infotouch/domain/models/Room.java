@@ -28,9 +28,8 @@ public class Room extends RuzObject implements DomainObject {
     @JsonField(name = "buildingOid")
     private Integer buildingId;
 
-    private String coordinates;
-
-    private Integer floor;
+    @Column(name="map_element_id")
+    private Integer mapElementId;
 
     public Integer getId() {
         return Id;
@@ -38,14 +37,6 @@ public class Room extends RuzObject implements DomainObject {
 
     public void setId(Integer id) {
         Id = id;
-    }
-
-    public Integer getFloor() {
-        return floor;
-    }
-
-    public void setFloor(Integer floor) {
-        this.floor = floor;
     }
 
     public String getAuditoriumType() {
@@ -88,11 +79,11 @@ public class Room extends RuzObject implements DomainObject {
         return Objects.hash(Id, auditoriumType, number, buildingId);
     }
 
-    public String getCoordinates() {
-        return coordinates;
+    public Integer getMapElementId() {
+        return mapElementId;
     }
 
-    public void setCoordinates(String coordinates) {
-        this.coordinates = coordinates;
+    public void setMapElementId(Integer mapElementId) {
+        this.mapElementId = mapElementId;
     }
 }

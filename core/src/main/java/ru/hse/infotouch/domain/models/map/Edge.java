@@ -1,5 +1,7 @@
 package ru.hse.infotouch.domain.models.map;
 
+import ru.hse.infotouch.domain.dto.request.EdgeDTO;
+
 import javax.persistence.*;
 
 @Entity
@@ -49,5 +51,15 @@ public class Edge {
 
     public void setWeight(Integer weight) {
         this.weight = weight;
+    }
+
+    public static Edge createFromDTO(EdgeDTO edgeDTO) {
+        Edge edge = new Edge();
+
+        edge.setLeftPointId(edgeDTO.getLeftPointId());
+        edge.setRightPointId(edgeDTO.getRightPointId());
+        edge.setWeight(edgeDTO.getWeight());
+
+        return edge;
     }
 }

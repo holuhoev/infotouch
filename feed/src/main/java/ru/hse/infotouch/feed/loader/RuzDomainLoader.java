@@ -69,7 +69,7 @@ public class RuzDomainLoader implements CommandLineRunner {
 //        loadPersons();
 
 //        loadBuildings();
-        loadRooms();
+//        loadRooms();
     }
 
     private void loadPersons() throws IOException {
