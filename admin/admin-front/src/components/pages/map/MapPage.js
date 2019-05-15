@@ -16,7 +16,11 @@ import {
     selectCurrentSchemePoints
 } from "../../../store/selectors/map";
 import { find, isNil, propEq } from "ramda";
+import './MapPage.scss'
+import { Button, Dropdown, Menu, Spin } from "antd";
+import SchemeMenu from "./scheme-menu/SchemeMenu";
 
+const ButtonGroup = Button.Group;
 
 const renderStairs = element => {
     const { lines } = element;
@@ -46,7 +50,6 @@ const renderStairs = element => {
         </Fragment>
 
     )
-
 };
 
 function Element(item) {
@@ -89,7 +92,7 @@ const MODE = {
 class MapPage extends Component {
 
     componentDidMount() {
-        this.props.loadBuildingMap(2167)
+        this.props.loadBuildingMap()
     }
 
     constructor(props) {
@@ -130,27 +133,36 @@ class MapPage extends Component {
         return [ cursorPoint.x.toString(), cursorPoint.y.toString() ]
     };
 
-    toggleAddPointMode = () => {
+    startDrawingPoints = () => {
+        this.svgElem.addEventListener('mousemove', this.moveAddingPoint);
+        this.setState({ mode: MODE.ADD_POINT });
+    };
+
+    cancelDrawingPoint = () => {
+        this.svgElem.removeEventListener('mousemove', this.moveAddingPoint);
+        this.props.cancelCreatedPoints();
+        this.setState({ mode: MODE.NONE });
+    };
+
+    cancelDrawingEdges = () => {
+        this.setState({ mode: MODE.NONE, startEdgePointId: null });
+    };
+
+    cancel = () => {
         const { mode } = this.state;
 
-        if (mode === MODE.ADD_POINT) {
-            this.svgElem.removeEventListener('mousemove', this.moveAddingPoint);
-            this.props.cancelCreatedPoints();
-            this.setState({ mode: MODE.NONE });
-        } else {
-            this.svgElem.addEventListener('mousemove', this.moveAddingPoint);
-            this.setState({ mode: MODE.ADD_POINT });
+        switch (mode) {
+            case MODE.ADD_EDGE:
+                this.cancelDrawingEdges();
+                break;
+            case MODE.ADD_POINT:
+                this.cancelDrawingPoint();
+                break;
         }
     };
 
-    toggleAddEdgeMode = () => {
-        const { mode } = this.state;
-
-        if (mode === MODE.ADD_EDGE) {
-            this.setState({ mode: MODE.NONE });
-        } else {
-            this.setState({ mode: MODE.ADD_EDGE });
-        }
+    startDrawingEdges = () => {
+        this.setState({ mode: MODE.ADD_EDGE });
     };
 
     createPoint = () => {
@@ -274,60 +286,81 @@ class MapPage extends Component {
         return find(propEq('id', startEdgePointId))(points)
     }
 
-    render() {
-        const { elements } = this.props;
-        const { mode }     = this.state;
+    get addingMenu() {
+        const { loading } = this.props;
 
         return (
-            <div>
-                <button
-                    onClick={ this.toggleAddPointMode }
-                    disabled={ mode === MODE.ADD_EDGE }
-                >
-                    { mode === MODE.ADD_POINT ? 'Отменить все' : 'Добавить точки' }
-                </button>
-                <button
-                    onClick={ this.toggleAddEdgeMode }
-                    disabled={ mode === MODE.ADD_POINT }
-                >
-                    { mode === MODE.ADD_EDGE ? 'Отменить все' : 'Добавить ребра' }
-                </button>
-                <button onClick={ this.saveAll }>Сохранить</button>
-                <button onClick={ this.undoCreate }>Отмена</button>
-                <button onClick={ this.redoCreate }>Вернуть</button>
-                <svg
-                    height="330" width="600"
-                    ref={ (e) => this.svgElem = e }
-                    style={ {
-                        userSelect: 'none'
-                    } }
-                >
-                    {
-                        elements.map((element, index) => (
-                            <Element
-                                key={ index }
-                                { ...element }
-                            />
-                        ))
-                    }
-                    {
-                        this.renderDrawingEdge()
-                    }
-                    {
-                        this.renderEdges()
-                    }
-                    {
-                        this.renderPoints()
-                    }
-                    { mode === MODE.ADD_POINT && (
-                        <circle cx="-5" cy="-5" r="1.5"
-                                id="created_point"
-                                onClick={ this.createPoint }
-                                ref={ (e) => this.created_point = e }
-                        />
+            <Menu>
+                <Menu.Item disabled={ loading } onClick={ this.startDrawingPoints }>
+                    Точки
+                </Menu.Item>
+                <Menu.Item disabled={ loading } onClick={ this.startDrawingEdges }>
+                    Ребра
+                </Menu.Item>
+            </Menu>
+        )
+    }
+
+    render() {
+        const { elements, loading } = this.props;
+        const { mode }              = this.state;
+
+        return (
+            <div className="map-page">
+                <SchemeMenu/>
+                <div className="map-page__button-menu">
+
+                    { mode === MODE.NONE ? (
+                        <Dropdown overlay={ this.addingMenu }>
+                            <Button disabled={ loading } icon={ "edit" }>Добавить</Button>
+                        </Dropdown>
+                    ) : (
+                        <Button disabled={ loading } onClick={ this.cancel }>Отменить</Button>
                     ) }
 
-                </svg>
+                    <ButtonGroup>
+                        <Button disabled={ loading } onClick={ this.saveAll }>Сохранить</Button>
+                        <Button disabled={ loading } onClick={ this.undoCreate }>Отмена</Button>
+                        <Button disabled={ loading } onClick={ this.redoCreate }>Вернуть</Button>
+                    </ButtonGroup>
+                </div>
+                <div className="map-page__map">
+                    <Spin spinning={ loading }>
+                        <svg
+                            height="330" width="600"
+                            ref={ (e) => this.svgElem = e }
+                            style={ {
+                                userSelect: 'none'
+                            } }
+                        >
+                            {
+                                elements.map((element, index) => (
+                                    <Element
+                                        key={ index }
+                                        { ...element }
+                                    />
+                                ))
+                            }
+                            {
+                                this.renderDrawingEdge()
+                            }
+                            {
+                                this.renderEdges()
+                            }
+                            {
+                                this.renderPoints()
+                            }
+                            { mode === MODE.ADD_POINT && (
+                                <circle cx="-5" cy="-5" r="1.5"
+                                        id="created_point"
+                                        onClick={ this.createPoint }
+                                        ref={ (e) => this.created_point = e }
+                                />
+                            ) }
+                        </svg>
+                    </Spin>
+                </div>
+
             </div>
         )
     }
@@ -338,7 +371,8 @@ const mapStateToProps = (state) => {
     return {
         points:   selectCurrentSchemePoints(state),
         elements: selectCurrentSchemeElements(state),
-        edges:    selectCurrentSchemeEdges(state)
+        edges:    selectCurrentSchemeEdges(state),
+        loading:  state.map.loading
     }
 };
 

@@ -10,6 +10,7 @@ import {
 } from "../reducers/map";
 import { createNewEdges, createNewPoints, getBuildingMap } from "../../api";
 import {
+    selectBuildingId,
     selectMapCurrentSchemeId,
     selectRoomId,
     selectSchemeCreatedPoints,
@@ -25,7 +26,8 @@ export default function* main() {
 
 function* fetchBuildingMap(action) {
     try {
-        const buildingId  = action.payload;
+        const state       = yield select();
+        const buildingId  = selectBuildingId(state);
         const buildingMap = yield call(getBuildingMap, buildingId);
 
         yield put({ type: LOAD_SUCCESS, payload: buildingMap })

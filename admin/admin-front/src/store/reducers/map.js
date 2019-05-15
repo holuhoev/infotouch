@@ -3,6 +3,7 @@ import { prop, map, find, propEq } from "ramda";
 import { calculateCentroid, calculateStairsLines } from "../../utils/map";
 import { createAction } from "../../utils/action";
 
+export const CHANGE_SCHEME = 'admin/map/CHANGE_SCHEME';
 
 export const LOAD         = 'admin/map/LOAD';
 export const LOAD_SUCCESS = 'admin/map/LOAD_SUCCESS';
@@ -33,6 +34,7 @@ export const cancelCreatedPoints = createAction(CANCEL_CREATED_POINTS);
 export const addEdge             = createAction(ADD_EDGE);
 export const saveCreatedEdges    = createAction(SAVE_CREATED_EDGES);
 export const cancelCreatedEdges  = createAction(CANCEL_CREATED_EDGES);
+export const changeScheme        = createAction(CHANGE_SCHEME);
 
 const initialState = {
     loading:          false,
@@ -43,11 +45,19 @@ const initialState = {
         elements: [],
         edges:    []
     },
-    buildingSchemeId: 3
+    buildingSchemeId: 3,
+    buildingId:       2167
 };
 
 const reducer = (state = initialState, action = {}) => {
     switch (action.type) {
+
+        case CHANGE_SCHEME:
+
+            return {
+                ...state,
+                buildingSchemeId: action.payload
+            };
 
         case SAVE_CREATED_EDGES_SUCCESS:
 
@@ -90,7 +100,7 @@ const reducer = (state = initialState, action = {}) => {
             return {
                 ...state,
                 data:    mapFromServer(action.payload),
-                loading: false
+                loading: false,
             };
 
         case LOAD_FAILED:
@@ -155,7 +165,7 @@ const mapElement = getFloor => element => {
     }
 };
 
-const getStairLines    = element => {
+const getStairLines = element => {
     if (!isElementIsStair(element))
         return [];
 

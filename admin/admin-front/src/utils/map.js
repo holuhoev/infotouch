@@ -56,7 +56,6 @@ const getLineCount = sorted => {
     const minY = sorted[ 0 ][ 1 ];
 
     const length = maxY - minY;
-    console.log(length);
 
     return length / STAIRS_LINE_OFFSET;
 };

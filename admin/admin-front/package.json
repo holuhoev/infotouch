@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@mapbox/polylabel": "^1.0.2",
+    "antd": "^3.18.1",
     "axios": "^0.18.0",
     "classnames": "^2.2.6",
     "lodash": "^4.17.11",

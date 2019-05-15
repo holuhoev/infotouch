@@ -11,7 +11,6 @@ const error        = (method, endpoint) => err => {
 };
 
 export const getBuildingMap = buildingId => {
-    console.log("get map: " + buildingId);
 
     return axios
         .get(`${ GET_BUILDING_MAP }/${ buildingId }`)

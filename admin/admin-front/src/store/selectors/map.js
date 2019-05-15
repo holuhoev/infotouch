@@ -2,6 +2,9 @@ import { filter, propEq, map, has, prop, indexBy, __, find, isNil } from "ramda"
 import { isRoomOrCorridor } from "../reducers/map";
 import { isPointInPolygon } from "../../utils/map";
 
+export const selectSchemes    = state => selectMapData(state).schemes;
+export const selectBuildingId = state => state.map.buildingId;
+
 export const selectCurrentSchemeEdges    = state => {
     const pointsObj = indexBy(prop('id'), selectCurrentSchemePoints(state));
     const pointsHas = has(__, pointsObj);

@@ -1,6 +1,8 @@
 import React from 'react';
-import './App.scss';
+import 'antd/dist/antd.css';
 import { Redirect, Route, Switch } from "react-router-dom";
+
+import './App.scss';
 import { ROUTE } from "../../utils/routes";
 import MapPage from "../pages/map/MapPage";
 
