@@ -7,3 +7,4 @@ export const POST_CREATE_POINT = `/building/scheme/points/create`;
 export const POST_CREATE_EDGE  = `/building/scheme/edges`;
 
 export const GET_DEVICES = '/device';
+export const PUT_DEVICES = '/device';

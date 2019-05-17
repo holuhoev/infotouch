@@ -76,7 +76,7 @@ public class DeviceService {
     public Device create(DeviceRequest request) {
         Device device = new Device();
 
-        device.setLocation(geometryFactory.createPoint(new Coordinate(request.getX(), request.getY())));
+//        device.setLocation(geometryFactory.createPoint(new Coordinate(request.getX(), request.getY())));
 
         device.updateFromRequest(request);
 
@@ -87,7 +87,7 @@ public class DeviceService {
     public Device update(int id, DeviceRequest request) {
         Device device = this.getOneById(id);
 
-        device.setLocation(geometryFactory.createPoint(new Coordinate(request.getX(), request.getY())));
+//        device.setLocation(geometryFactory.createPoint(new Coordinate(request.getX(), request.getY())));
         device.updateFromRequest(request);
 
         return deviceRepository.save(device);

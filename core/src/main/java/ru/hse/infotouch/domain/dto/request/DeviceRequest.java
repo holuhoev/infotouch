@@ -4,9 +4,6 @@ public class DeviceRequest {
     private String title;
     private String description;
     private Integer buildingId;
-    // TODO: may be replaced when start front
-    private double x;
-    private double y;
 
     public String getTitle() {
         return title;
@@ -22,22 +19,6 @@ public class DeviceRequest {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public double getX() {
-        return x;
-    }
-
-    public void setX(double x) {
-        this.x = x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public void setY(double y) {
-        this.y = y;
     }
 
     public Integer getBuildingId() {
