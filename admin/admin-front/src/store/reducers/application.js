@@ -3,8 +3,14 @@ import {
     LOAD_DEVICES,
     LOAD_DEVICES_FAILED,
     LOAD_DEVICES_SUCCESS,
-    LOAD_ONE_DEVICE, LOAD_ONE_DEVICE_FAILED,
-    LOAD_ONE_DEVICE_SUCCESS, SAVE_DEVICE, SAVE_DEVICE_FAILED, SAVE_DEVICE_SUCCESS
+    LOAD_ONE_DEVICE,
+    LOAD_ONE_DEVICE_FAILED,
+    LOAD_ONE_DEVICE_SUCCESS,
+    OPEN_CREATE_DEVICE,
+    SAVE_DEVICE,
+    SAVE_DEVICE_FAILED,
+    SAVE_DEVICE_SUCCESS,
+    SAVE_NEW_DEVICE_SUCCESS
 } from "./devices";
 
 const initialState = {
@@ -17,6 +23,13 @@ const initialState = {
 
 export const application = (state = initialState, action = {}) => {
     switch (action.type) {
+
+        case OPEN_CREATE_DEVICE:
+
+            return {
+                ...state,
+                visibleModal: true
+            };
 
         case LOAD_DEVICES:
 
@@ -78,7 +91,7 @@ export const application = (state = initialState, action = {}) => {
             };
 
         case SAVE_DEVICE_SUCCESS:
-
+        case SAVE_NEW_DEVICE_SUCCESS:
             return {
                 ...state,
                 visibleModal: false,

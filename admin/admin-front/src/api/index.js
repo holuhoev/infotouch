@@ -1,7 +1,14 @@
 import axios from 'axios';
 import { propOr } from 'ramda';
 
-import { GET_BUILDING_MAP, GET_DEVICES, POST_CREATE_EDGE, POST_CREATE_POINT, PUT_DEVICES } from "../utils/url";
+import {
+    CREATE_DEVICE,
+    GET_BUILDING_MAP,
+    GET_DEVICES,
+    POST_CREATE_EDGE,
+    POST_CREATE_POINT,
+    PUT_DEVICE
+} from "../utils/url";
 
 
 const responseData = response => propOr([], 'data', response);
@@ -55,14 +62,24 @@ export const getDeviceById = (id) => {
         .catch(error('GET', `${ GET_DEVICES }/${ id }`))
 };
 
-export const putDevice = (id, { title, description, buildingId }) => {
+export const putDevice = ({ title, description }, id) => {
 
     return axios
-        .put(`${ PUT_DEVICES }/${ id }`, {
+        .put(`${ PUT_DEVICE }/${ id }`, {
             title,
-            description,
-            buildingId
+            description
         })
         .then(responseData)
-        .catch(error('GET', `${ PUT_DEVICES }/${ id }`))
+        .catch(error('PUT', `${ PUT_DEVICE }/${ id }`))
+};
+
+export const createDevice = ({ title, description }) => {
+
+    return axios
+        .post(CREATE_DEVICE, {
+            title,
+            description
+        })
+        .then(responseData)
+        .catch(error('POST', CREATE_DEVICE))
 };

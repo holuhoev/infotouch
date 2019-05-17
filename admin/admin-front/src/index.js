@@ -10,13 +10,18 @@ import './utils/axios';
 import './index.scss';
 import App from './components/app/App';
 import store from "./store";
+import { ConfigProvider, Empty } from "antd";
 
 moment.locale('ru');
 
 ReactDOM.render(
     <Provider store={ store }>
         <BrowserRouter basename={ context }>
-            <App/>
+            <ConfigProvider
+                renderEmpty={ () => (<Empty image={ Empty.PRESENTED_IMAGE_SIMPLE } description={ "Данных нет" }/>) }
+            >
+                <App/>
+            </ConfigProvider>
         </BrowserRouter>
     </Provider>,
     document.getElementById('root')

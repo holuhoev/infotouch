@@ -98,6 +98,5 @@ public class Device {
     public void updateFromRequest(DeviceRequest request) {
         this.setTitle(request.getTitle());
         this.setDescription(request.getDescription());
-        this.setBuildingId(request.getBuildingId());
     }
 }

@@ -2,8 +2,9 @@ import React, { Component } from "react";
 
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { cancelEditDevice, editDevice, loadDeviceById, loadDevices, saveDevice } from "../../../store/reducers/devices";
-import { Button, Form, Input, List, Modal, Skeleton, Spin, Typography } from "antd";
+import { createDevice, loadDeviceById, loadDevices } from "../../../store/reducers/devices";
+import { Button, ConfigProvider, Divider, Empty, List, Skeleton, Spin, Typography } from "antd";
+import DeviceModal from "./DeviceModal";
 
 const { Title } = Typography;
 
@@ -13,25 +14,12 @@ class DevicePage extends Component {
         this.props.loadDevices();
     }
 
-    onEdit = (device) => () => {
+    onEditClick = (device) => () => {
         this.props.loadDeviceById(device)
     };
 
-    handleEdit = (e) => {
-        const value = e.target.value;
-        const field = e.target.name;
-
-        if (field) {
-            this.props.editDevice({ [ field ]: value })
-        }
-    };
-
-    handleSave = () => {
-        this.props.saveDevice()
-    };
-
-    handleCancel = () => {
-        this.props.cancelEditDevice()
+    onCreateClick = () => {
+        this.props.createDevice()
     };
 
     renderDeviceAction = (device) => {
@@ -42,7 +30,7 @@ class DevicePage extends Component {
                 disabled={ listLoading }
                 type={ "link" }
                 icon={ "edit" }
-                onClick={ this.onEdit(device) }
+                onClick={ this.onEditClick(device) }
             >
                 Редактировать
             </Button>
@@ -50,13 +38,14 @@ class DevicePage extends Component {
     };
 
     render() {
-        const { devices, listLoading, editableDevice, visibleModal, oneLoading, saveLoading } = this.props;
+        const { devices, listLoading } = this.props;
 
-
-        console.log(visibleModal);
         return (
             <Spin spinning={ listLoading && devices.length === 0 }>
+                <Button icon="plus-circle" onClick={ this.onCreateClick }>Добавить</Button>
+                <Divider orientation={ "left" }>Список устройств</Divider>
                 <div style={ { minHeight: 300 } }>
+
                     <List
                         itemLayout="horizontal"
                         dataSource={ devices }
@@ -72,44 +61,8 @@ class DevicePage extends Component {
                             </List.Item>
                         ) }
                     />
+                    <DeviceModal/>
                 </div>
-                <Modal
-                    title={ editableDevice.title }
-                    visible={ visibleModal }
-                    onOk={ this.handleSave }
-                    confirmLoading={ saveLoading }
-                    onCancel={ this.handleCancel }
-                    okText={ "Сохранить" }
-                    okButtonProps={ {
-                        disabled: oneLoading
-                    } }
-                >
-                    <Spin spinning={ oneLoading }>
-                        <Form layout="vertical" onChange={ this.handleEdit }>
-                            <Form.Item>
-                                <Input name={ "title" } addonBefore={ "Заголовок" } value={ editableDevice.title }/>
-                            </Form.Item>
-                            <Form.Item label="Описание">
-                                <Input.TextArea
-                                    name={ "description" }
-                                    autosize={ false }
-                                    addonBefore={ "Описание" }
-                                    value={ editableDevice.description }
-                                />
-                            </Form.Item>
-                            <Form.Item>
-                                <Input
-                                    name={ "buildingId" }
-                                    style={ {
-                                        paddingTop: 10
-                                    } }
-                                    addonBefore={ "ID здания" }
-                                    value={ editableDevice.buildingId }
-                                />
-                            </Form.Item>
-                        </Form>
-                    </Spin>
-                </Modal>
             </Spin>
         )
     }
@@ -119,12 +72,8 @@ class DevicePage extends Component {
 const mapStateToProps = (state) => {
 
     return {
-        devices:        state.devices.list,
-        listLoading:    state.application.listLoading,
-        oneLoading:     state.application.oneLoading,
-        editableDevice: state.devices.editable,
-        visibleModal:   state.application.visibleModal,
-        saveLoading:    state.application.saveLoading,
+        devices:     state.devices.list,
+        listLoading: state.application.listLoading,
     }
 };
 
@@ -132,9 +81,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => bindActionCreators({
     loadDevices,
     loadDeviceById,
-    cancelEditDevice,
-    saveDevice,
-    editDevice
+    createDevice
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(DevicePage);

@@ -9,9 +9,9 @@ import {
     LOAD_ONE_DEVICE,
     LOAD_ONE_DEVICE_FAILED,
     LOAD_ONE_DEVICE_SUCCESS,
-    SAVE_DEVICE, SAVE_DEVICE_FAILED, SAVE_DEVICE_SUCCESS
+    SAVE_DEVICE, SAVE_DEVICE_FAILED, SAVE_DEVICE_SUCCESS, SAVE_NEW_DEVICE_SUCCESS
 } from "../reducers/devices";
-import { getDeviceById, getDevices, putDevice } from "../../api";
+import { createDevice, getDeviceById, getDevices, putDevice } from "../../api";
 
 export default function* main() {
     yield takeLatest(LOAD_DEVICES, fetchDeviceList);
@@ -51,12 +51,14 @@ function* saveDevice() {
     const state        = yield select();
     const deviceToSave = state.devices.editable;
 
+    console.log(deviceToSave);
     try {
-        const savedDevice = yield call(putDevice, deviceToSave.id, deviceToSave);
+        const savedDevice = yield call((deviceToSave.isNew ? createDevice : putDevice), deviceToSave, deviceToSave.id,);
 
-        yield put({ type: SAVE_DEVICE_SUCCESS, payload: savedDevice })
+        message.success(`Устройство с id=${ savedDevice.id } сохранено`);
+        yield put({ type: (deviceToSave.isNew? SAVE_NEW_DEVICE_SUCCESS: SAVE_DEVICE_SUCCESS), payload: savedDevice })
     } catch (error) {
-        message.error(`Ошибка сохранения устройства с id=${ deviceToSave.id }`);
+        message.error(`Ошибка сохранения устройства`);
         yield put({ type: SAVE_DEVICE_FAILED, payload: error })
     }
 }

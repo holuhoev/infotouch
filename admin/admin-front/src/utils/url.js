@@ -6,5 +6,6 @@ export const GET_BUILDING_MAP = '/building/scheme';
 export const POST_CREATE_POINT = `/building/scheme/points/create`;
 export const POST_CREATE_EDGE  = `/building/scheme/edges`;
 
-export const GET_DEVICES = '/device';
-export const PUT_DEVICES = '/device';
+export const GET_DEVICES   = '/device';
+export const PUT_DEVICE    = '/device';
+export const CREATE_DEVICE = '/device';
