@@ -26,20 +26,8 @@ public class PointService {
         this.entityManager = entityManager;
     }
 
-    public List<Point> createNew(int buildingSchemeId, List<CreatePointDTO> createPointDTOS) {
-        List<Point> toSave = createPointDTOS.stream()
-                .map(toCreate -> Point.createFromRequest(toCreate, buildingSchemeId))
-                .collect(Collectors.toList());
-
-        return pointRepository.saveAll(toSave);
-    }
-
-
     @Transactional
-    public List<Point> saveAll(int buildingSchemeId, List<CreatePointDTO> createPointDTOS) {
-        removePointsAndRelations(buildingSchemeId);
-
-        // 3. Создать новые точки
+    public List<Point> createNew(int buildingSchemeId, List<CreatePointDTO> createPointDTOS) {
         List<Point> toSave = createPointDTOS.stream()
                 .map(toCreate -> Point.createFromRequest(toCreate, buildingSchemeId))
                 .collect(Collectors.toList());
@@ -54,10 +42,20 @@ public class PointService {
                     Query query = entityManager.createNativeQuery("update map_element set point_id=:pointId where id=:schemeElementId");
                     query.setParameter("pointId", point.getId())
                             .setParameter("schemeElementId", point.getSchemeElementId());
+
                     return query;
                 }).forEach(Query::executeUpdate);
 
         return saved;
+    }
+
+
+    @Transactional
+    public List<Point> saveAll(int buildingSchemeId, List<CreatePointDTO> createPointDTOS) {
+        removePointsAndRelations(buildingSchemeId);
+
+        // 3. Создать новые точки
+        return createNew(buildingSchemeId, createPointDTOS);
     }
 
 

@@ -150,7 +150,7 @@ const mapElement = getFloor => element => {
 
     const floor        = getFloor(buildingSchemeId);
     const textCentroid = calculateCentroid(coordinates);
-    const stairLines   = getStairLines(element)
+    const stairLines   = getStairLines(element);
 
     return {
         id,

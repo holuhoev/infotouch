@@ -1,4 +1,5 @@
 import { takeLatest, put, call, select } from "redux-saga/effects";
+import { message } from 'antd';
 
 import {
     LOAD,
@@ -32,6 +33,7 @@ function* fetchBuildingMap(action) {
 
         yield put({ type: LOAD_SUCCESS, payload: buildingMap })
     } catch (error) {
+        message.error('Ошибка загрузки карты');
         yield put({ type: LOAD_FAILED, payload: error })
     }
 }
@@ -50,8 +52,11 @@ function* saveCreatedPoints() {
         };
 
         const saved = yield call(createNewPoints, data);
+
+        message.success('Сохранено');
         yield put({ type: SAVE_CREATED_POINTS_SUCCESS, payload: saved })
     } catch (error) {
+        message.error('Ошибка сохранения');
         yield put({ type: SAVE_CREATED_POINTS_FAILED, payload: error })
     }
 }
@@ -64,8 +69,11 @@ function* saveCreatedEdges() {
         };
 
         const saved = yield call(createNewEdges, data);
+
+        message.success('Сохранено');
         yield put({ type: SAVE_CREATED_EDGES_SUCCESS, payload: saved })
     } catch (error) {
+        message.error('Ошибка сохранения');
         yield put({ type: SAVE_CREATED_EDGES_FAILED, payload: error })
     }
 }

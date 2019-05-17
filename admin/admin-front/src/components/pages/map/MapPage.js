@@ -101,7 +101,8 @@ class MapPage extends Component {
 
         this.state = {
             mode:             MODE.NONE,
-            startEdgePointId: null
+            startEdgePointId: null,
+            selectedPointId:  null
         }
     }
 
@@ -218,6 +219,8 @@ class MapPage extends Component {
                 break;
             case MODE.ADD_STAIRS:
                 this.pointClickWithDrawingStair(point);
+            case MODE.NONE:
+                this.setState({ selectedPointId: point.id })
                 break;
         }
     };
