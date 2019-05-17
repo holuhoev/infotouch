@@ -13,7 +13,7 @@ import {
 import {
     selectCurrentSchemeEdges,
     selectCurrentSchemeElements,
-    selectCurrentSchemePoints, selectCurrentSchemeStairPoint, selectPoints
+    selectPoints
 } from "../../../store/selectors/map";
 import { find, isNil, propEq } from "ramda";
 import './MapPage.scss'
@@ -67,7 +67,6 @@ function Element(item) {
             { isElementHasLabel(item) && (
                 <text
                     fill="#507b8f"
-                    // fontWeight="bold"
                     x={ item.textCentroid[ 0 ] }
                     y={ item.textCentroid[ 1 ] }
                     fontSize="8"
@@ -149,7 +148,7 @@ class MapPage extends Component {
 
     cancelDrawingEdges = () => {
         this.svgElem.removeEventListener('mousemove', this.moveAddingPoint);
-        this.props.cancelCreatedEdges()
+        this.props.cancelCreatedEdges();
         this.setState({ mode: MODE.NONE, startEdgePointId: null });
     };
 
@@ -169,6 +168,8 @@ class MapPage extends Component {
                 break;
             case MODE.ADD_STAIRS:
                 this.cancelAddStairs();
+                break;
+            default:
                 break;
         }
     };
@@ -224,8 +225,9 @@ class MapPage extends Component {
                 this.pointClickWithDrawingStair(point);
                 break;
             case MODE.NONE:
-
                 this.setState({ selectedPoint: point });
+                break;
+            default:
                 break;
         }
     };
@@ -387,8 +389,8 @@ class MapPage extends Component {
 
 
     render() {
-        const { elements, loading, stairPoints } = this.props;
-        const { mode }                           = this.state;
+        const { elements, loading } = this.props;
+        const { mode }              = this.state;
 
         return (
             <div className={ "map-page" }>
@@ -455,11 +457,10 @@ class MapPage extends Component {
 const mapStateToProps = (state) => {
 
     return {
-        points:      selectPoints(state),
-        elements:    selectCurrentSchemeElements(state),
-        edges:       selectCurrentSchemeEdges(state),
-        stairPoints: selectCurrentSchemeStairPoint(state),
-        loading:     state.map.loading
+        points:   selectPoints(state),
+        elements: selectCurrentSchemeElements(state),
+        edges:    selectCurrentSchemeEdges(state),
+        loading:  state.map.loading
     }
 };
 
