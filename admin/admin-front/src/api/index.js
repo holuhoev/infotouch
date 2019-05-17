@@ -5,7 +5,8 @@ import {
     GET_BUILDING_MAP,
     DEVICE,
     POST_CREATE_EDGE,
-    POST_CREATE_POINT
+    POST_CREATE_POINT,
+    SERVICE
 } from "../utils/url";
 
 
@@ -88,4 +89,12 @@ export const deleteDeviceById = (id) => {
         .delete(`${ DEVICE }/${ id }`)
         .then(responseData)
         .catch(error('DELETE', `${ DEVICE }/${ id }`))
+};
+
+export const getServices = () => {
+
+    return axios
+        .get(SERVICE)
+        .then(responseData)
+        .catch(error('GET', SERVICE))
 };

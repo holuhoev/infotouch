@@ -7,6 +7,7 @@ import createdPoints from "./reducers/createdPoints";
 import createdEdges from "./reducers/createdEdges";
 import { application } from "./reducers/application";
 import { devices } from "./reducers/devices";
+import { services } from "./reducers/services";
 
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -17,7 +18,8 @@ const rootReducer = combineReducers({
     createdPoints,
     createdEdges,
     application,
-    devices
+    devices,
+    services
 });
 
 

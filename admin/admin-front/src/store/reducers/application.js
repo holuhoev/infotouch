@@ -12,13 +12,15 @@ import {
     SAVE_DEVICE_SUCCESS,
     SAVE_NEW_DEVICE_SUCCESS
 } from "./devices";
+import { LOAD_SERVICES, LOAD_SERVICES_FAILED, LOAD_SERVICES_SUCCESS } from "./services";
 
 const initialState = {
-    listLoading:       false,
-    oneLoading:        false,
-    error:             null,
-    visibleModal:      false,
-    saveLoading:       false
+    listLoading:     false,
+    servicesLoading: false,
+    oneLoading:      false,
+    error:           null,
+    visibleModal:    false,
+    saveLoading:     false
 };
 
 export const application = (state = initialState, action = {}) => {
@@ -32,10 +34,30 @@ export const application = (state = initialState, action = {}) => {
             };
 
         case LOAD_DEVICES:
-
             return {
                 ...state,
                 listLoading: true
+            };
+
+        case LOAD_SERVICES:
+            return {
+                ...state,
+                servicesLoading: true
+            };
+
+        case LOAD_SERVICES_SUCCESS:
+
+            return {
+                ...state,
+                servicesLoading: false
+            };
+
+        case LOAD_SERVICES_FAILED:
+
+            return {
+                ...state,
+                servicesLoading: false,
+                error:           action.payload
             };
 
         case LOAD_DEVICES_SUCCESS:

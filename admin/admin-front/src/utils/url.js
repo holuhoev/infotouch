@@ -6,4 +6,5 @@ export const GET_BUILDING_MAP = '/building/scheme';
 export const POST_CREATE_POINT = `/building/scheme/points/create`;
 export const POST_CREATE_EDGE  = `/building/scheme/edges`;
 
-export const DEVICE        = '/device';
+export const DEVICE  = '/device';
+export const SERVICE = '/hseLocation';
