@@ -13,12 +13,13 @@ import {
 import {
     selectCurrentSchemeEdges,
     selectCurrentSchemeElements,
-    selectCurrentSchemePoints
+    selectCurrentSchemePoints, selectCurrentSchemeStairPoint, selectPoints
 } from "../../../store/selectors/map";
 import { find, isNil, propEq } from "ramda";
 import './MapPage.scss'
-import { Button, Dropdown, Menu, Spin } from "antd";
+import { Button, Dropdown, Menu, Spin, message } from "antd";
 import SchemeMenu from "./scheme-menu/SchemeMenu";
+import PointInfo from "./point-info/PointInfo";
 
 const ButtonGroup = Button.Group;
 
@@ -196,6 +197,8 @@ class MapPage extends Component {
         } else if (mode === MODE.ADD_EDGE) {
             this.svgElem.removeEventListener('mousemove', this.drawEdge);
             this.props.saveCreatedEdges();
+        } else if (mode === MODE.ADD_STAIRS) {
+            this.props.saveCreatedEdges();
         }
 
 
@@ -219,8 +222,10 @@ class MapPage extends Component {
                 break;
             case MODE.ADD_STAIRS:
                 this.pointClickWithDrawingStair(point);
+                break;
             case MODE.NONE:
-                this.setState({ selectedPointId: point.id })
+
+                this.setState({ selectedPoint: point });
                 break;
         }
     };
@@ -238,6 +243,7 @@ class MapPage extends Component {
         if (this.selectingFirstPoint) {
             this.setState({ startEdgePointId: point.id })
         } else if (this.isDrawingStair) {
+            message.info("Добавлено");
             this.endDrawEdge(point)
         }
     };
@@ -290,7 +296,7 @@ class MapPage extends Component {
                 key={ index }
                 cx={ point.x }
                 cy={ point.y }
-                r="1"
+                r="1.5"
                 fill={ "#26c2ed" }
                 stroke={ "#26c2ed" }
             />,
@@ -298,7 +304,7 @@ class MapPage extends Component {
                 <circle
                     className={ "map-page__point-ring" }
                     onClick={ this.onPointClick(point) }
-                    key={ index + "_" }
+                    key={ index + "_ring" }
                     cx={ point.x }
                     cy={ point.y }
                     r="3"
@@ -306,7 +312,20 @@ class MapPage extends Component {
                     stroke={ "#26c2ed" }
                     strokeWidth={ "0.5" }
                 />
-            ) ]));
+            ),
+            (point.isInStair) && (
+                <circle
+                    onClick={ this.onPointClick(point) }
+                    key={ index + "_stair" }
+                    cx={ point.x }
+                    cy={ point.y }
+                    r="4"
+                    fill={ "none" }
+                    stroke={ "#274fed" }
+                    strokeWidth={ "1" }
+                />
+            )
+        ]));
     }
 
     renderEdges() {
@@ -366,12 +385,13 @@ class MapPage extends Component {
         )
     }
 
+
     render() {
-        const { elements, loading } = this.props;
-        const { mode }              = this.state;
+        const { elements, loading, stairPoints } = this.props;
+        const { mode }                           = this.state;
 
         return (
-            <div className="map-page">
+            <div className={ "map-page" }>
                 <SchemeMenu/>
                 <div className="map-page__button-menu">
 
@@ -425,19 +445,21 @@ class MapPage extends Component {
                         </svg>
                     </Spin>
                 </div>
-
+                { this.state.selectedPoint && (<PointInfo point={ this.state.selectedPoint }/>) }
             </div>
         )
     }
+
 }
 
 const mapStateToProps = (state) => {
 
     return {
-        points:   selectCurrentSchemePoints(state),
-        elements: selectCurrentSchemeElements(state),
-        edges:    selectCurrentSchemeEdges(state),
-        loading:  state.map.loading
+        points:      selectPoints(state),
+        elements:    selectCurrentSchemeElements(state),
+        edges:       selectCurrentSchemeEdges(state),
+        stairPoints: selectCurrentSchemeStairPoint(state),
+        loading:     state.map.loading
     }
 };
 
