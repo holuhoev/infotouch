@@ -1,4 +1,4 @@
-import { LOAD_DEVICES_FAILED, LOAD_DEVICES_SUCCESS } from "./devices";
+import { LOAD_DEVICES, LOAD_DEVICES_FAILED, LOAD_DEVICES_SUCCESS } from "./devices";
 
 const initialState = {
     loading: false,
@@ -7,6 +7,13 @@ const initialState = {
 
 export const application = (state = initialState, action = {}) => {
     switch (action.type) {
+
+        case LOAD_DEVICES:
+
+            return {
+                ...state,
+                loading: true
+            };
 
         case LOAD_DEVICES_SUCCESS:
 

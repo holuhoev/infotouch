@@ -1,4 +1,4 @@
-import { takeLatest, put, call } from "redux-saga/effects";
+import { takeLatest, put, call ,delay} from "redux-saga/effects";
 
 
 import { message } from "antd";
@@ -15,6 +15,7 @@ export default function* main() {
 
 function* fetchBuildingMap(action) {
     try {
+        yield delay(1000);
         const deviceList = yield call(getDevices);
 
         yield put({ type: LOAD_DEVICES_SUCCESS, payload: deviceList })

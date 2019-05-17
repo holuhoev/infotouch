@@ -3,6 +3,9 @@ import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { loadDevices } from "../../../store/reducers/devices";
+import { List, Spin, Typography } from "antd";
+
+const { Title } = Typography;
 
 class DevicePage extends Component {
 
@@ -11,12 +14,26 @@ class DevicePage extends Component {
     }
 
     render() {
-        const { devices } = this.props;
+        const { devices, loading } = this.props;
 
         return (
-            <div>
-                Device Page
-            </div>
+            <Spin spinning={ loading }>
+                <div style={ { minHeight: 300 } }>
+                    <List
+                        itemLayout="horizontal"
+                        dataSource={ devices }
+                        renderItem={ device => (
+                            <List.Item>
+                                <List.Item.Meta
+                                    avatar={ <Title level={ 4 }>{ device.id }</Title> }
+                                    title={ device.title }
+                                    description={ device.description }
+                                />
+                            </List.Item>
+                        ) }
+                    />
+                </div>
+            </Spin>
         )
     }
 }
@@ -25,7 +42,8 @@ class DevicePage extends Component {
 const mapStateToProps = (state) => {
 
     return {
-        devices: state.devices
+        devices: state.devices,
+        loading: state.application.loading
     }
 };
 
