@@ -1,6 +1,6 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import { Link, Redirect, Route, Switch } from "react-router-dom";
+import { Link, Redirect, Route, Switch, withRouter } from "react-router-dom";
 import { Layout, Menu, Breadcrumb } from 'antd';
 
 import './App.scss';
@@ -12,7 +12,7 @@ import DevicePage from "../pages/device/DevicePage";
 const { Header, Content, Footer } = Layout;
 
 
-function App() {
+function App({ location }) {
 
     return (
         <div className="root-container">
@@ -24,12 +24,12 @@ function App() {
                     <Menu
                         theme="light"
                         mode="horizontal"
-                        defaultSelectedKeys={ [ '1' ] }
+                        selectedKeys={ [ location.pathname ] }
                         style={ { lineHeight: '64px' } }
                     >
-                        <Menu.Item key="1"><Link to={ ROUTE.MAP }>Карта</Link></Menu.Item>
-                        <Menu.Item key="2"><Link to={ ROUTE.DEVICE }>Устройства</Link></Menu.Item>
-                        <Menu.Item key="3"><Link to={ ROUTE.SERVICE }>Услуги</Link></Menu.Item>
+                        <Menu.Item key={ ROUTE.MAP }><Link to={ ROUTE.MAP }>Карта</Link></Menu.Item>
+                        <Menu.Item key={ ROUTE.DEVICE }><Link to={ ROUTE.DEVICE }>Устройства</Link></Menu.Item>
+                        <Menu.Item key={ ROUTE.SERVICE }><Link to={ ROUTE.SERVICE }>Услуги</Link></Menu.Item>
                     </Menu>
                 </Header>
                 <Content style={ { padding: '0 50px' } }>
@@ -53,4 +53,4 @@ function App() {
     );
 }
 
-export default App;
+export default withRouter(App);
