@@ -45,10 +45,14 @@ export const createNewEdges = data => {
         .catch(error('POST', POST_CREATE_EDGE));
 };
 
-export const getDevices = () => {
+export const getDevices = (searchString = '') => {
 
     return axios
-        .get(DEVICE)
+        .get(DEVICE, {
+            params: {
+                searchString
+            }
+        })
         .then(responseData)
         .catch(error('GET', DEVICE))
 };

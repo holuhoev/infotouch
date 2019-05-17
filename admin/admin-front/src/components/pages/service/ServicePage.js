@@ -2,14 +2,19 @@ import React, { Component } from "react";
 import { Button, Divider, Skeleton, Spin, List, Typography } from "antd";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
+
 import { loadServices } from "../../../store/reducers/services";
+import { loadDevices } from "../../../store/reducers/devices";
+import DeviceSelector from "../../common/building/DeviceSelector";
+import './ServicePage.scss'
 
 const { Title } = Typography;
 
 class ServicePage extends Component {
 
     componentDidMount() {
-        this.props.loadServices()
+        this.props.loadServices();
+        this.props.loadDevices()
     }
 
     render() {
@@ -20,6 +25,7 @@ class ServicePage extends Component {
                 <Spin spinning={ servicesLoading && services.length === 0 }>
                     <div className={ "service-page__button-menu" }>
                         <Button icon="plus-circle">Добавить</Button>
+                        <DeviceSelector style={ { width: 500, marginLeft: 50 } }/>
                     </div>
                     <Divider orientation={ "left" }>Список услуг</Divider>
                     <div style={ {
@@ -54,13 +60,14 @@ const mapStateToProps = (state) => {
 
     return {
         servicesLoading: state.application.servicesLoading,
-        services: state.services.list
+        services:        state.services.list
     }
 };
 
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    loadServices
+    loadServices,
+    loadDevices
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ServicePage);

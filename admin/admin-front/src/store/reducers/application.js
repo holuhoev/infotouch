@@ -10,7 +10,7 @@ import {
     SAVE_DEVICE,
     SAVE_DEVICE_FAILED,
     SAVE_DEVICE_SUCCESS,
-    SAVE_NEW_DEVICE_SUCCESS
+    SAVE_NEW_DEVICE_SUCCESS, SELECT_DEVICE
 } from "./devices";
 import { LOAD_SERVICES, LOAD_SERVICES_FAILED, LOAD_SERVICES_SUCCESS } from "./services";
 
@@ -20,11 +20,19 @@ const initialState = {
     oneLoading:      false,
     error:           null,
     visibleModal:    false,
-    saveLoading:     false
+    saveLoading:     false,
+    selectedDevice:  undefined
 };
 
 export const application = (state = initialState, action = {}) => {
     switch (action.type) {
+
+        case SELECT_DEVICE:
+
+            return {
+                ...state,
+                selectedDevice: action.payload
+            };
 
         case OPEN_CREATE_DEVICE:
 

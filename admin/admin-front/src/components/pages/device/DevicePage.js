@@ -10,7 +10,7 @@ import {
 } from "../../../store/reducers/devices";
 import { Button, Divider, List, Skeleton, Spin, Typography } from "antd";
 import DeviceModal from "./DeviceModal";
-import  { showDeleteConfirm } from "./DeleteModal";
+import { showDeleteConfirm } from "./DeleteModal";
 
 const { Title } = Typography;
 
@@ -34,7 +34,7 @@ class DevicePage extends Component {
         showDeleteConfirm({ id, deleteDevice })
     };
 
-    renderDeviceAction = (device) => {
+    renderDeviceActions = (device) => {
         const { listLoading } = this.props;
 
         return [ (
@@ -49,7 +49,7 @@ class DevicePage extends Component {
         ), (
             <Button
                 disabled={ listLoading }
-                type={ "danger" }
+                type={ "link" }
                 icon={ "delete" }
                 onClick={ this.onDeleteClick(device) }
             />
@@ -72,7 +72,7 @@ class DevicePage extends Component {
                         itemLayout="horizontal"
                         dataSource={ devices }
                         renderItem={ device => (
-                            <List.Item actions={ this.renderDeviceAction(device) }>
+                            <List.Item actions={ this.renderDeviceActions(device) }>
                                 <Skeleton loading={ listLoading } active>
                                     <List.Item.Meta
                                         avatar={ <Title level={ 4 }>{ device.id }</Title> }
@@ -84,7 +84,6 @@ class DevicePage extends Component {
                         ) }
                     />
                     <DeviceModal/>
-                    {/*<DeleteModal/>*/}
                 </div>
             </Spin>
         )
