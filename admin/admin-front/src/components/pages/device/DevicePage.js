@@ -2,9 +2,15 @@ import React, { Component } from "react";
 
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { createDevice, loadDeviceById, loadDevices } from "../../../store/reducers/devices";
-import { Button, ConfigProvider, Divider, Empty, List, Skeleton, Spin, Typography } from "antd";
+import {
+    createDevice,
+    deleteDevice,
+    loadDeviceById,
+    loadDevices
+} from "../../../store/reducers/devices";
+import { Button, Divider, List, Skeleton, Spin, Typography } from "antd";
 import DeviceModal from "./DeviceModal";
+import  { showDeleteConfirm } from "./DeleteModal";
 
 const { Title } = Typography;
 
@@ -22,6 +28,12 @@ class DevicePage extends Component {
         this.props.createDevice()
     };
 
+    onDeleteClick = ({ id }) => () => {
+        const { deleteDevice } = this.props;
+
+        showDeleteConfirm({ id, deleteDevice })
+    };
+
     renderDeviceAction = (device) => {
         const { listLoading } = this.props;
 
@@ -34,6 +46,13 @@ class DevicePage extends Component {
             >
                 Редактировать
             </Button>
+        ), (
+            <Button
+                disabled={ listLoading }
+                type={ "danger" }
+                icon={ "delete" }
+                onClick={ this.onDeleteClick(device) }
+            />
         ) ]
     };
 
@@ -44,8 +63,11 @@ class DevicePage extends Component {
             <Spin spinning={ listLoading && devices.length === 0 }>
                 <Button icon="plus-circle" onClick={ this.onCreateClick }>Добавить</Button>
                 <Divider orientation={ "left" }>Список устройств</Divider>
-                <div style={ { minHeight: 300 } }>
-
+                <div style={ {
+                    overflow: 'auto',
+                    height:   444
+                } }
+                >
                     <List
                         itemLayout="horizontal"
                         dataSource={ devices }
@@ -62,6 +84,7 @@ class DevicePage extends Component {
                         ) }
                     />
                     <DeviceModal/>
+                    {/*<DeleteModal/>*/}
                 </div>
             </Spin>
         )
@@ -81,7 +104,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => bindActionCreators({
     loadDevices,
     loadDeviceById,
-    createDevice
+    createDevice,
+    deleteDevice
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(DevicePage);

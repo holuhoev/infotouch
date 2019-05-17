@@ -14,11 +14,11 @@ import {
 } from "./devices";
 
 const initialState = {
-    listLoading:  false,
-    oneLoading:   false,
-    error:        null,
-    visibleModal: false,
-    saveLoading:  false
+    listLoading:       false,
+    oneLoading:        false,
+    error:             null,
+    visibleModal:      false,
+    saveLoading:       false
 };
 
 export const application = (state = initialState, action = {}) => {

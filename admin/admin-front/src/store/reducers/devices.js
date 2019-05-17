@@ -1,4 +1,5 @@
 import { createAction } from "../../utils/action";
+import { complement, filter, propEq } from "ramda";
 
 
 export const LOAD_DEVICES         = 'admin/device/LOAD_DEVICES';
@@ -18,8 +19,10 @@ export const SAVE_DEVICE_SUCCESS     = 'admin/device/SAVE_DEVICE_SUCCESS';
 export const SAVE_NEW_DEVICE_SUCCESS = 'admin/device/SAVE_NEW_DEVICE_SUCCESS';
 export const SAVE_DEVICE_FAILED      = 'admin/device/SAVE_DEVICE_FAILED';
 
-export const EDIT_DEVICE = 'admin/device/EDIT_DEVICE';
-
+export const EDIT_DEVICE           = 'admin/device/EDIT_DEVICE';
+export const DELETE_DEVICE         = 'admin/device/DELETE_DEVICE';
+export const DELETE_DEVICE_SUCCESS = 'admin/device/DELETE_DEVICE_SUCCESS';
+export const DELETE_DEVICE_FAILED  = 'admin/device/DELETE_DEVICE_FAILED';
 
 export const createDevice     = createAction(OPEN_CREATE_DEVICE);
 export const editDevice       = createAction(EDIT_DEVICE);
@@ -27,6 +30,7 @@ export const loadDevices      = createAction(LOAD_DEVICES);
 export const loadDeviceById   = createAction(LOAD_ONE_DEVICE);
 export const cancelEditDevice = createAction(CANCEL_EDIT_DEVICE);
 export const saveDevice       = createAction(SAVE_DEVICE);
+export const deleteDevice     = createAction(DELETE_DEVICE);
 
 const initState = {
     list:     [],
@@ -36,6 +40,15 @@ const initState = {
 export const devices = (state = initState, action = {}) => {
 
     switch (action.type) {
+
+        case DELETE_DEVICE_SUCCESS:
+            const notDeleted = complement(propEq('id', action.payload));
+
+            return {
+                ...state,
+                list: filter(notDeleted, state.list)
+            };
+
         case OPEN_CREATE_DEVICE:
 
             return {

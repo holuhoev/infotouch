@@ -2,12 +2,10 @@ import axios from 'axios';
 import { propOr } from 'ramda';
 
 import {
-    CREATE_DEVICE,
     GET_BUILDING_MAP,
-    GET_DEVICES,
+    DEVICE,
     POST_CREATE_EDGE,
-    POST_CREATE_POINT,
-    PUT_DEVICE
+    POST_CREATE_POINT
 } from "../utils/url";
 
 
@@ -49,37 +47,45 @@ export const createNewEdges = data => {
 export const getDevices = () => {
 
     return axios
-        .get(GET_DEVICES)
+        .get(DEVICE)
         .then(responseData)
-        .catch(error('GET', GET_DEVICES))
+        .catch(error('GET', DEVICE))
 };
 
 export const getDeviceById = (id) => {
 
     return axios
-        .get(`${ GET_DEVICES }/${ id }`)
+        .get(`${ DEVICE }/${ id }`)
         .then(responseData)
-        .catch(error('GET', `${ GET_DEVICES }/${ id }`))
+        .catch(error('GET', `${ DEVICE }/${ id }`))
 };
 
 export const putDevice = ({ title, description }, id) => {
 
     return axios
-        .put(`${ PUT_DEVICE }/${ id }`, {
+        .put(`${ DEVICE }/${ id }`, {
             title,
             description
         })
         .then(responseData)
-        .catch(error('PUT', `${ PUT_DEVICE }/${ id }`))
+        .catch(error('PUT', `${ DEVICE }/${ id }`))
 };
 
 export const createDevice = ({ title, description }) => {
 
     return axios
-        .post(CREATE_DEVICE, {
+        .post(DEVICE, {
             title,
             description
         })
         .then(responseData)
-        .catch(error('POST', CREATE_DEVICE))
+        .catch(error('POST', DEVICE))
+};
+
+export const deleteDeviceById = (id) => {
+
+    return axios
+        .delete(`${ DEVICE }/${ id }`)
+        .then(responseData)
+        .catch(error('DELETE', `${ DEVICE }/${ id }`))
 };
