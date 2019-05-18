@@ -10,28 +10,51 @@ import {
     SAVE_DEVICE,
     SAVE_DEVICE_FAILED,
     SAVE_DEVICE_SUCCESS,
-    SAVE_NEW_DEVICE_SUCCESS, SELECT_DEVICE
+    SAVE_NEW_DEVICE_SUCCESS,
 } from "./devices";
 import { LOAD_SERVICES, LOAD_SERVICES_FAILED, LOAD_SERVICES_SUCCESS } from "./services";
+import { LOAD_BUILDINGS, LOAD_BUILDINGS_FAILED, LOAD_BUILDINGS_SUCCESS, SELECT_BUILDING } from "./buildings";
 
 const initialState = {
-    listLoading:     false,
-    servicesLoading: false,
-    oneLoading:      false,
-    error:           null,
-    visibleModal:    false,
-    saveLoading:     false,
-    selectedDevice:  undefined
+    listLoading:      false,
+    servicesLoading:  false,
+    buildingsLoading: false,
+    oneLoading:       false,
+    error:            null,
+    visibleModal:     false,
+    saveLoading:      false,
+    selectedBuildingId: undefined
 };
 
 export const application = (state = initialState, action = {}) => {
     switch (action.type) {
 
-        case SELECT_DEVICE:
+        case LOAD_BUILDINGS:
 
             return {
                 ...state,
-                selectedDevice: action.payload
+                buildingsLoading: true
+            };
+        case LOAD_BUILDINGS_SUCCESS:
+
+            return {
+                ...state,
+                buildingsLoading: false
+            };
+
+        case LOAD_BUILDINGS_FAILED:
+
+            return {
+                ...state,
+                buildingsLoading: false,
+                error:            action.payload
+            };
+
+        case SELECT_BUILDING:
+
+            return {
+                ...state,
+                selectedBuildingId: action.payload
             };
 
         case OPEN_CREATE_DEVICE:
@@ -46,7 +69,6 @@ export const application = (state = initialState, action = {}) => {
                 ...state,
                 listLoading: true
             };
-
         case LOAD_SERVICES:
             return {
                 ...state,

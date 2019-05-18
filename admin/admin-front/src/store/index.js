@@ -8,6 +8,7 @@ import createdEdges from "./reducers/createdEdges";
 import { application } from "./reducers/application";
 import { devices } from "./reducers/devices";
 import { services } from "./reducers/services";
+import buildings from "./reducers/buildings";
 
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -19,7 +20,8 @@ const rootReducer = combineReducers({
     createdEdges,
     application,
     devices,
-    services
+    services,
+    buildings
 });
 
 

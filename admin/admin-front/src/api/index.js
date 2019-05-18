@@ -6,7 +6,7 @@ import {
     DEVICE,
     POST_CREATE_EDGE,
     POST_CREATE_POINT,
-    SERVICE
+    SERVICE, BUILDING
 } from "../utils/url";
 
 
@@ -101,4 +101,12 @@ export const getServices = () => {
         .get(SERVICE)
         .then(responseData)
         .catch(error('GET', SERVICE))
+};
+
+export const getBuildings = ()=>{
+
+    return axios
+        .get(BUILDING)
+        .then(responseData)
+        .catch(error('GET', BUILDING))
 };

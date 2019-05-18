@@ -11,22 +11,18 @@ import {
     LOAD_ONE_DEVICE,
     LOAD_ONE_DEVICE_FAILED,
     LOAD_ONE_DEVICE_SUCCESS,
-    SAVE_DEVICE, SAVE_DEVICE_FAILED, SAVE_DEVICE_SUCCESS, SAVE_NEW_DEVICE_SUCCESS, SEARCH_DEVICE
+    SAVE_DEVICE,
+    SAVE_DEVICE_FAILED,
+    SAVE_DEVICE_SUCCESS,
+    SAVE_NEW_DEVICE_SUCCESS
 } from "../reducers/devices";
 import { createDevice, deleteDeviceById, getDeviceById, getDevices, putDevice } from "../../api";
 
 export default function* main() {
     yield takeLatest(LOAD_DEVICES, fetchDeviceList);
-    yield takeLatest(SEARCH_DEVICE, searchDevice);
     yield takeLatest(LOAD_ONE_DEVICE, fetchOneDeviceById);
     yield takeLatest(SAVE_DEVICE, saveDevice);
     yield takeLatest(DELETE_DEVICE, deleteDevice);
-}
-
-function* searchDevice(action) {
-    yield delay(250);
-
-    yield put({ type: LOAD_DEVICES, payload: action.payload })
 }
 
 function* fetchDeviceList(action) {
