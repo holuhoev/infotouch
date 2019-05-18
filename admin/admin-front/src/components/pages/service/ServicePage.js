@@ -3,11 +3,16 @@ import { Button, Divider, Skeleton, Spin, List, Typography } from "antd";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
-import { deleteService, loadServices, openEditServiceModal } from "../../../store/reducers/services";
+import {
+    deleteService,
+    loadServices,
+    openCreateServiceModal,
+    openEditServiceModal
+} from "../../../store/reducers/services";
 import { loadBuildings } from "../../../store/reducers/buildings";
 import './ServicePage.scss'
 import BuildingSelector from "../../common/building/BuildingSelector";
-import { selectServiceList } from "../../../store/selectors/services";
+import { selectIsCreateEnable, selectServiceList } from "../../../store/selectors/services";
 import ServiceModal from "./ServiceModal";
 import { showDeleteConfirm } from "../../common/delete-modal/DeleteModal";
 import { renderListItemActions } from "../../common/list-item-actions/ListItemActions";
@@ -27,7 +32,7 @@ class ServicePage extends Component {
     };
 
     onCreateClick = () => {
-
+        this.props.openCreateServiceModal()
     };
 
     onDeleteClick = ({ id }) => () => {
@@ -38,13 +43,19 @@ class ServicePage extends Component {
 
 
     render() {
-        const { servicesLoading, services } = this.props;
+        const { servicesLoading, services, isCreateEnable } = this.props;
 
         return (
             <div>
                 <Spin spinning={ servicesLoading && services.length === 0 }>
                     <div className={ "service-page__button-menu" }>
-                        <Button icon="plus-circle" disabled={ servicesLoading }>Добавить</Button>
+                        <Button
+                            icon="plus-circle"
+                            disabled={ !isCreateEnable }
+                            onClick={ this.onCreateClick }
+                        >
+                            Добавить
+                        </Button>
                         <BuildingSelector style={ { width: 430 } } afterSelect={ this.props.loadServices }/>
                     </div>
                     <Divider orientation={ "left" }>Список услуг</Divider>
@@ -91,7 +102,8 @@ const mapStateToProps = (state) => {
 
     return {
         servicesLoading: state.application.servicesLoading,
-        services:        selectServiceList(state)
+        services:        selectServiceList(state),
+        isCreateEnable:  selectIsCreateEnable(state)
     }
 };
 
@@ -100,7 +112,8 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     loadServices,
     loadBuildings,
     deleteService,
-    openEditServiceModal
+    openEditServiceModal,
+    openCreateServiceModal
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ServicePage);

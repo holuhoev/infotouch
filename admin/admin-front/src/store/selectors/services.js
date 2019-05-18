@@ -25,3 +25,5 @@ export const selectServiceList = state => {
 export const getServiceTypeOptions = () => {
     return values(mapObjIndexed((value, key) => ({ label: value, value: key }), SERVICE_TYPE_LABELS))
 };
+
+export const selectIsCreateEnable = state => !!state.application.selectedBuildingId && !state.application.servicesLoading;

@@ -4,6 +4,9 @@ import { call, put, select, takeLatest } from "redux-saga/effects";
 import { message } from "antd";
 
 import {
+    DELETE_SERVICE,
+    DELETE_SERVICE_FAILED,
+    DELETE_SERVICE_SUCCESS,
     LOAD_SERVICES,
     LOAD_SERVICES_FAILED,
     LOAD_SERVICES_SUCCESS,
@@ -12,13 +15,14 @@ import {
     SAVE_SERVICE_FAILED,
     SAVE_SERVICE_SUCCESS
 } from "../reducers/services";
-import { createService, getServices, putService } from "../../api";
+import { createService, deleteServiceById, getServices, putService } from "../../api";
 
 import { selectBuildingId } from "../selectors/map";
 
 export default function* main() {
     yield takeLatest(LOAD_SERVICES, fetchServices);
     yield takeLatest(SAVE_SERVICE, saveService);
+    yield takeLatest(DELETE_SERVICE, deleteService);
 }
 
 function* saveService() {
@@ -51,8 +55,22 @@ function* fetchServices(action) {
 
         yield put({ type: LOAD_SERVICES_SUCCESS, payload: services })
     } catch (error) {
-        message.error('Ошибка загрузки устройств');
+        message.error('Ошибка загрузки списка услуг');
         yield put({ type: LOAD_SERVICES_FAILED, payload: error })
+    }
+}
+
+
+function* deleteService(action) {
+    const id = action.payload;
+    try {
+        yield call(deleteServiceById, id);
+
+        yield put({ type: DELETE_SERVICE_SUCCESS, payload: id });
+        message.info(`Услуга с id =${ id } удалена`);
+    } catch (error) {
+        message.error(`Ошибка удаления услуги с id =${ id }`);
+        yield put({ type: DELETE_SERVICE_FAILED, payload: error })
     }
 }
 

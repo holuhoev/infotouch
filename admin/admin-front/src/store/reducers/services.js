@@ -23,13 +23,13 @@ export const DELETE_SERVICE         = 'admin/service/DELETE_SERVICE';
 export const DELETE_SERVICE_SUCCESS = 'admin/service/DELETE_SERVICE_SUCCESS';
 export const DELETE_SERVICE_FAILED  = 'admin/service/DELETE_SERVICE_FAILED';
 
-
-export const openEditServiceModal = createAction(OPEN_EDIT_SERVICE_MODAL);
-export const loadServices         = createAction(LOAD_SERVICES);
-export const saveService          = createAction(SAVE_SERVICE);
-export const deleteService        = createAction(DELETE_SERVICE);
-export const cancelEditService    = createAction(CANCEL_EDIT_SERVICE);
-export const changeService        = createAction(CHANGE_SERVICE);
+export const openEditServiceModal   = createAction(OPEN_EDIT_SERVICE_MODAL);
+export const loadServices           = createAction(LOAD_SERVICES);
+export const saveService            = createAction(SAVE_SERVICE);
+export const deleteService          = createAction(DELETE_SERVICE);
+export const cancelEditService      = createAction(CANCEL_EDIT_SERVICE);
+export const changeService          = createAction(CHANGE_SERVICE);
+export const openCreateServiceModal = createAction(OPEN_CREATE_SERVICE);
 
 const initState = {
     list:     [],
@@ -69,7 +69,8 @@ export const services = (state = initState, action = {}) => {
             return {
                 ...state,
                 editable: {
-                    isNew: true
+                    isNew: true,
+                    type:  SERVICE_TYPES.OTHER
                 }
             };
 
