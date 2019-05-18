@@ -17,18 +17,30 @@ import {
     selectSchemeCreatedPoints,
     selectSchemeEdgesForSave
 } from "../selectors/map";
+import { SELECT_BUILDING } from "../reducers/buildings";
 
 
 export default function* main() {
+    yield takeLatest(SELECT_BUILDING, fetchByBuilding);
     yield takeLatest(LOAD, fetchBuildingMap);
     yield takeLatest(SAVE_CREATED_POINTS, saveCreatedPoints);
     yield takeLatest(SAVE_CREATED_EDGES, saveCreatedEdges)
 }
 
+function* fetchByBuilding(action) {
+    yield put({ type: LOAD, payload: action.payload })
+}
+
 function* fetchBuildingMap(action) {
     try {
-        const state       = yield select();
-        const buildingId  = selectBuildingId(state);
+        const state      = yield select();
+        const buildingId = action.payload || selectBuildingId(state);
+
+        if (!buildingId) {
+            yield put({ type: LOAD_FAILED, payload: "Выберите здание." })
+            return;
+        }
+
         const buildingMap = yield call(getBuildingMap, buildingId);
 
         yield put({ type: LOAD_SUCCESS, payload: buildingMap })

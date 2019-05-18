@@ -24,7 +24,7 @@ class SchemeMenu extends Component {
         return (
             <Radio.Group
                 disabled={ disabled }
-                className="map-page__scheme-menu"
+
                 value={ currentSchemeId }
                 onChange={ this.onChangeScheme }
             >

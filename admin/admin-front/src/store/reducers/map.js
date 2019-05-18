@@ -1,4 +1,4 @@
-import { prop, map, find, propEq } from "ramda";
+import { prop, map, find, propEq, isEmpty } from "ramda";
 
 import { calculateCentroid, calculateStairsLines } from "../../utils/map";
 import { createAction } from "../../utils/action";
@@ -45,8 +45,7 @@ const initialState = {
         elements: [],
         edges:    []
     },
-    buildingSchemeId: 3,
-    buildingId:       2167
+    buildingSchemeId: null
 };
 
 const reducer = (state = initialState, action = {}) => {
@@ -92,15 +91,21 @@ const reducer = (state = initialState, action = {}) => {
         case SAVE_CREATED_POINTS:
             return {
                 ...state,
-                loading: true
+                loading: true,
+                error:   null
             };
 
         case LOAD_SUCCESS:
+            const data        = mapFromServer(action.payload);
+            const { schemes } = data;
+            console.log(schemes);
 
             return {
                 ...state,
-                data:    mapFromServer(action.payload),
-                loading: false,
+                data:             data,
+                loading:          false,
+                error:            null,
+                buildingSchemeId: isEmpty(schemes) ? null : schemes[ 0 ].id
             };
 
         case LOAD_FAILED:

@@ -12,7 +12,7 @@ import {
 } from "../../../store/reducers/map";
 import {
     selectCurrentSchemeEdges,
-    selectCurrentSchemeElements,
+    selectCurrentSchemeElements, selectIsEmptyMap,
     selectPoints
 } from "../../../store/selectors/map";
 import { find, isNil, propEq } from "ramda";
@@ -20,6 +20,9 @@ import './MapPage.scss'
 import { Button, Dropdown, Menu, Spin, message } from "antd";
 import SchemeMenu from "./scheme-menu/SchemeMenu";
 import PointInfo from "./point-info/PointInfo";
+import BuildingSelector from "../../common/building/BuildingSelector";
+import { loadBuildings } from "../../../store/reducers/buildings";
+import Empty from "../../common/empty/Empty";
 
 const ButtonGroup = Button.Group;
 
@@ -93,7 +96,8 @@ const MODE = {
 class MapPage extends Component {
 
     componentDidMount() {
-        this.props.loadBuildingMap()
+        this.props.loadBuildings();
+        this.props.loadBuildingMap();
     }
 
     constructor(props) {
@@ -389,12 +393,16 @@ class MapPage extends Component {
 
 
     render() {
-        const { elements, loading } = this.props;
-        const { mode }              = this.state;
+        const { elements, loading, isEmpty } = this.props;
+        const { mode }                       = this.state;
 
         return (
             <div className={ "map-page" }>
-                <SchemeMenu/>
+                <div className="map-page__scheme-menu">
+                    <SchemeMenu/>
+                    <BuildingSelector style={ { width: 430 } }/>
+                </div>
+
                 <div className="map-page__button-menu">
 
                     { mode === MODE.NONE ? (
@@ -412,6 +420,7 @@ class MapPage extends Component {
                     </ButtonGroup>
                 </div>
                 <div className="map-page__map">
+                    { isEmpty && (<Empty/>) }
                     <Spin spinning={ loading }>
                         <svg
                             height="330" width="600"
@@ -447,6 +456,7 @@ class MapPage extends Component {
                         </svg>
                     </Spin>
                 </div>
+
                 { this.state.selectedPoint && (<PointInfo point={ this.state.selectedPoint }/>) }
             </div>
         )
@@ -460,7 +470,8 @@ const mapStateToProps = (state) => {
         points:   selectPoints(state),
         elements: selectCurrentSchemeElements(state),
         edges:    selectCurrentSchemeEdges(state),
-        loading:  state.map.loading
+        loading:  state.map.loading,
+        isEmpty:  selectIsEmptyMap(state)
     }
 };
 
@@ -474,7 +485,8 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     redo,
     addEdge,
     saveCreatedEdges,
-    cancelCreatedEdges
+    cancelCreatedEdges,
+    loadBuildings
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapPage);
