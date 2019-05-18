@@ -67,7 +67,12 @@ class ServicePage extends Component {
                                         <List.Item.Meta
                                             avatar={ <Title level={ 4 }>{ service.id }</Title> }
                                             title={ service.title }
-                                            description={ service.floorLabel + " | " + service.typeLabel }
+                                            description={ service.floorLabel
+                                            + " | "
+                                            + service.typeLabel
+                                            + " | "
+                                            + service.buildingName
+                                            }
                                         />
                                     </Skeleton>
                                 </List.Item>
