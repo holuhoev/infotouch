@@ -35,7 +35,7 @@ export const selectServicesWithNoPoint = state => {
     return filter(s => (!s.pointId || s.pointId === selectedPointId), services);
 };
 
-const selectServiceByPointId = (state, pointId) => {
+export const selectServiceByPointId = (state, pointId) => {
     return find(propEq('pointId', pointId))(state.services.list)
 };
 

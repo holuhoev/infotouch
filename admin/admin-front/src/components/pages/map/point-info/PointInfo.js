@@ -32,7 +32,7 @@ class PointInfo extends Component {
                 <div className={ "point_info-data" }>
                     { `Выбрана точка ${ selectedPoint.x }, ${ selectedPoint.y }. ID: ${ selectedPoint.id }` }
                 </div>
-                { isEditService && (
+                { isEditService ? (
                     <Select
                         style={ { width: 300 } }
                         onChange={ this.onServiceChange }
@@ -42,6 +42,10 @@ class PointInfo extends Component {
                             <Select.Option key={ id }>{ title }</Select.Option>
                         )) }
                     </Select>
+                ) : (
+                    <div className={ "point_info-data" }>
+                        { `${ selectedPoint.serviceLabel }` }
+                    </div>
                 ) }
             </div>
         )
