@@ -28,20 +28,20 @@ public class HseLocationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<HseLocation>> findAll() {
+    public ResponseEntity<List<HseLocation>> findAll(@RequestParam(value = "buildingId", required = false) Integer buildingId) {
 
-        return ResponseEntity.ok(hseLocationService.findAll());
+        return ResponseEntity.ok(hseLocationService.findAll(buildingId));
     }
 
     @PostMapping
-    public ResponseEntity<HseLocation> createHseLocation(HseLocationRequest request) {
+    public ResponseEntity<HseLocation> createHseLocation(@RequestBody HseLocationRequest request) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(hseLocationService.create(request));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<HseLocation> updateHseLocation(@PathVariable("id") int id, HseLocationRequest request) {
+    public ResponseEntity<HseLocation> updateHseLocation(@PathVariable("id") int id, @RequestBody HseLocationRequest request) {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(hseLocationService.update(id, request));

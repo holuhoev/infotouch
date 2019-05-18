@@ -6,6 +6,7 @@ import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.PrecisionModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.hse.infotouch.domain.datasource.HseLocationDatasource;
 import ru.hse.infotouch.domain.dto.request.HseLocationRequest;
 import ru.hse.infotouch.domain.models.admin.HseLocation;
 import ru.hse.infotouch.domain.repo.HseLocationRepository;
@@ -15,43 +16,47 @@ import java.util.List;
 @Service
 public class HseLocationService {
     private final HseLocationRepository repository;
+    private final HseLocationDatasource datasource;
 
     private GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
 
-    public HseLocationService(HseLocationRepository repository) {
+    public HseLocationService(HseLocationRepository repository,
+                              HseLocationDatasource datasource) {
         this.repository = repository;
+        this.datasource = datasource;
     }
 
-    public List<HseLocation> findAll() {
-        return repository.findAll();
+    public List<HseLocation> findAll(Integer buildingId) {
+        return datasource.findAll(buildingId);
     }
 
     public HseLocation getOneById(int id) {
         return this.repository.findById(id).orElseThrow(() -> new IllegalArgumentException(String.format("Локации с id \"%d\" не существует", id)));
     }
 
-    @Transactional
     public HseLocation create(HseLocationRequest request) {
         HseLocation hseLocation = new HseLocation();
 
-        hseLocation.updateFromRequest(request)
-                .setLocation(createPoint(request.getX(), request.getY()));
-
-        return repository.save(hseLocation);
+        return updateHseLocation(request, hseLocation);
     }
 
-    @Transactional
     public HseLocation update(int id, HseLocationRequest request) {
         HseLocation hseLocation = repository.getOne(id);
 
-        hseLocation.updateFromRequest(request)
-                .setLocation(createPoint(request.getX(), request.getY()));
+        return updateHseLocation(request, hseLocation);
+    }
+
+    private HseLocation updateHseLocation(HseLocationRequest request, HseLocation hseLocation) {
+        hseLocation.updateFromRequest(request);
+
+        if (request.getGpsX() != null && request.getGpsY() != null) {
+            hseLocation.setLocation(createPoint(request.getGpsX(), request.getGpsY()));
+        }
 
         return repository.save(hseLocation);
     }
 
 
-    @Transactional
     public void delete(int id) {
         HseLocation location = repository.getOne(id);
 
