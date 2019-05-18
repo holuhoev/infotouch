@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hse.infotouch.domain.dto.request.HseLocationPointsRequest;
 import ru.hse.infotouch.domain.dto.request.HseLocationRequest;
 import ru.hse.infotouch.domain.models.admin.HseLocation;
 import ru.hse.infotouch.domain.service.HseLocationService;
@@ -52,5 +53,11 @@ public class HseLocationController {
     public void deleteHseLocation(@PathVariable("id") Integer id) {
 
         this.hseLocationService.delete(id);
+    }
+
+    @PutMapping("/points")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void setPoints(@RequestBody HseLocationPointsRequest request) {
+        this.hseLocationService.savePoints(request);
     }
 }

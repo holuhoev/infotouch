@@ -13,16 +13,36 @@ import {
     SAVE_NEW_SERVICE_SUCCESS,
     SAVE_SERVICE,
     SAVE_SERVICE_FAILED,
-    SAVE_SERVICE_SUCCESS
+    SAVE_SERVICE_SUCCESS,
+    SAVE_SERVICES_POINTS, SAVE_SERVICES_POINTS_FAILED, SAVE_SERVICES_POINTS_SUCCESS
 } from "../reducers/services";
-import { createService, deleteServiceById, getServices, putService } from "../../api";
+import { createService, deleteServiceById, getServices, putService, putServicesPoints } from "../../api";
 
 import { selectBuildingId } from "../selectors/map";
+import { selectForSavePoints } from "../selectors/services";
 
 export default function* main() {
     yield takeLatest(LOAD_SERVICES, fetchServices);
     yield takeLatest(SAVE_SERVICE, saveService);
     yield takeLatest(DELETE_SERVICE, deleteService);
+    yield takeLatest(SAVE_SERVICES_POINTS, saveServicesPoints);
+}
+
+function* saveServicesPoints() {
+    const state  = yield select();
+    const toSave = selectForSavePoints(state);
+
+    try {
+        yield call(putServicesPoints, toSave);
+
+        yield put({
+            type:    SAVE_SERVICES_POINTS_SUCCESS,
+            payload: []
+        })
+    } catch (error) {
+        message.error(`Ошибка сохранения услуги`);
+        yield put({ type: SAVE_SERVICES_POINTS_FAILED, payload: error })
+    }
 }
 
 function* saveService() {

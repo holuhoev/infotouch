@@ -6,7 +6,7 @@ import {
     DEVICE,
     POST_CREATE_EDGE,
     POST_CREATE_POINT,
-    SERVICE, BUILDING
+    SERVICE, BUILDING, SERVICE_POINTS
 } from "../utils/url";
 
 
@@ -149,4 +149,14 @@ export const deleteServiceById = (id) => {
         .delete(`${ SERVICE }/${ id }`)
         .then(responseData)
         .catch(error('DELETE', `${ SERVICE }/${ id }`))
+};
+
+export const putServicesPoints = (data) => {
+
+    return axios
+        .put(SERVICE_POINTS, {
+            hseLocationToPoint: data
+        })
+        .then(responseData)
+        .catch(error('PUT', SERVICE_POINTS))
 };

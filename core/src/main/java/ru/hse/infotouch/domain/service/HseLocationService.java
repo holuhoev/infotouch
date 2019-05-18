@@ -1,7 +1,9 @@
 package ru.hse.infotouch.domain.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.hse.infotouch.domain.datasource.HseLocationDatasource;
+import ru.hse.infotouch.domain.dto.request.HseLocationPointsRequest;
 import ru.hse.infotouch.domain.dto.request.HseLocationRequest;
 import ru.hse.infotouch.domain.models.admin.HseLocation;
 import ru.hse.infotouch.domain.models.map.BuildingScheme;
@@ -9,7 +11,10 @@ import ru.hse.infotouch.domain.models.map.Point;
 import ru.hse.infotouch.domain.repo.HseLocationRepository;
 import ru.hse.infotouch.util.PostgresPointUtils;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class HseLocationService {
@@ -18,17 +23,18 @@ public class HseLocationService {
     private final PointService pointService;
     private final BuildingSchemeService schemeService;
     private final PostgresPointUtils postgresPointUtils;
-
+    private final EntityManager entityManager;
 
     public HseLocationService(HseLocationRepository repository,
                               HseLocationDatasource datasource,
                               PointService pointService,
-                              BuildingSchemeService schemeService, PostgresPointUtils postgresPointUtils) {
+                              BuildingSchemeService schemeService, PostgresPointUtils postgresPointUtils, EntityManager entityManager) {
         this.repository = repository;
         this.datasource = datasource;
         this.pointService = pointService;
         this.schemeService = schemeService;
         this.postgresPointUtils = postgresPointUtils;
+        this.entityManager = entityManager;
     }
 
     public List<HseLocation> findAll(Integer buildingId) {
@@ -85,5 +91,20 @@ public class HseLocationService {
         HseLocation location = repository.getOne(id);
 
         repository.delete(location);
+    }
+
+    @Transactional
+    public void savePoints(HseLocationPointsRequest request) {
+        Map<Integer, Integer> locationToPoint = request.getHseLocationToPoint();
+
+        locationToPoint.entrySet()
+                .stream()
+                .map(entry -> {
+                    Query query = entityManager.createNativeQuery("update hse_location set point_id=:pointId where id=:hseLocationId");
+                    query.setParameter("pointId", entry.getValue())
+                            .setParameter("hseLocationId", entry.getKey());
+
+                    return query;
+                }).forEach(Query::executeUpdate);
     }
 }

@@ -25,6 +25,8 @@ export const CANCEL_CREATED_EDGES       = 'admin/map/CANCEL_CREATED_EDGES';
 export const SAVE_CREATED_EDGES_SUCCESS = 'admin/map/SAVE_CREATED_EDGES_SUCCESS';
 export const SAVE_CREATED_EDGES_FAILED  = 'admin/map/SAVE_CREATED_EDGES_FAILED';
 
+export const CHANGE_SELECTED_POINT = 'admin/map/CHANGE_SELECTED_POINT';
+
 export const loadBuildingMap     = createAction(LOAD);
 export const createPoint         = createAction(CREATE_POINT);
 export const undo                = createAction(UNDO);
@@ -35,6 +37,7 @@ export const addEdge             = createAction(ADD_EDGE);
 export const saveCreatedEdges    = createAction(SAVE_CREATED_EDGES);
 export const cancelCreatedEdges  = createAction(CANCEL_CREATED_EDGES);
 export const changeScheme        = createAction(CHANGE_SCHEME);
+export const changeSelectedPoint = createAction(CHANGE_SELECTED_POINT);
 
 const initialState = {
     loading:          false,
@@ -45,11 +48,19 @@ const initialState = {
         elements: [],
         edges:    []
     },
-    buildingSchemeId: null
+    buildingSchemeId: null,
+    selectedPointId:  null
 };
 
 const reducer = (state = initialState, action = {}) => {
     switch (action.type) {
+
+        case CHANGE_SELECTED_POINT:
+
+            return {
+                ...state,
+                selectedPointId: action.payload
+            };
 
         case CHANGE_SCHEME:
 
@@ -98,7 +109,6 @@ const reducer = (state = initialState, action = {}) => {
         case LOAD_SUCCESS:
             const data        = mapFromServer(action.payload);
             const { schemes } = data;
-            console.log(schemes);
 
             return {
                 ...state,
