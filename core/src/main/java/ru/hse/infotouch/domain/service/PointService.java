@@ -26,6 +26,10 @@ public class PointService {
         this.entityManager = entityManager;
     }
 
+    public Point getOneById(int id) {
+
+         return this.pointRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(String.format("Точки с id \"%d\" не существует", id)));
+    }
     @Transactional
     public List<Point> createNew(int buildingSchemeId, List<CreatePointDTO> createPointDTOS) {
         List<Point> toSave = createPointDTOS.stream()

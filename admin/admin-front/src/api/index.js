@@ -114,3 +114,39 @@ export const getBuildings = () => {
         .then(responseData)
         .catch(error('GET', BUILDING))
 };
+
+export const putService = ({ title, type, gpsX, gpsY, buildingId }, id) => {
+
+    return axios
+        .put(`${ SERVICE }/${ id }`, {
+            title,
+            type,
+            gpsX,
+            gpsY,
+            buildingId
+        })
+        .then(responseData)
+        .catch(error('PUT', `${ SERVICE }/${ id }`))
+};
+
+export const createService = ({ title, type, gpsX, gpsY, buildingId }) => {
+
+    return axios
+        .post(SERVICE, {
+            title,
+            type,
+            gpsX,
+            gpsY,
+            buildingId
+        })
+        .then(responseData)
+        .catch(error('POST', SERVICE))
+};
+
+export const deleteServiceById = (id) => {
+
+    return axios
+        .delete(`${ SERVICE }/${ id }`)
+        .then(responseData)
+        .catch(error('DELETE', `${ SERVICE }/${ id }`))
+};

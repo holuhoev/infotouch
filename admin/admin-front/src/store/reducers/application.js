@@ -12,17 +12,24 @@ import {
     SAVE_DEVICE_SUCCESS,
     SAVE_NEW_DEVICE_SUCCESS,
 } from "./devices";
-import { LOAD_SERVICES, LOAD_SERVICES_FAILED, LOAD_SERVICES_SUCCESS } from "./services";
+import {
+    CANCEL_EDIT_SERVICE,
+    LOAD_SERVICES,
+    LOAD_SERVICES_FAILED,
+    LOAD_SERVICES_SUCCESS,
+    OPEN_CREATE_SERVICE,
+    OPEN_EDIT_SERVICE_MODAL, SAVE_NEW_SERVICE_SUCCESS, SAVE_SERVICE, SAVE_SERVICE_FAILED, SAVE_SERVICE_SUCCESS
+} from "./services";
 import { LOAD_BUILDINGS, LOAD_BUILDINGS_FAILED, LOAD_BUILDINGS_SUCCESS, SELECT_BUILDING } from "./buildings";
 
 const initialState = {
-    listLoading:      false,
-    servicesLoading:  false,
-    buildingsLoading: false,
-    oneLoading:       false,
-    error:            null,
-    visibleModal:     false,
-    saveLoading:      false,
+    listLoading:        false,
+    servicesLoading:    false,
+    buildingsLoading:   false,
+    oneLoading:         false,
+    error:              null,
+    visibleModal:       false,
+    saveLoading:        false,
     selectedBuildingId: undefined
 };
 
@@ -58,6 +65,8 @@ export const application = (state = initialState, action = {}) => {
             };
 
         case OPEN_CREATE_DEVICE:
+        case OPEN_EDIT_SERVICE_MODAL:
+        case OPEN_CREATE_SERVICE:
 
             return {
                 ...state,
@@ -129,14 +138,14 @@ export const application = (state = initialState, action = {}) => {
             };
 
         case CANCEL_EDIT_DEVICE:
-
+        case CANCEL_EDIT_SERVICE:
             return {
                 ...state,
                 visibleModal: false
             };
 
         case SAVE_DEVICE:
-
+        case SAVE_SERVICE:
             return {
                 ...state,
                 saveLoading: true
@@ -144,6 +153,9 @@ export const application = (state = initialState, action = {}) => {
 
         case SAVE_DEVICE_SUCCESS:
         case SAVE_NEW_DEVICE_SUCCESS:
+        case SAVE_SERVICE_SUCCESS:
+        case SAVE_NEW_SERVICE_SUCCESS:
+
             return {
                 ...state,
                 visibleModal: false,
@@ -151,7 +163,7 @@ export const application = (state = initialState, action = {}) => {
             };
 
         case SAVE_DEVICE_FAILED:
-
+        case SAVE_SERVICE_FAILED:
             return {
                 ...state,
                 saveLoading: false,

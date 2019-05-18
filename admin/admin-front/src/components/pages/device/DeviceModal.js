@@ -41,6 +41,7 @@ class DeviceModal extends Component {
                 confirmLoading={ saveLoading }
                 onCancel={ this.handleCancel }
                 okText={ "Сохранить" }
+                cancelText={ "Отмена" }
                 okButtonProps={ {
                     disabled: oneLoading
                 } }

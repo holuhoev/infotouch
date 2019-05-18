@@ -1,5 +1,5 @@
 import { createAction } from "../../utils/action";
-import { complement, filter, propEq } from "ramda";
+import { excludeById } from "../../utils/common";
 
 
 export const LOAD_DEVICES         = 'admin/device/LOAD_DEVICES';
@@ -42,11 +42,10 @@ export const devices = (state = initState, action = {}) => {
     switch (action.type) {
 
         case DELETE_DEVICE_SUCCESS:
-            const notDeleted = complement(propEq('id', action.payload));
 
             return {
                 ...state,
-                list: filter(notDeleted, state.list)
+                list: excludeById(action.payload, state.list)
             };
 
         case OPEN_CREATE_DEVICE:

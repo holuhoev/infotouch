@@ -3,11 +3,14 @@ import { Button, Divider, Skeleton, Spin, List, Typography } from "antd";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
-import { loadServices } from "../../../store/reducers/services";
+import { deleteService, loadServices, openEditServiceModal } from "../../../store/reducers/services";
 import { loadBuildings } from "../../../store/reducers/buildings";
 import './ServicePage.scss'
 import BuildingSelector from "../../common/building/BuildingSelector";
 import { selectServiceList } from "../../../store/selectors/services";
+import ServiceModal from "./ServiceModal";
+import { showDeleteConfirm } from "../../common/delete-modal/DeleteModal";
+import { renderListItemActions } from "../../common/list-item-actions/ListItemActions";
 
 
 const { Title } = Typography;
@@ -18,6 +21,21 @@ class ServicePage extends Component {
         this.props.loadBuildings();
         this.props.loadServices()
     }
+
+    onEditClick = (service) => () => {
+        this.props.openEditServiceModal(service)
+    };
+
+    onCreateClick = () => {
+
+    };
+
+    onDeleteClick = ({ id }) => () => {
+        const { deleteService } = this.props;
+
+        showDeleteConfirm({ id, onDelete: deleteService })
+    };
+
 
     render() {
         const { servicesLoading, services } = this.props;
@@ -39,7 +57,12 @@ class ServicePage extends Component {
                             itemLayout="horizontal"
                             dataSource={ services }
                             renderItem={ service => (
-                                <List.Item>
+                                <List.Item actions={ renderListItemActions({
+                                    disabled: servicesLoading,
+                                    item:     service,
+                                    onEdit:   this.onEditClick,
+                                    onDelete: this.onDeleteClick
+                                }) }>
                                     <Skeleton loading={ servicesLoading } active>
                                         <List.Item.Meta
                                             avatar={ <Title level={ 4 }>{ service.id }</Title> }
@@ -51,6 +74,7 @@ class ServicePage extends Component {
                             ) }
                         />
                     </div>
+                    <ServiceModal/>
                 </Spin>
             </div>
         )
@@ -69,7 +93,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     loadServices,
-    loadBuildings
+    loadBuildings,
+    deleteService,
+    openEditServiceModal
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ServicePage);

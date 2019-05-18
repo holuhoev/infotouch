@@ -2,15 +2,17 @@ import React, { Component } from "react";
 
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
+import { Button, Divider, List, Skeleton, Spin, Typography } from "antd";
+
 import {
     createDevice,
     deleteDevice,
     loadDeviceById,
     loadDevices
 } from "../../../store/reducers/devices";
-import { Button, Divider, List, Skeleton, Spin, Typography } from "antd";
 import DeviceModal from "./DeviceModal";
-import { showDeleteConfirm } from "./DeleteModal";
+import { showDeleteConfirm } from "../../common/delete-modal/DeleteModal";
+import { renderListItemActions } from "../../common/list-item-actions/ListItemActions";
 
 const { Title } = Typography;
 
@@ -31,29 +33,7 @@ class DevicePage extends Component {
     onDeleteClick = ({ id }) => () => {
         const { deleteDevice } = this.props;
 
-        showDeleteConfirm({ id, deleteDevice })
-    };
-
-    renderDeviceActions = (device) => {
-        const { listLoading } = this.props;
-
-        return [ (
-            <Button
-                disabled={ listLoading }
-                type={ "link" }
-                icon={ "edit" }
-                onClick={ this.onEditClick(device) }
-            >
-                Редактировать
-            </Button>
-        ), (
-            <Button
-                disabled={ listLoading }
-                type={ "link" }
-                icon={ "delete" }
-                onClick={ this.onDeleteClick(device) }
-            />
-        ) ]
+        showDeleteConfirm({ id, onDelete: deleteDevice })
     };
 
     render() {
@@ -72,7 +52,12 @@ class DevicePage extends Component {
                         itemLayout="horizontal"
                         dataSource={ devices }
                         renderItem={ device => (
-                            <List.Item actions={ this.renderDeviceActions(device) }>
+                            <List.Item actions={ renderListItemActions({
+                                disabled: listLoading,
+                                item:     device,
+                                onEdit:   this.onEditClick,
+                                onDelete: this.onDeleteClick
+                            }) }>
                                 <Skeleton loading={ listLoading } active>
                                     <List.Item.Meta
                                         avatar={ <Title level={ 4 }>{ device.id }</Title> }
