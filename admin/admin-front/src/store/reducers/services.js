@@ -42,7 +42,13 @@ export const SERVICE_TYPE_LABELS = {
     LIBRARY:        'Библиотека',
     TYPOGRAPHY:     'Типография',
     MEDICAL_CENTER: 'Медицинское отделение',
-    COMPUTER_CLASS: 'Компьютерный класс'
+    POS:            'Банкомат',
+    READING_ROOM:   'Читальный зал',
+    COOLER:         'Кулер с водой',
+    COMPUTER_CLASS: 'Компьютерный класс',
+    PRINTER:        'Принтер',
+    TOILET:         'Туалет',
+    OTHER:          'Другое'
 };
 
 export const SERVICE_TYPES = indexBy(identity, keys(SERVICE_TYPE_LABELS));

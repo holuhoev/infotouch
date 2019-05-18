@@ -4,6 +4,7 @@ import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
 
 import { cancelEditService, changeService, saveService } from "../../../store/reducers/services";
+import ServiceTypeSelect from "../../common/service/ServiceTypeSelect";
 
 
 class ServiceModal extends Component {
@@ -25,13 +26,16 @@ class ServiceModal extends Component {
         this.props.cancelEditService()
     };
 
+    handleChangeType = (value) => {
+        this.props.changeService({ type: value })
+    };
 
     render() {
-        const { editableService, visibleModal, saveLoading } = this.props;
+        const { service, visibleModal, saveLoading } = this.props;
 
         return (
             <Modal
-                title={ editableService.title || "Заголовок" }
+                title={ service.title || "Заголовок" }
                 visible={ visibleModal }
                 onOk={ this.handleSave }
                 confirmLoading={ saveLoading }
@@ -41,7 +45,13 @@ class ServiceModal extends Component {
             >
                 <Form layout="vertical" onChange={ this.handleEdit }>
                     <Form.Item>
-                        <Input name={ "title" } addonBefore={ "Заголовок" } value={ editableService.title }/>
+                        <Input name={ "title" } addonBefore={ "Заголовок" } value={ service.title }/>
+                    </Form.Item>
+                    <Form.Item label={ "Тип услуги" }>
+                        <ServiceTypeSelect
+                            value={ service.type }
+                            onChange={ this.handleChangeType }
+                        />
                     </Form.Item>
                 </Form>
             </Modal>
@@ -52,9 +62,9 @@ class ServiceModal extends Component {
 const mapStateToProps = (state) => {
 
     return {
-        editableService: state.services.editable,
-        visibleModal:    state.application.visibleModal,
-        saveLoading:     state.application.saveLoading,
+        service:      state.services.editable,
+        visibleModal: state.application.visibleModal,
+        saveLoading:  state.application.saveLoading,
     }
 };
 
