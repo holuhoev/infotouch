@@ -172,6 +172,14 @@ CREATE TABLE "news2tag"
   tag_id  int    not null references "tag" (id)
 );
 
-
-
+drop table if exists "hse_unit" cascade;
+create table "hse_unit"
+(
+  id             serial  not null primary key,
+  title          text default '',
+  description    text default '',
+  building_id    integer not null references building (id),
+  map_element_id integer null references map_element (id),
+  CONSTRAINT hse_unit_ID_uindex UNIQUE (ID)
+);
 
