@@ -6,7 +6,7 @@ import {
     DEVICE,
     POST_CREATE_EDGE,
     POST_CREATE_POINT,
-    SERVICE, BUILDING, SERVICE_POINTS
+    SERVICE, BUILDING, SERVICE_POINTS, UNIT
 } from "../utils/url";
 
 
@@ -159,4 +159,48 @@ export const putServicesPoints = (data) => {
         })
         .then(responseData)
         .catch(error('PUT', SERVICE_POINTS))
+};
+
+export const getUnits = (buildingId) => {
+
+    return axios
+        .get(UNIT, {
+            params: {
+                buildingId
+            }
+        })
+        .then(responseData)
+        .catch(error('GET', UNIT))
+};
+
+export const putUnit = ({ title, description, buildingId }, id) => {
+
+    return axios
+        .put(`${ UNIT }/${ id }`, {
+            title,
+            description,
+            buildingId
+        })
+        .then(responseData)
+        .catch(error('PUT', `${ UNIT }/${ id }`))
+};
+
+export const createUnit = ({ title, description, buildingId }) => {
+
+    return axios
+        .post(UNIT, {
+            title,
+            description,
+            buildingId
+        })
+        .then(responseData)
+        .catch(error('POST', UNIT))
+};
+
+export const deleteUnitById = (id) => {
+
+    return axios
+        .delete(`${ UNIT }/${ id }`)
+        .then(responseData)
+        .catch(error('DELETE', `${ UNIT }/${ id }`))
 };

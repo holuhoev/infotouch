@@ -20,9 +20,23 @@ import {
     OPEN_CREATE_SERVICE,
     OPEN_EDIT_SERVICE_MODAL,
     SAVE_NEW_SERVICE_SUCCESS,
-    SAVE_SERVICE, SAVE_SERVICE_FAILED, SAVE_SERVICE_SUCCESS
+    SAVE_SERVICE,
+    SAVE_SERVICE_FAILED,
+    SAVE_SERVICE_SUCCESS
 } from "./services";
 import { LOAD_BUILDINGS, LOAD_BUILDINGS_FAILED, LOAD_BUILDINGS_SUCCESS, SELECT_BUILDING } from "./buildings";
+import {
+    CANCEL_EDIT_UNIT,
+    LOAD_UNITS,
+    LOAD_UNITS_FAILED,
+    LOAD_UNITS_SUCCESS,
+    OPEN_CREATE_UNIT,
+    OPEN_EDIT_UNIT_MODAL,
+    SAVE_NEW_UNIT_SUCCESS,
+    SAVE_UNIT,
+    SAVE_UNIT_FAILED,
+    SAVE_UNIT_SUCCESS
+} from "./units";
 
 const initialState = {
     listLoading:        false,
@@ -69,22 +83,27 @@ export const application = (state = initialState, action = {}) => {
         case OPEN_CREATE_DEVICE:
         case OPEN_EDIT_SERVICE_MODAL:
         case OPEN_CREATE_SERVICE:
-
+        case OPEN_CREATE_UNIT:
+        case OPEN_EDIT_UNIT_MODAL:
             return {
                 ...state,
                 visibleModal: true
             };
 
         case LOAD_DEVICES:
+
             return {
                 ...state,
                 listLoading: true
             };
+
         case LOAD_SERVICES:
+
             return {
                 ...state,
                 servicesLoading: true
             };
+
 
         case LOAD_SERVICES_SUCCESS:
 
@@ -99,6 +118,27 @@ export const application = (state = initialState, action = {}) => {
                 ...state,
                 servicesLoading: false,
                 error:           action.payload
+            };
+
+        case LOAD_UNITS:
+
+            return {
+                ...state,
+                unitsLoading: true
+            };
+        case LOAD_UNITS_SUCCESS:
+
+            return {
+                ...state,
+                unitsLoading: false
+            };
+
+        case LOAD_UNITS_FAILED:
+
+            return {
+                ...state,
+                unitsLoading: false,
+                error:        action.payload
             };
 
         case LOAD_DEVICES_SUCCESS:
@@ -141,6 +181,7 @@ export const application = (state = initialState, action = {}) => {
 
         case CANCEL_EDIT_DEVICE:
         case CANCEL_EDIT_SERVICE:
+        case CANCEL_EDIT_UNIT:
             return {
                 ...state,
                 visibleModal: false
@@ -148,6 +189,7 @@ export const application = (state = initialState, action = {}) => {
 
         case SAVE_DEVICE:
         case SAVE_SERVICE:
+        case SAVE_UNIT:
             return {
                 ...state,
                 saveLoading: true
@@ -157,7 +199,8 @@ export const application = (state = initialState, action = {}) => {
         case SAVE_NEW_DEVICE_SUCCESS:
         case SAVE_SERVICE_SUCCESS:
         case SAVE_NEW_SERVICE_SUCCESS:
-
+        case SAVE_UNIT_SUCCESS:
+        case SAVE_NEW_UNIT_SUCCESS:
             return {
                 ...state,
                 visibleModal: false,
@@ -166,6 +209,7 @@ export const application = (state = initialState, action = {}) => {
 
         case SAVE_DEVICE_FAILED:
         case SAVE_SERVICE_FAILED:
+        case SAVE_UNIT_FAILED:
             return {
                 ...state,
                 saveLoading: false,

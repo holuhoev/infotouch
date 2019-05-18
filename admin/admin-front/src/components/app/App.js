@@ -8,6 +8,7 @@ import { ROUTE } from "../../utils/routes";
 import MapPage from "../pages/map/MapPage";
 import ServicePage from "../pages/service/ServicePage";
 import DevicePage from "../pages/device/DevicePage";
+import UnitPage from "../pages/unit/UnitPage";
 
 const { Header, Content, Footer } = Layout;
 
@@ -29,7 +30,9 @@ function App({ location }) {
                     >
                         <Menu.Item key={ ROUTE.MAP }><Link to={ ROUTE.MAP }>Карта</Link></Menu.Item>
                         <Menu.Item key={ ROUTE.DEVICE }><Link to={ ROUTE.DEVICE }>Устройства</Link></Menu.Item>
+                        <Menu.Item key={ ROUTE.UNIT }><Link to={ ROUTE.UNIT }>Подразделения</Link></Menu.Item>
                         <Menu.Item key={ ROUTE.SERVICE }><Link to={ ROUTE.SERVICE }>Услуги</Link></Menu.Item>
+
                     </Menu>
                 </Header>
                 <Content style={ { padding: '0 50px' } }>
@@ -42,6 +45,7 @@ function App({ location }) {
                             <Route path={ ROUTE.MAP } component={ MapPage }/>
                             <Route path={ ROUTE.SERVICE } component={ ServicePage }/>
                             <Route path={ ROUTE.DEVICE } component={ DevicePage }/>
+                            <Route path={ ROUTE.UNIT } component={ UnitPage }/>
 
                         </Switch>
                     </div>

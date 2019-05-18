@@ -7,6 +7,7 @@ export const ROUTE = {
     MAP:     '/map',
     DEVICE:  '/device',
     SERVICE: '/service',
+    UNIT:    '/unit',
 };
 
 export const getMapRoute = buildingId => ROUTE.MAP.replace(PARAMS.ID, buildingId);
