@@ -400,7 +400,7 @@ class MapPage extends Component {
             <div className={ "map-page" }>
                 <div className="map-page__scheme-menu">
                     <SchemeMenu/>
-                    <BuildingSelector style={ { width: 430 } }/>
+                    <BuildingSelector style={ { width: 430 } } afterSelect={ this.props.loadBuildingMap }/>
                 </div>
 
                 <div className="map-page__button-menu">

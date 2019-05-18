@@ -8,18 +8,23 @@ import { selectBuildings } from "../../../store/selectors/buildings";
 
 const Option = Select.Option;
 
-function BuildingSelector({ buildings, selected, selectBuilding, searchBuilding, style, disabled }) {
+function BuildingSelector({ buildings, selected, selectBuilding, searchBuilding, style, disabled, afterSelect }) {
+
+    const onChange = value => {
+        selectBuilding(value);
+        afterSelect && afterSelect(value)
+    };
 
     return (
         <Select
-            disabled={disabled}
+            disabled={ disabled }
             showSearch
             placeholder="Введите здание"
             value={ selected }
-            onChange={ selectBuilding }
+            onChange={ onChange }
             style={ style }
             optionFilterProp="children"
-            filterOption={(input, option) =>
+            filterOption={ (input, option) =>
                 option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
             }
         >

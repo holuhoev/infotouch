@@ -1,3 +1,5 @@
+import { identity, indexBy, keys, prop } from 'ramda';
+
 import { createAction } from "../../utils/action";
 
 export const LOAD_SERVICES         = 'admin/device/LOAD_SERVICES';
@@ -7,9 +9,20 @@ export const LOAD_SERVICES_FAILED  = 'admin/device/LOAD_SERVICES_FAILED';
 export const loadServices = createAction(LOAD_SERVICES);
 
 const initState = {
-    list:     [ {} ],
+    list:     [],
     editable: {}
 };
+
+
+export const SERVICE_TYPE_LABELS = {
+    CAFETERIA:      'Кафетерий',
+    LIBRARY:        'Библиотека',
+    TYPOGRAPHY:     'Типография',
+    MEDICAL_CENTER: 'Медицинское отделение',
+    COMPUTER_CLASS: 'Компьютерный класс'
+};
+
+export const SERVICE_TYPES = indexBy(identity, keys(SERVICE_TYPE_LABELS));
 
 export const services = (state = initState, action = {}) => {
 

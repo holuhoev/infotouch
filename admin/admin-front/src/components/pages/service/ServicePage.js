@@ -7,6 +7,7 @@ import { loadServices } from "../../../store/reducers/services";
 import { loadBuildings } from "../../../store/reducers/buildings";
 import './ServicePage.scss'
 import BuildingSelector from "../../common/building/BuildingSelector";
+import { selectServiceList } from "../../../store/selectors/services";
 
 
 const { Title } = Typography;
@@ -26,7 +27,7 @@ class ServicePage extends Component {
                 <Spin spinning={ servicesLoading && services.length === 0 }>
                     <div className={ "service-page__button-menu" }>
                         <Button icon="plus-circle" disabled={ servicesLoading }>Добавить</Button>
-                        <BuildingSelector style={ { width: 500 } }/>
+                        <BuildingSelector style={ { width: 430 } } afterSelect={ this.props.loadServices }/>
                     </div>
                     <Divider orientation={ "left" }>Список услуг</Divider>
                     <div style={ {
@@ -36,14 +37,14 @@ class ServicePage extends Component {
                     >
                         <List
                             itemLayout="horizontal"
-                            dataSource={ [ {} ] }
+                            dataSource={ services }
                             renderItem={ service => (
                                 <List.Item>
                                     <Skeleton loading={ servicesLoading } active>
                                         <List.Item.Meta
                                             avatar={ <Title level={ 4 }>{ service.id }</Title> }
                                             title={ service.title }
-                                            description={ service.description }
+                                            description={ service.floorLabel + " | " + service.typeLabel }
                                         />
                                     </Skeleton>
                                 </List.Item>
@@ -61,7 +62,7 @@ const mapStateToProps = (state) => {
 
     return {
         servicesLoading: state.application.servicesLoading,
-        services:        state.services.list
+        services:        selectServiceList(state)
     }
 };
 

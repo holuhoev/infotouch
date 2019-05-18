@@ -95,15 +95,19 @@ export const deleteDeviceById = (id) => {
         .catch(error('DELETE', `${ DEVICE }/${ id }`))
 };
 
-export const getServices = () => {
+export const getServices = (buildingId) => {
 
     return axios
-        .get(SERVICE)
+        .get(SERVICE, {
+            params: {
+                buildingId
+            }
+        })
         .then(responseData)
         .catch(error('GET', SERVICE))
 };
 
-export const getBuildings = ()=>{
+export const getBuildings = () => {
 
     return axios
         .get(BUILDING)
