@@ -121,6 +121,6 @@ export const selectSelectedPoint = (state) => {
     return {
         ...point,
         serviceId:    service ? service.id : null,
-        serviceLabel: service ? `${ service.title }` : null
+        serviceLabel: service ? `${ service.title }` : ''
     }
 };
