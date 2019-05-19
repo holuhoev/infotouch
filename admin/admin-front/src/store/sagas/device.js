@@ -1,4 +1,4 @@
-import { takeLatest, put, call, delay, select } from "redux-saga/effects";
+import { takeLatest, put, call, select } from "redux-saga/effects";
 
 
 import { message } from "antd";
@@ -29,7 +29,6 @@ function* fetchDeviceList(action) {
     try {
         const searchString = action.payload;
 
-        yield delay(1000);
         const deviceList = yield call(getDevices, searchString);
 
         yield put({ type: LOAD_DEVICES_SUCCESS, payload: deviceList })
@@ -41,7 +40,6 @@ function* fetchDeviceList(action) {
 
 function* fetchOneDeviceById(action) {
     try {
-        yield delay(1000);
 
         const { id }     = action.payload;
         const deviceList = yield call(getDeviceById, id);
@@ -54,8 +52,6 @@ function* fetchOneDeviceById(action) {
 }
 
 function* saveDevice() {
-    yield delay(1000);
-
     const state        = yield select();
     const deviceToSave = state.devices.editable;
 

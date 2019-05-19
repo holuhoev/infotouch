@@ -17,25 +17,24 @@ import java.util.stream.StreamSupport;
 @Service
 public class EventService {
 
-    private final EventUrlRepository eventUrlRepository;
-    private final QEventUrl qEventUrl = QEventUrl.eventUrl;
+    private final EventUrlService eventUrlService;
     private final SiteEventService siteEventService;
 
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 
-    public EventService(EventUrlRepository eventUrlRepository, SiteEventService siteEventService) {
-        this.eventUrlRepository = eventUrlRepository;
+    public EventService(EventUrlService eventUrlService, SiteEventService siteEventService) {
+        this.eventUrlService = eventUrlService;
         this.siteEventService = siteEventService;
     }
 
     public List<Event> findAll(int deviceId) {
-        Set<String> urls = getUrls(deviceId);
+        Set<String> urls = eventUrlService.getUrls(deviceId);
 
         return siteEventService.getEventsByUrls(urls);
     }
 
     public List<Event> findTodayAll(int deviceId) {
-        Set<String> urls = getUrls(deviceId);
+        Set<String> urls = eventUrlService.getUrls(deviceId);
 
         LocalDate now = LocalDate.now();
 
@@ -44,14 +43,6 @@ public class EventService {
                 .collect(Collectors.toSet());
 
         return siteEventService.getEventsByUrls(todayUrls);
-    }
-
-    private Set<String> getUrls(int deviceId) {
-        return StreamSupport.stream(
-                eventUrlRepository.findAll(qEventUrl.deviceId.eq(deviceId)).spliterator(),
-                false)
-                .map(EventUrl::getUrl)
-                .collect(Collectors.toSet());
     }
 
 
