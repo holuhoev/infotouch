@@ -5,6 +5,7 @@ import device from "./device";
 import service from "./service";
 import building from "./building";
 import units from "./units";
+import events from "./events";
 
 export default function* main() {
     yield fork(map);
@@ -12,4 +13,5 @@ export default function* main() {
     yield fork(service);
     yield fork(building);
     yield fork(units);
+    yield fork(events);
 };

@@ -10,7 +10,7 @@ import {
     SAVE_DEVICE,
     SAVE_DEVICE_FAILED,
     SAVE_DEVICE_SUCCESS,
-    SAVE_NEW_DEVICE_SUCCESS,
+    SAVE_NEW_DEVICE_SUCCESS, SELECT_DEVICE,
 } from "./devices";
 import {
     CANCEL_EDIT_SERVICE,
@@ -37,6 +37,14 @@ import {
     SAVE_UNIT_FAILED,
     SAVE_UNIT_SUCCESS
 } from "./units";
+import {
+    CANCEL_EDIT_EVENT,
+    LOAD_EVENTS,
+    LOAD_EVENTS_FAILED,
+    LOAD_EVENTS_SUCCESS,
+    OPEN_CREATE_EVENT,
+    OPEN_EDIT_EVENT_MODAL, SAVE_EVENT, SAVE_EVENT_FAILED, SAVE_EVENT_SUCCESS, SAVE_NEW_EVENT_SUCCESS
+} from "./events";
 
 const initialState = {
     listLoading:        false,
@@ -46,11 +54,20 @@ const initialState = {
     error:              null,
     visibleModal:       false,
     saveLoading:        false,
-    selectedBuildingId: undefined
+    selectedBuildingId: undefined,
+    selectedDeviceId:   undefined,
+    eventsLoading:      false
 };
 
 export const application = (state = initialState, action = {}) => {
     switch (action.type) {
+
+        case SELECT_DEVICE:
+
+            return {
+                ...state,
+                selectedDeviceId: action.payload
+            };
 
         case LOAD_BUILDINGS:
 
@@ -85,6 +102,8 @@ export const application = (state = initialState, action = {}) => {
         case OPEN_CREATE_SERVICE:
         case OPEN_CREATE_UNIT:
         case OPEN_EDIT_UNIT_MODAL:
+        case OPEN_CREATE_EVENT:
+        case OPEN_EDIT_EVENT_MODAL:
             return {
                 ...state,
                 visibleModal: true
@@ -141,6 +160,26 @@ export const application = (state = initialState, action = {}) => {
                 error:        action.payload
             };
 
+        case LOAD_EVENTS:
+
+            return {
+                ...state,
+                eventsLoading: true
+            };
+        case LOAD_EVENTS_SUCCESS:
+
+            return {
+                ...state,
+                eventsLoading: false
+            };
+
+        case LOAD_EVENTS_FAILED:
+
+            return {
+                ...state,
+                eventsLoading: false,
+                error:         action.payload
+            };
         case LOAD_DEVICES_SUCCESS:
 
             return {
@@ -182,6 +221,7 @@ export const application = (state = initialState, action = {}) => {
         case CANCEL_EDIT_DEVICE:
         case CANCEL_EDIT_SERVICE:
         case CANCEL_EDIT_UNIT:
+        case CANCEL_EDIT_EVENT:
             return {
                 ...state,
                 visibleModal: false
@@ -190,6 +230,7 @@ export const application = (state = initialState, action = {}) => {
         case SAVE_DEVICE:
         case SAVE_SERVICE:
         case SAVE_UNIT:
+        case SAVE_EVENT:
             return {
                 ...state,
                 saveLoading: true
@@ -201,6 +242,8 @@ export const application = (state = initialState, action = {}) => {
         case SAVE_NEW_SERVICE_SUCCESS:
         case SAVE_UNIT_SUCCESS:
         case SAVE_NEW_UNIT_SUCCESS:
+        case SAVE_EVENT_SUCCESS:
+        case SAVE_NEW_EVENT_SUCCESS:
             return {
                 ...state,
                 visibleModal: false,
@@ -210,6 +253,7 @@ export const application = (state = initialState, action = {}) => {
         case SAVE_DEVICE_FAILED:
         case SAVE_SERVICE_FAILED:
         case SAVE_UNIT_FAILED:
+        case SAVE_EVENT_FAILED:
             return {
                 ...state,
                 saveLoading: false,

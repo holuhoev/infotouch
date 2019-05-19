@@ -10,6 +10,7 @@ import { devices } from "./reducers/devices";
 import { services } from "./reducers/services";
 import buildings from "./reducers/buildings";
 import { units } from "./reducers/units";
+import { events } from "./reducers/events";
 
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -23,7 +24,8 @@ const rootReducer = combineReducers({
     devices,
     services,
     buildings,
-    units
+    units,
+    events
 });
 
 

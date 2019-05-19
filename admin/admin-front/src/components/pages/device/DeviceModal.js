@@ -35,7 +35,7 @@ class DeviceModal extends Component {
 
         return (
             <Modal
-                title={ editableDevice.title || "Заголовок" }
+                title={ editableDevice.title || "Устройство" }
                 visible={ visibleModal }
                 onOk={ this.handleSave }
                 confirmLoading={ saveLoading }

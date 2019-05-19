@@ -10,5 +10,6 @@ export const DEVICE   = '/device';
 export const SERVICE  = '/hseLocation';
 export const BUILDING = '/building';
 export const UNIT     = '/hseUnit';
+export const EVENT    = '/eventUrl';
 
 export const SERVICE_POINTS = '/hseLocation/points';

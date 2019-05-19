@@ -9,6 +9,7 @@ import MapPage from "../pages/map/MapPage";
 import ServicePage from "../pages/service/ServicePage";
 import DevicePage from "../pages/device/DevicePage";
 import UnitPage from "../pages/unit/UnitPage";
+import EventPage from "../pages/event/EventPage";
 
 const { Header, Content, Footer } = Layout;
 
@@ -32,6 +33,7 @@ function App({ location }) {
                         <Menu.Item key={ ROUTE.DEVICE }><Link to={ ROUTE.DEVICE }>Устройства</Link></Menu.Item>
                         <Menu.Item key={ ROUTE.UNIT }><Link to={ ROUTE.UNIT }>Подразделения</Link></Menu.Item>
                         <Menu.Item key={ ROUTE.SERVICE }><Link to={ ROUTE.SERVICE }>Услуги</Link></Menu.Item>
+                        <Menu.Item key={ ROUTE.EVENT }><Link to={ ROUTE.EVENT }>Мероприятия</Link></Menu.Item>
 
                     </Menu>
                 </Header>
@@ -46,6 +48,7 @@ function App({ location }) {
                             <Route path={ ROUTE.SERVICE } component={ ServicePage }/>
                             <Route path={ ROUTE.DEVICE } component={ DevicePage }/>
                             <Route path={ ROUTE.UNIT } component={ UnitPage }/>
+                            <Route path={ ROUTE.EVENT } component={ EventPage }/>
 
                         </Switch>
                     </div>

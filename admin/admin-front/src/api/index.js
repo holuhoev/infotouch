@@ -6,7 +6,7 @@ import {
     DEVICE,
     POST_CREATE_EDGE,
     POST_CREATE_POINT,
-    SERVICE, BUILDING, SERVICE_POINTS, UNIT
+    SERVICE, BUILDING, SERVICE_POINTS, UNIT, EVENT
 } from "../utils/url";
 
 
@@ -203,4 +203,44 @@ export const deleteUnitById = (id) => {
         .delete(`${ UNIT }/${ id }`)
         .then(responseData)
         .catch(error('DELETE', `${ UNIT }/${ id }`))
+};
+
+export const getEvents = (deviceId) => {
+
+    return axios
+        .get(EVENT, {
+            params: {
+                deviceId
+            }
+        })
+        .then(responseData)
+        .catch(error('GET', EVENT))
+};
+
+export const putEvent = ({ url, deviceId }, id) => {
+
+    return axios
+        .put(`${ EVENT }/${ id }`, {
+            url, deviceId
+        })
+        .then(responseData)
+        .catch(error('PUT', `${ EVENT }/${ id }`))
+};
+
+export const createEvent = ({ url, deviceId }) => {
+
+    return axios
+        .post(EVENT, {
+            url, deviceId
+        })
+        .then(responseData)
+        .catch(error('POST', EVENT))
+};
+
+export const deleteEventById = (id) => {
+
+    return axios
+        .delete(`${ EVENT }/${ id }`)
+        .then(responseData)
+        .catch(error('DELETE', `${ EVENT }/${ id }`))
 };

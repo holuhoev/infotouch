@@ -3,34 +3,34 @@ import { Form, Input, Modal } from "antd";
 import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
 
-import { cancelEditUnit, changeUnit, saveUnit } from "../../../store/reducers/units";
+import { cancelEditEvent, changeEvent, saveEvent } from "../../../store/reducers/events";
 
 
-class UnitModal extends Component {
+class EventModal extends Component {
 
     handleEdit = (e) => {
         const value = e.target.value;
         const field = e.target.name;
 
         if (field) {
-            this.props.changeUnit({ [ field ]: value })
+            this.props.changeEvent({ [ field ]: value })
         }
     };
 
     handleSave = () => {
-        this.props.saveUnit()
+        this.props.saveEvent()
     };
 
     handleCancel = () => {
-        this.props.cancelEditUnit()
+        this.props.cancelEditEvent()
     };
 
     render() {
-        const { unit, visibleModal, saveLoading } = this.props;
+        const { event, visibleModal, saveLoading } = this.props;
 
         return (
             <Modal
-                title={ unit.title || "Подразделение" }
+                title={ event.url || "Мероприятие" }
                 visible={ visibleModal }
                 onOk={ this.handleSave }
                 confirmLoading={ saveLoading }
@@ -40,15 +40,7 @@ class UnitModal extends Component {
             >
                 <Form layout="vertical" onChange={ this.handleEdit }>
                     <Form.Item>
-                        <Input name={ "title" } addonBefore={ "Заголовок" } value={ unit.title }/>
-                    </Form.Item>
-                    <Form.Item label="Описание">
-                        <Input.TextArea
-                            name={ "description" }
-                            autosize={ false }
-                            addonBefore={ "Описание" }
-                            value={ unit.description }
-                        />
+                        <Input name={ "url" } addonBefore={ "Ссылка" } value={ event.url }/>
                     </Form.Item>
                 </Form>
             </Modal>
@@ -59,7 +51,7 @@ class UnitModal extends Component {
 const mapStateToProps = (state) => {
 
     return {
-        unit:         state.units.editable,
+        event:        state.events.editable,
         visibleModal: state.application.visibleModal,
         saveLoading:  state.application.saveLoading,
     }
@@ -67,9 +59,9 @@ const mapStateToProps = (state) => {
 
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    cancelEditUnit,
-    saveUnit,
-    changeUnit
+    cancelEditEvent,
+    saveEvent,
+    changeEvent
 }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(UnitModal)
+export default connect(mapStateToProps, mapDispatchToProps)(EventModal)

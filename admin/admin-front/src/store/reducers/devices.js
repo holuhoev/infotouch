@@ -24,6 +24,8 @@ export const DELETE_DEVICE         = 'admin/device/DELETE_DEVICE';
 export const DELETE_DEVICE_SUCCESS = 'admin/device/DELETE_DEVICE_SUCCESS';
 export const DELETE_DEVICE_FAILED  = 'admin/device/DELETE_DEVICE_FAILED';
 
+export const SELECT_DEVICE = 'admin/device/SELECT_DEVICE';
+
 export const createDevice     = createAction(OPEN_CREATE_DEVICE);
 export const editDevice       = createAction(EDIT_DEVICE);
 export const loadDevices      = createAction(LOAD_DEVICES);
@@ -31,6 +33,7 @@ export const loadDeviceById   = createAction(LOAD_ONE_DEVICE);
 export const cancelEditDevice = createAction(CANCEL_EDIT_DEVICE);
 export const saveDevice       = createAction(SAVE_DEVICE);
 export const deleteDevice     = createAction(DELETE_DEVICE);
+export const selectDevice     = createAction(SELECT_DEVICE);
 
 const initState = {
     list:     [],

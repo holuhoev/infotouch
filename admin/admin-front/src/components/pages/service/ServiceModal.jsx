@@ -35,7 +35,7 @@ class ServiceModal extends Component {
 
         return (
             <Modal
-                title={ service.title || "Заголовок" }
+                title={ service.title || "Услуга" }
                 visible={ visibleModal }
                 onOk={ this.handleSave }
                 confirmLoading={ saveLoading }

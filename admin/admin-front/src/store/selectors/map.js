@@ -1,10 +1,11 @@
 import { filter, propEq, map, has, prop, indexBy, __, find, isNil, isEmpty } from "ramda";
 import { isRoomOrCorridor } from "../reducers/map";
 import { isPointInPolygon } from "../../utils/map";
-import { selectServiceByPointId, selectServiceIdByPointId } from "./services";
+import { selectServiceByPointId } from "./services";
 
 export const selectSchemes    = state => selectMapData(state).schemes;
 export const selectBuildingId = state => state.application.selectedBuildingId;
+export const selectDeviceId   = state => state.application.selectedDeviceId;
 
 export const selectCurrentSchemeEdges = state => {
     const currentSchemePointsObj = indexBy(prop('id'), selectCurrentSchemePoints(state));
