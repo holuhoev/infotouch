@@ -45,7 +45,7 @@ class ServiceModal extends Component {
             >
                 <Form layout="vertical" onChange={ this.handleEdit }>
                     <Form.Item>
-                        <Input name={ "title" } addonBefore={ "Заголовок" } value={ service.title }/>
+                        <Input name={ "title" } addonBefore={ "Наименование" } value={ service.title }/>
                     </Form.Item>
                     <Form.Item label={ "Тип услуги" }>
                         <ServiceTypeSelect

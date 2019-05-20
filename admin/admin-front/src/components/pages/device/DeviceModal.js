@@ -49,7 +49,7 @@ class DeviceModal extends Component {
                 <Spin spinning={ oneLoading }>
                     <Form layout="vertical" onChange={ this.handleEdit }>
                         <Form.Item>
-                            <Input name={ "title" } addonBefore={ "Заголовок" } value={ editableDevice.title }/>
+                            <Input name={ "title" } addonBefore={ "Наименование" } value={ editableDevice.title }/>
                         </Form.Item>
                         <Form.Item label="Описание">
                             <Input.TextArea

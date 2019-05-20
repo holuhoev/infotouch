@@ -40,7 +40,7 @@ class UnitModal extends Component {
             >
                 <Form layout="vertical" onChange={ this.handleEdit }>
                     <Form.Item>
-                        <Input name={ "title" } addonBefore={ "Заголовок" } value={ unit.title }/>
+                        <Input name={ "title" } addonBefore={ "Наименование" } value={ unit.title }/>
                     </Form.Item>
                     <Form.Item label="Описание">
                         <Input.TextArea
