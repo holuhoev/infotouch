@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { Form, Input, Modal } from "antd";
+import { Form, Input, message, Modal } from "antd";
 import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
 
 import { cancelEditUnit, changeUnit, saveUnit } from "../../../store/reducers/units";
+import { isEmpty } from "ramda";
 
 
 class UnitModal extends Component {
@@ -17,8 +18,21 @@ class UnitModal extends Component {
         }
     };
 
+    get requireValidatedData() {
+        const { unit }  = this.props;
+        const { title } = unit;
+
+
+        if (isEmpty(title)) {
+            message.warn("Наименование должна быть заполнено");
+            return false;
+        }
+
+        return true;
+    }
+
     handleSave = () => {
-        this.props.saveUnit()
+        this.requireValidatedData && this.props.saveUnit()
     };
 
     handleCancel = () => {

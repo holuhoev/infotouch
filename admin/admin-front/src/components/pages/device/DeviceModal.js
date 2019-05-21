@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Input, Modal, Spin } from "antd";
+import { Form, Input, Modal, Spin, message } from "antd";
 import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
 
@@ -8,6 +8,7 @@ import {
     editDevice,
     saveDevice
 } from "../../../store/reducers/devices";
+import { isEmpty } from "ramda";
 
 
 class DeviceModal extends Component {
@@ -21,8 +22,21 @@ class DeviceModal extends Component {
         }
     };
 
+    get requireValidatedData() {
+        const { editableDevice } = this.props;
+        const { title }          = editableDevice;
+
+
+        if (isEmpty(title)) {
+            message.warn("Наименование должно быть заполнено");
+            return false;
+        }
+
+        return true;
+    }
+
     handleSave = () => {
-        this.props.saveDevice()
+        this.requireValidatedData && this.props.saveDevice();
     };
 
     handleCancel = () => {

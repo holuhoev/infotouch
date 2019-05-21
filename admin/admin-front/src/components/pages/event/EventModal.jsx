@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { Form, Input, Modal } from "antd";
+import { Form, Input, message, Modal } from "antd";
 import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
 
 import { cancelEditEvent, changeEvent, saveEvent } from "../../../store/reducers/events";
+import { isEmpty } from "ramda";
 
 
 class EventModal extends Component {
@@ -17,8 +18,21 @@ class EventModal extends Component {
         }
     };
 
+    get requireValidatedData() {
+        const { event } = this.props;
+        const { url }   = event;
+
+
+        if (isEmpty(url)) {
+            message.warn("Ссылка должна быть заполнена");
+            return false;
+        }
+
+        return true;
+    }
+
     handleSave = () => {
-        this.props.saveEvent()
+        this.requireValidatedData && this.props.saveEvent()
     };
 
     handleCancel = () => {

@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { Form, Input, Modal, Spin } from "antd";
+import { Form, Input, message, Modal, Spin } from "antd";
 import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
 
 import { cancelEditService, changeService, saveService } from "../../../store/reducers/services";
 import ServiceTypeSelect from "../../common/service/ServiceTypeSelect";
+import { isEmpty } from "ramda";
 
 
 class ServiceModal extends Component {
@@ -18,8 +19,22 @@ class ServiceModal extends Component {
         }
     };
 
+    get requireValidatedData() {
+        const { service } = this.props;
+        const { title }   = service;
+
+
+        if (isEmpty(title)) {
+            message.warn("Наименование должна быть заполнено");
+            return false;
+        }
+
+        return true;
+    }
+
+
     handleSave = () => {
-        this.props.saveService()
+        this.requireValidatedData && this.props.saveService()
     };
 
     handleCancel = () => {
