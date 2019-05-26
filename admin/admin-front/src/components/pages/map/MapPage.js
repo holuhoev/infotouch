@@ -406,7 +406,7 @@ class MapPage extends Component {
                     Ребра
                 </Menu.Item>
                 <Menu.Item disabled={ disabled } onClick={ this.startDrawingStairs }>
-                    Лестницу
+                    Переход
                 </Menu.Item>
                 <Menu.Item disabled={ disabled } onClick={ this.setAddingServicesMode }>
                     Услуги

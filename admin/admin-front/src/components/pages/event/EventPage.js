@@ -76,8 +76,12 @@ class EventPage extends Component {
                                 }) }>
                                     <Skeleton loading={ eventsLoading } active>
                                         <List.Item.Meta
-                                            avatar={ <Title level={ 4 }>{ event.id }</Title> }
-                                            title={ event.url }
+                                            avatar={ (
+                                                <Title level={ 4 }>
+                                                    <a href={ event.url } target={"_blank"}>{ event.url }</a>
+                                                </Title>
+                                            ) }
+                                            // title={ event.url }
                                         />
                                     </Skeleton>
                                 </List.Item>
