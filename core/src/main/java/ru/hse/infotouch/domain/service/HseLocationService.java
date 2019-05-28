@@ -8,6 +8,7 @@ import ru.hse.infotouch.domain.dto.request.HseLocationRequest;
 import ru.hse.infotouch.domain.models.admin.HseLocation;
 import ru.hse.infotouch.domain.models.map.BuildingScheme;
 import ru.hse.infotouch.domain.models.map.Point;
+import ru.hse.infotouch.domain.models.map.SchemeElement;
 import ru.hse.infotouch.domain.repo.HseLocationRepository;
 import ru.hse.infotouch.util.PostgresPointUtils;
 
@@ -24,17 +25,19 @@ public class HseLocationService {
     private final BuildingSchemeService schemeService;
     private final PostgresPointUtils postgresPointUtils;
     private final EntityManager entityManager;
+    private final SchemeElementService schemeElementService;
 
     public HseLocationService(HseLocationRepository repository,
                               HseLocationDatasource datasource,
                               PointService pointService,
-                              BuildingSchemeService schemeService, PostgresPointUtils postgresPointUtils, EntityManager entityManager) {
+                              BuildingSchemeService schemeService, PostgresPointUtils postgresPointUtils, EntityManager entityManager, SchemeElementService schemeElementService) {
         this.repository = repository;
         this.datasource = datasource;
         this.pointService = pointService;
         this.schemeService = schemeService;
         this.postgresPointUtils = postgresPointUtils;
         this.entityManager = entityManager;
+        this.schemeElementService = schemeElementService;
     }
 
     public List<HseLocation> findAll(Integer buildingId) {
@@ -53,8 +56,9 @@ public class HseLocationService {
         if (location.getPointId() != null) {
             Point point = pointService.getOneById(location.getPointId());
 
-            if (point.getBuildingSchemeId() != null) {
-                BuildingScheme scheme = schemeService.getOneById(point.getBuildingSchemeId());
+            if (point.getSchemeElementId() != null) {
+                SchemeElement element = schemeElementService.getOneById(point.getSchemeElementId());
+                BuildingScheme scheme = schemeService.getOneById(element.getBuildingSchemeId());
 
                 location.setBuildingSchemeId(scheme.getId());
                 location.setFloor(scheme.getFloor());
