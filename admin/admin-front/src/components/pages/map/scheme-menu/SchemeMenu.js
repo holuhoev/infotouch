@@ -2,6 +2,7 @@ import React from 'react';
 import { Radio } from "antd";
 import { Component } from "react";
 import { bindActionCreators } from "redux";
+import {sortBy,prop} from 'ramda';
 
 import {
     selectMapCurrentSchemeId,
@@ -44,7 +45,7 @@ const mapStateToProps = (state) => {
 
     return {
         currentSchemeId: selectMapCurrentSchemeId(state),
-        schemes:         selectSchemes(state),
+        schemes:         sortBy(prop('floor'))(selectSchemes(state)),
         disabled:        state.map.loading
     }
 };

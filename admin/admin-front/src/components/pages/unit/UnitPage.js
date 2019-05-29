@@ -76,7 +76,7 @@ class UnitPage extends Component {
                                 }) }>
                                     <Skeleton loading={ unitsLoading } active>
                                         <List.Item.Meta
-                                            avatar={ <Title level={ 4 }>{ unit.id }</Title> }
+                                            // avatar={ <Title level={ 4 }>{ unit.id }</Title> }
                                             title={ unit.title }
                                             description={ unit.floorLabel
                                             + " | "

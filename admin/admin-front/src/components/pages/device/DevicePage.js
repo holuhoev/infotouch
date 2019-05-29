@@ -60,7 +60,7 @@ class DevicePage extends Component {
                             }) }>
                                 <Skeleton loading={ listLoading } active>
                                     <List.Item.Meta
-                                        avatar={ <Title level={ 4 }>{ device.id }</Title> }
+                                        // avatar={ <Title level={ 4 }>{ device.id }</Title> }
                                         title={ device.title }
                                         description={ device.description }
                                     />

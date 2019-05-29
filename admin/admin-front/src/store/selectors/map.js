@@ -1,4 +1,4 @@
-import { filter, propEq, map, has, prop, indexBy, __, find, isNil, isEmpty } from "ramda";
+import { filter, propEq, map, has, prop, indexBy, __, find, isNil, isEmpty,sortBy } from "ramda";
 import { isRoomOrCorridor } from "../reducers/map";
 import { isPointInPolygon } from "../../utils/map";
 import { selectServiceByPointId } from "./services";

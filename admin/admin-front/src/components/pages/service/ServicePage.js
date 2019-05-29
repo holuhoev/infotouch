@@ -76,7 +76,7 @@ class ServicePage extends Component {
                                 }) }>
                                     <Skeleton loading={ servicesLoading } active>
                                         <List.Item.Meta
-                                            avatar={ <Title level={ 4 }>{ service.id }</Title> }
+                                            // avatar={ <Title level={ 4 }>{ service.id }</Title> }
                                             title={ service.title }
                                             description={ service.floorLabel
                                             + " | "
