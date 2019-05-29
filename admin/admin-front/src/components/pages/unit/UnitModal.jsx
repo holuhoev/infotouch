@@ -24,7 +24,7 @@ class UnitModal extends Component {
 
 
         if (isEmpty(title)) {
-            message.warn("Наименование должна быть заполнено");
+            message.warn("Наименование должно быть заполнено");
             return false;
         }
 

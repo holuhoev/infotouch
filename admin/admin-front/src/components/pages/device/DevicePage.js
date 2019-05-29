@@ -13,12 +13,14 @@ import {
 import DeviceModal from "./DeviceModal";
 import { showDeleteConfirm } from "../../common/delete-modal/DeleteModal";
 import { renderListItemActions } from "../../common/list-item-actions/ListItemActions";
+import {loadBuildings} from "../../../store/reducers/buildings";
 
 const { Title } = Typography;
 
 class DevicePage extends Component {
 
     componentDidMount() {
+        this.props.loadBuildings();
         this.props.loadDevices();
     }
 
@@ -89,7 +91,8 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     loadDevices,
     loadDeviceById,
     createDevice,
-    deleteDevice
+    deleteDevice,
+    loadBuildings
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(DevicePage);

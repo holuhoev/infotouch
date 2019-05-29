@@ -9,6 +9,7 @@ import {
     saveDevice
 } from "../../../store/reducers/devices";
 import { isEmpty } from "ramda";
+import {selectEditableDevice} from "../../../store/selectors/devices";
 
 
 class DeviceModal extends Component {
@@ -73,17 +74,18 @@ class DeviceModal extends Component {
                                 value={ editableDevice.description }
                             />
                         </Form.Item>
-                        <Form.Item>
-                            <Input
-                                disabled={ true }
-                                name={ "buildingId" }
-                                style={ {
-                                    paddingTop: 10
-                                } }
-                                addonBefore={ "ID здания" }
-                                value={ editableDevice.buildingId }
-                            />
-                        </Form.Item>
+                        {editableDevice.buildingName && (
+                            <Form.Item>
+                                <Input
+                                    disabled={ true }
+                                    style={ {
+                                        paddingTop: 10
+                                    } }
+                                    addonBefore={ "Адрес" }
+                                    value={ editableDevice.buildingName }
+                                />
+                            </Form.Item>
+                        )}
                     </Form>
                 </Spin>
             </Modal>
@@ -95,7 +97,7 @@ const mapStateToProps = (state) => {
 
     return {
         oneLoading:     state.application.oneLoading,
-        editableDevice: state.devices.editable,
+        editableDevice: selectEditableDevice(state),
         visibleModal:   state.application.visibleModal,
         saveLoading:    state.application.saveLoading,
     }
