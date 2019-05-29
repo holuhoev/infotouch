@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal } from "antd";
 
 const confirm      = Modal.confirm;
-const titleDefault = 'Вы уверены, что хотите удалить этот объект?';
+const titleDefault = 'Удалить объект?';
 
 export function showDeleteConfirm({
                                       onDelete,
@@ -11,7 +11,7 @@ export function showDeleteConfirm({
                                   }) {
     confirm({
         title:      title || titleDefault,
-        content:    `ID - ${ id }`,
+        // content:    `ID - ${ id }`,
         okText:     'Да',
         okType:     'danger',
         cancelText: 'Нет',

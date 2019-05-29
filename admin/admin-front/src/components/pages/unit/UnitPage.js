@@ -35,10 +35,10 @@ class UnitPage extends Component {
         this.props.openCreateUnitModal()
     };
 
-    onDeleteClick = ({ id }) => () => {
+    onDeleteClick = ({ id,title }) => () => {
         const { deleteUnit } = this.props;
 
-        showDeleteConfirm({ id, onDelete: deleteUnit })
+        showDeleteConfirm({ id, onDelete: deleteUnit, title: `Удалить устройство \`${title}\`` })
     };
 
 

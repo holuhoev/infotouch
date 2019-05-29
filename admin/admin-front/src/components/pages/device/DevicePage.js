@@ -32,10 +32,10 @@ class DevicePage extends Component {
         this.props.createDevice()
     };
 
-    onDeleteClick = ({ id }) => () => {
+    onDeleteClick = ({ id,title }) => () => {
         const { deleteDevice } = this.props;
 
-        showDeleteConfirm({ id, onDelete: deleteDevice })
+        showDeleteConfirm({ id,onDelete:deleteDevice, title: `Удалить устройство \`${title}\`` })
     };
 
     render() {

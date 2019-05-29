@@ -35,10 +35,10 @@ class ServicePage extends Component {
         this.props.openCreateServiceModal()
     };
 
-    onDeleteClick = ({ id }) => () => {
+    onDeleteClick = ({ id,title }) => () => {
         const { deleteService } = this.props;
 
-        showDeleteConfirm({ id, onDelete: deleteService })
+        showDeleteConfirm({ id, onDelete: deleteService, title: `Удалить услугу \`${title}\` ?` })
     };
 
 
