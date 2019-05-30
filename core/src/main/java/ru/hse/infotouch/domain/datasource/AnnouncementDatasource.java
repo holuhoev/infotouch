@@ -20,6 +20,8 @@ public class AnnouncementDatasource {
     @Value("${entities.page-size.default}")
     private int pageSize;
 
+    private int announcementLimit = 2;
+
     private final EntityManager em;
 
     private final QAnnouncement qAnnouncement = QAnnouncement.announcement;
@@ -46,8 +48,8 @@ public class AnnouncementDatasource {
         return query.where(whereClause)
                 .distinct()
                 .offset(pageSize * page)
-                .limit(pageSize)
-                .orderBy(qAnnouncement.id.asc())
+                .limit(announcementLimit)
+                .orderBy(qAnnouncement.id.desc())
                 .fetch();
     }
 
