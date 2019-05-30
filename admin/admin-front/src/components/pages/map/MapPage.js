@@ -8,7 +8,14 @@ import {
     loadBuildingMap,
     saveCreatedPoints,
     undo,
-    redo, addEdge, saveCreatedEdges, cancelCreatedEdges, isElementHasLabel, isElementIsStair, changeSelectedPoint
+    redo,
+    addEdge,
+    saveCreatedEdges,
+    cancelCreatedEdges,
+    isElementHasLabel,
+    isElementIsStair,
+    changeSelectedPoint,
+    changeSelectedElement
 } from "../../../store/reducers/map";
 import {
     selectCurrentSchemeEdges,
@@ -57,7 +64,7 @@ const renderStairs = element => {
     )
 };
 
-function Element(item) {
+function Element({item, onClick}) {
 
     return (
         <Fragment>
@@ -67,6 +74,7 @@ function Element(item) {
                 stroke={ "#236481" }
                 strokeWidth={ 1 }
                 opacity={ 0.8 }
+                onClick={onClick}
             />
             { isElementHasLabel(item) && (
                 <text
@@ -232,6 +240,18 @@ class MapPage extends Component {
 
     redoCreate = e => {
         this.props.redo()
+    };
+
+    onElementClick = element => e => {
+        const { mode } = this.state;
+
+        switch (mode) {
+            case MODE.NONE:
+                this.props.changeSelectedElement(element.id);
+                break;
+            default:
+                break;
+        }
     };
 
     onPointClick = point => e => {
@@ -461,7 +481,8 @@ class MapPage extends Component {
                                 elements.map((element, index) => (
                                     <Element
                                         key={ index }
-                                        { ...element }
+                                        onClick={this.onElementClick(element)}
+                                        item={element}
                                     />
                                 ))
                             }
@@ -517,7 +538,8 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     loadBuildings,
     changeSelectedPoint,
     loadServices,
-    saveServicesPoints
+    saveServicesPoints,
+    changeSelectedElement
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapPage);
