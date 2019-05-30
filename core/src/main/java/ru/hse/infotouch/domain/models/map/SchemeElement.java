@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "map_element")
+@Table(name = "scheme_element")
 public class SchemeElement implements DomainObject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +27,7 @@ public class SchemeElement implements DomainObject {
     private Integer buildingSchemeId;
 
     @Column(name = "point_id")
-    private Integer pointId;
+    private Integer centerPointId;
 
     public Integer getBuildingSchemeId() {
         return buildingSchemeId;
@@ -92,11 +92,11 @@ public class SchemeElement implements DomainObject {
                 '}';
     }
 
-    public Integer getPointId() {
-        return pointId;
+    public Integer getCenterPointId() {
+        return centerPointId;
     }
 
-    public void setPointId(Integer pointId) {
-        this.pointId = pointId;
+    public void setCenterPointId(Integer centerPointId) {
+        this.centerPointId = centerPointId;
     }
 }

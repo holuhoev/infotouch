@@ -21,10 +21,7 @@ public class Point implements DomainObject {
     @Column(name = "y")
     private Integer y;
 
-    @Column(name = "building_scheme_id")
-    private Integer buildingSchemeId;
-
-    @Transient
+    @Column(name = "scheme_element_id")
     private Integer schemeElementId;
 
     public Integer getId() {
@@ -64,20 +61,11 @@ public class Point implements DomainObject {
         return Objects.hash(id);
     }
 
-    public Integer getBuildingSchemeId() {
-        return buildingSchemeId;
-    }
-
-    public void setBuildingSchemeId(Integer buildingSchemeId) {
-        this.buildingSchemeId = buildingSchemeId;
-    }
-
-    public static Point createFromRequest(CreatePointDTO createPointDTO, int buildingSchemeId) {
+    public static Point createFromRequest(CreatePointDTO createPointDTO) {
         Point point = new Point();
 
         point.setX(createPointDTO.getX());
         point.setY(createPointDTO.getY());
-        point.setBuildingSchemeId(buildingSchemeId);
         point.setSchemeElementId(createPointDTO.getSchemeElementId());
 
         return point;

@@ -12,14 +12,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 public class PointService {
     private final PointRepository pointRepository;
     private final EntityManager entityManager;
-    private final QPoint qPoint = QPoint.point;
 
     public PointService(PointRepository pointRepository, EntityManager entityManager) {
         this.pointRepository = pointRepository;
@@ -28,65 +26,25 @@ public class PointService {
 
     public Point getOneById(int id) {
 
-         return this.pointRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(String.format("Точки с id \"%d\" не существует", id)));
+        return this.pointRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(String.format("Точки с id \"%d\" не существует", id)));
     }
-    @Transactional
-    public List<Point> createNew(int buildingSchemeId, List<CreatePointDTO> createPointDTOS) {
+
+    public List<Point> createNew(List<CreatePointDTO> createPointDTOS) {
         List<Point> toSave = createPointDTOS.stream()
-                .map(toCreate -> Point.createFromRequest(toCreate, buildingSchemeId))
+                .map(Point::createFromRequest)
                 .collect(Collectors.toList());
 
-        List<Point> saved = pointRepository.saveAll(toSave);
-
-
-        // 4. Проставить связи c scheme_element
-        saved.stream()
-                .filter(point -> Objects.nonNull(point.getSchemeElementId()))
-                .map(point -> {
-                    Query query = entityManager.createNativeQuery("update map_element set point_id=:pointId where id=:schemeElementId");
-                    query.setParameter("pointId", point.getId())
-                            .setParameter("schemeElementId", point.getSchemeElementId());
-
-                    return query;
-                }).forEach(Query::executeUpdate);
-
-        return saved;
+        return pointRepository.saveAll(toSave);
     }
-
 
     @Transactional
-    public List<Point> saveAll(int buildingSchemeId, List<CreatePointDTO> createPointDTOS) {
-        removePointsAndRelations(buildingSchemeId);
+    public void delete(int pointId) {
+        Query deleteEdges = entityManager.createNativeQuery("delete from edge where left_point_id = :pointId or right_point_id = :pointId");
+        deleteEdges.setParameter("pointId", pointId).executeUpdate();
 
-        // 3. Создать новые точки
-        return createNew(buildingSchemeId, createPointDTOS);
-    }
+        Query removeFromHseLocations = entityManager.createNativeQuery("update hse_location set point_id = null where point_id = :pointId");
+        removeFromHseLocations.setParameter("pointId", pointId).executeUpdate();
 
-
-    private void removePointsAndRelations(int buildingSchemeId) {
-        // 1. Взять ID всех старых точек
-        List<Integer> ids = getPointIdsByScheme(buildingSchemeId);
-
-        if (ids.size() > 0) {
-            // 2. Удалить все связи старых точек в scheme_element
-            Query query = entityManager.createNativeQuery("update map_element set point_id=null where point_id in (:point_id_list)");
-            query.setParameter("point_id_list", ids).executeUpdate();
-
-            // 3. Удалить связи в ребрах
-            Query deleteEdges = entityManager.createNativeQuery("delete from edge where left_point_id in (:point_id_list)");
-            deleteEdges.setParameter("point_id_list", ids).executeUpdate();
-
-            // 4. Удалить сами точки
-            Query delete = entityManager.createNativeQuery("delete from point where building_scheme_id=:schemeId");
-            delete.setParameter("schemeId", buildingSchemeId).executeUpdate();
-        }
-    }
-
-    private List<Integer> getPointIdsByScheme(int buildingSchemeId) {
-        return new JPAQuery<Integer>(entityManager)
-                .select(qPoint.id)
-                .from(qPoint)
-                .where(qPoint.buildingSchemeId.eq(buildingSchemeId))
-                .fetch();
+        pointRepository.deleteById(pointId);
     }
 }

@@ -1,13 +1,10 @@
 package ru.hse.infotouch.admin.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 
 
 import ru.hse.infotouch.domain.dto.BuildingMapDTO;
@@ -23,6 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/building/scheme")
+@Api
 public class AdminBuildingMapController {
     private final BuildingMapService buildingMapService;
     private final PointService pointService;
@@ -34,33 +32,30 @@ public class AdminBuildingMapController {
         this.edgeService = edgeService;
     }
 
-    // 4. Create new points
+
     @PostMapping("/points/create")
     public ResponseEntity<List<Point>> createNewPoints(@RequestBody CreatePointsRequest request) {
-
-        return ResponseEntity.ok(pointService.createNew(request.getBuildingSchemeId(), request.getPoints()));
+        // todo: выдавать ошибку если не прислали ID комнаты
+        // UIException
+        return ResponseEntity.ok(pointService.createNew(request.getPoints()));
     }
 
-    // 1. Save points and remove all edges
-    @PutMapping("/points/{schemeId}")
-    public ResponseEntity<List<Point>> savePoints(@PathVariable("schemeId") int schemeId,
-                                                  CreatePointsRequest request) {
-        return ResponseEntity.ok(pointService.saveAll(schemeId, request.getPoints()));
+    @DeleteMapping("/points/{pointId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiOperation(value = "Remove point and relations",
+            notes = "1. Remove point\n 2.Remove edges 3. Remove from service")
+    public void deletePoint(@PathVariable("pointId") int pointId) {
+        pointService.delete(pointId);
     }
 
-    // 2. Create edges
     @PostMapping("/edges")
     public ResponseEntity<List<Edge>> createEdges(@RequestBody CreateEdgesRequest request) {
         return ResponseEntity.ok(edgeService.create(request.getEdges()));
     }
 
-    // 3. Get BuildingMapDTO
     @GetMapping("/{buildingId}")
     public ResponseEntity<BuildingMapDTO> getOne(@PathVariable("buildingId") int buildingId) {
 
         return ResponseEntity.ok(buildingMapService.getOne(buildingId));
     }
-
-
-    // 4. создание схемы и карты пока не предусмотрено
 }

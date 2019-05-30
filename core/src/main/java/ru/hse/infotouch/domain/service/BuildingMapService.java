@@ -32,7 +32,7 @@ public class BuildingMapService {
 
         List<BuildingScheme> schemes = buildingSchemeService.findAll(buildingId);
         List<SchemeElement> elements = schemeElementService.findAll(getIds(schemes));
-        List<Point> points = pointDatasource.findAll(getIds(schemes));
+        List<Point> points = pointDatasource.findAll(getIds(elements));
         List<Edge> edges = edgeService.findAll(getIds(points));
 
         result.setSchemes(schemes);

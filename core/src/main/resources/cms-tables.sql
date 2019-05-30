@@ -175,7 +175,7 @@ create table "hse_unit"
   title          text default '',
   description    text default '',
   building_id    integer not null references building (id),
-  map_element_id integer null references map_element (id),
+  map_element_id integer null references scheme_element (id),
   CONSTRAINT hse_unit_ID_uindex UNIQUE (ID)
 );
 

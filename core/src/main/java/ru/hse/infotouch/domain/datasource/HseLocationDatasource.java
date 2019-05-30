@@ -11,6 +11,7 @@ import ru.hse.infotouch.domain.models.admin.QHseLocation;
 import ru.hse.infotouch.domain.models.map.BuildingScheme;
 import ru.hse.infotouch.domain.models.map.QBuildingScheme;
 import ru.hse.infotouch.domain.models.map.QPoint;
+import ru.hse.infotouch.domain.models.map.QSchemeElement;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -24,6 +25,7 @@ public class HseLocationDatasource {
     private final QHseLocation qHseLocation = QHseLocation.hseLocation;
     private final QBuildingScheme qBuildingScheme = QBuildingScheme.buildingScheme;
     private final QPoint qPoint = QPoint.point;
+    private final QSchemeElement qSchemeElement = QSchemeElement.schemeElement;
 
     @Autowired
     public HseLocationDatasource(EntityManager entityManager) {
@@ -42,7 +44,8 @@ public class HseLocationDatasource {
                 .select(qHseLocation, qBuildingScheme)
                 .from(qHseLocation)
                 .leftJoin(qPoint).on(qPoint.id.eq(qHseLocation.pointId))
-                .leftJoin(qBuildingScheme).on(qPoint.buildingSchemeId.eq(qBuildingScheme.id))
+                .leftJoin(qSchemeElement).on(qPoint.schemeElementId.eq(qSchemeElement.id))
+                .leftJoin(qBuildingScheme).on(qSchemeElement.buildingSchemeId.eq(qBuildingScheme.id))
                 .where(where)
                 .distinct()
                 .fetch()

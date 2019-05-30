@@ -1,8 +1,5 @@
 package ru.hse.infotouch.domain.service;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.PrecisionModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.hse.infotouch.domain.datasource.DeviceDatasource;
@@ -31,8 +28,7 @@ public class DeviceService {
     private final Device2AdRepository device2AdRepository;
     private final PointRepository pointRepository;
     private final BuildingSchemeService buildingSchemeService;
-
-    private GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
+    private final SchemeElementService schemeElementService;
 
     public DeviceService(EntityManager entityManager,
                          DeviceDatasource datasource,
@@ -40,7 +36,7 @@ public class DeviceService {
                          Device2NewsRepository device2NewsRepository,
                          Device2AnnouncementRepository device2AnnouncementRepository,
                          Device2AdRepository device2AdRepository,
-                         PointRepository pointRepository, BuildingSchemeService buildingSchemeService) {
+                         PointRepository pointRepository, BuildingSchemeService buildingSchemeService, SchemeElementService schemeElementService) {
         this.entityManager = entityManager;
         this.datasource = datasource;
         this.deviceRepository = deviceRepository;
@@ -49,6 +45,7 @@ public class DeviceService {
         this.device2AdRepository = device2AdRepository;
         this.pointRepository = pointRepository;
         this.buildingSchemeService = buildingSchemeService;
+        this.schemeElementService = schemeElementService;
     }
 
 
@@ -62,9 +59,13 @@ public class DeviceService {
 
         if (device.getPointId() != null) {
             pointRepository.findById(device.getPointId()).ifPresent(point -> {
-                if (point.getBuildingSchemeId() != null) {
-                    BuildingScheme buildingScheme = buildingSchemeService.getOneById(point.getBuildingSchemeId());
-                    device.setBuildingId(buildingScheme.getBuildingId());
+                // replace this
+                if (point.getSchemeElementId() != null) {
+                    SchemeElement schemeElement = schemeElementService.getOneById(point.getSchemeElementId());
+                    if (schemeElement.getBuildingSchemeId() != null) {
+                        BuildingScheme buildingScheme = buildingSchemeService.getOneById(schemeElement.getBuildingSchemeId());
+                        device.setBuildingId(buildingScheme.getBuildingId());
+                    }
                 }
             });
         }
