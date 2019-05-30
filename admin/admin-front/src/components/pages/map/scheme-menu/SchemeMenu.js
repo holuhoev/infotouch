@@ -41,12 +41,12 @@ class SchemeMenu extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state,ownProps) => {
 
     return {
         currentSchemeId: selectMapCurrentSchemeId(state),
         schemes:         sortBy(prop('floor'))(selectSchemes(state)),
-        disabled:        state.map.loading
+        disabled:        state.map.loading || ownProps.disabled
     }
 };
 

@@ -1,4 +1,4 @@
-import { prop, map, find, propEq, isEmpty } from "ramda";
+import { prop, map, find, propEq, isEmpty, indexBy } from "ramda";
 
 import { calculateCentroid, calculateStairsLines } from "../../utils/map";
 import { createAction } from "../../utils/action";
@@ -44,7 +44,7 @@ const initialState = {
     error:            null,
     data:             {
         schemes:  [],
-        points:   [],
+        points:   {},
         elements: [],
         edges:    []
     },
@@ -84,17 +84,16 @@ const reducer = (state = initialState, action = {}) => {
             };
 
         case SAVE_CREATED_POINTS_SUCCESS:
-            const getFloor = getFloorByScheme(state.data.schemes);
 
             return {
                 ...state,
                 loading: false,
                 data:    {
                     ...state.data,
-                    points: [
+                    points: {
                         ...state.data.points,
-                        ...map(mapPoint(getFloor), action.payload)
-                    ]
+                        ...indexBy(prop('id'), action.payload)
+                    }
                 }
             };
 
@@ -138,24 +137,10 @@ const mapFromServer = data => {
     const getFloor = getFloorByScheme(schemes);
 
     return {
-        points:   map(mapPoint(getFloor), points),
-        elements: map(mapElement(getFloor), elements),
+        points:   indexBy(prop('id'), points),
+        elements: indexBy(prop('id'), map(mapElement(getFloor), elements)),
         edges:    map(mapEdge, edges),
         schemes:  schemes || []
-    }
-};
-
-const mapPoint = getFloor => point => {
-    const { buildingSchemeId, x, y, id } = point;
-
-    const floor = getFloor(buildingSchemeId);
-
-    return {
-        x,
-        y,
-        id,
-        floor,
-        buildingSchemeId
     }
 };
 

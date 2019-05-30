@@ -1,4 +1,4 @@
-import { filter, propEq, map, has, prop, indexBy, __, find, isNil, isEmpty,sortBy } from "ramda";
+import { filter, propEq, map, has, prop, indexBy, __, find, isNil, isEmpty, values } from "ramda";
 import { isRoomOrCorridor } from "../reducers/map";
 import { isPointInPolygon } from "../../utils/map";
 import { selectServiceByPointId } from "./services";
@@ -33,10 +33,17 @@ export const selectSchemeCreatedPoints     = state => state.createdPoints.presen
         isNew: true
     }
 });
-export const selectCurrentSchemePoints     = state => [
-    ...filterByCurrentSchemeId(state)(selectSchemePoints(state)),
-    ...selectSchemeCreatedPoints(state)
-];
+
+export const selectCurrentSchemePoints     = state => {
+    const schemeId = selectMapCurrentSchemeId(state);
+    const pointShouldDisplayed = point => selectSchemeElementSchemeId(state, point.schemeElementId) === schemeId;
+
+    return [
+        ...filter(pointShouldDisplayed, (values(selectSchemePoints(state)))),
+        ...selectSchemeCreatedPoints(state) // отображаем все новые, т.к. создать точки можно только на одном этаже
+    ];
+};
+
 const swapEdgePoints                       = edge => [ edge[ 1 ], edge[ 0 ] ];
 export const selectCurrentSchemeStairPoint = state => {
     const currentSchemePointsObj = indexBy(prop('id'), selectCurrentSchemePoints(state));
@@ -67,7 +74,7 @@ export const selectPoints                = state => {
         isInStair: !!stairPoints[ point.id ]
     }))
 };
-export const selectCurrentSchemeElements = state => filterByCurrentSchemeId(state)(selectSchemeElements(state));
+export const selectCurrentSchemeElements = state => filterByCurrentSchemeId(state)(values(selectSchemeElements(state)));
 
 
 export const selectSchemeCreatedEdges = state => state.createdEdges.present;
@@ -81,6 +88,8 @@ const selectSchemeEdges    = state => selectMapData(state).edges;
 const selectSchemeElements = state => selectMapData(state).elements;
 const selectSchemePoints   = state => selectMapData(state).points;
 
+const selectSchemeElementSchemeId = (state, id) => selectSchemeElements(state)[ id ].buildingSchemeId;
+
 const selectMapData                   = state => state.map.data;
 export const selectMapCurrentSchemeId = state => state.map.buildingSchemeId;
 
@@ -88,14 +97,14 @@ const filterByCurrentSchemeId = state => filterBySchemeId(selectMapCurrentScheme
 const filterBySchemeId        = buildingSchemeId => array => filter(propEq('buildingSchemeId', buildingSchemeId), array);
 
 
-export const selectRoomId = (state, [ x, y ]) => {
-    const room = selectRoomOrCorridorByCoordinates(state, [ x, y ]);
+export const selectElementIdByCoordinates = (state, [ x, y ]) => {
+    const room = selectElementByCoordinates(state, [ x, y ]);
 
     return room ? room.id : room
 };
 
-const selectRoomOrCorridorByCoordinates = (state, [ x, y ]) => {
-    const all = selectCurrentSchemeElements(state).filter(isRoomOrCorridor);
+const selectElementByCoordinates = (state, [ x, y ]) => {
+    const all = selectCurrentSchemeElements(state);
 
     return getElementByCoordinates(all, [ x, y ]);
 };

@@ -45,6 +45,9 @@ public class PointService {
         Query removeFromHseLocations = entityManager.createNativeQuery("update hse_location set point_id = null where point_id = :pointId");
         removeFromHseLocations.setParameter("pointId", pointId).executeUpdate();
 
+        Query removeFromSchemeElement = entityManager.createNativeQuery("update scheme_element set point_id = null where point_id = :pointId");
+        removeFromSchemeElement.setParameter("pointId", pointId).executeUpdate();
+
         pointRepository.deleteById(pointId);
     }
 }

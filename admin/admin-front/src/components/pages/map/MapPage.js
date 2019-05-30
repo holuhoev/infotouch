@@ -427,7 +427,7 @@ class MapPage extends Component {
         return (
             <div className={ "map-page" }>
                 <div className="map-page__scheme-menu">
-                    <SchemeMenu/>
+                    <SchemeMenu disabled={ mode === MODE.ADD_POINT }/>
                     <BuildingSelector style={ { width: 430 } } afterSelect={ this.afterBuildingSelect }/>
                 </div>
 

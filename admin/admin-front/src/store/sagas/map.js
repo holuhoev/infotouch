@@ -13,10 +13,11 @@ import { createNewEdges, createNewPoints, getBuildingMap } from "../../api";
 import {
     selectBuildingId,
     selectMapCurrentSchemeId,
-    selectRoomId,
+    selectElementIdByCoordinates,
     selectSchemeCreatedPoints,
     selectSchemeEdgesForSave
 } from "../selectors/map";
+import { filter } from "ramda";
 
 
 export default function* main() {
@@ -25,6 +26,7 @@ export default function* main() {
     yield takeLatest(SAVE_CREATED_EDGES, saveCreatedEdges)
 }
 
+const pointHasSchemeElement = point => !!point.schemeElementId;
 
 function* fetchBuildingMap(action) {
     try {
@@ -51,11 +53,10 @@ function* saveCreatedPoints() {
         const points = selectSchemeCreatedPoints(state);
 
         const data = {
-            points:           points.map(point => ({
+            points:           filter(pointHasSchemeElement, points.map(point => ({
                 ...point,
-                schemeElementId: selectRoomId(state, [ point.x, point.y ])
-            })),
-            buildingSchemeId: selectMapCurrentSchemeId(state)
+                schemeElementId: selectElementIdByCoordinates(state, [ point.x, point.y ])
+            })))
         };
 
         const saved = yield call(createNewPoints, data);

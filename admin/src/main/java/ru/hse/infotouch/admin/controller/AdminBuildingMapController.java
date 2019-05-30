@@ -43,7 +43,7 @@ public class AdminBuildingMapController {
     @DeleteMapping("/points/{pointId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation(value = "Remove point and relations",
-            notes = "1. Remove point\n 2.Remove edges 3. Remove from service")
+            notes = "1. Remove point\n 2.Remove edges 3. Remove from service 4. Remove from scheme element")
     public void deletePoint(@PathVariable("pointId") int pointId) {
         pointService.delete(pointId);
     }
