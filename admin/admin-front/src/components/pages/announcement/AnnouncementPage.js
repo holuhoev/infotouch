@@ -36,10 +36,10 @@ class AnnouncementPage extends Component {
     this.props.openCreateAnnouncementModal()
   };
 
-  onDeleteClick = ({id,url}) => () => {
+  onDeleteClick = ({id, title}) => () => {
     const {deleteAnnouncement} = this.props;
 
-    showDeleteConfirm({id, onDelete: deleteAnnouncement, title: `Удалить объявление \`${url}\`?`})
+    showDeleteConfirm({id, onDelete: deleteAnnouncement, title: `Удалить объявление \`${title}\`?`})
   };
 
   render() {

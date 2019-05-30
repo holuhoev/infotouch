@@ -37,13 +37,13 @@ function* saveAnnouncement() {
 
     const savedAnnouncement = yield call((announcementToSave.isNew ? createAnnouncement : putAnnouncement), announcementToSave, announcementToSave.id,);
 
-    message.success(`Мероприятие с id=${ savedAnnouncement.id } сохранено`);
+    message.success(`Объявление сохранено`);
     yield put({
       type:    (announcementToSave.isNew ? SAVE_NEW_ANNOUNCEMENT_SUCCESS : SAVE_ANNOUNCEMENT_SUCCESS),
       payload: savedAnnouncement
     })
   } catch (error) {
-    message.error(`Ошибка сохранения мероприятия`);
+    message.error(`Ошибка сохранения объявления`);
     yield put({ type: SAVE_ANNOUNCEMENT_FAILED, payload: error })
   }
 }
@@ -56,7 +56,7 @@ function* fetchAnnouncements(action) {
 
     yield put({ type: LOAD_ANNOUNCEMENTS_SUCCESS, payload: announcements })
   } catch (error) {
-    message.error('Ошибка загрузки списка мероприятий');
+    message.error('Ошибка загрузки списка объявлений');
     yield put({ type: LOAD_ANNOUNCEMENTS_FAILED, payload: error })
   }
 }
@@ -70,7 +70,7 @@ function* deleteAnnouncement(action) {
     yield put({ type: DELETE_ANNOUNCEMENT_SUCCESS, payload: id });
     message.info(`Мероприятие с id =${ id } удалено`);
   } catch (error) {
-    message.error(`Ошибка удаления мероприятия с id =${ id }`);
+    message.error(`Ошибка удаления объявления с id =${ id }`);
     yield put({ type: DELETE_ANNOUNCEMENT_FAILED, payload: error })
   }
 }
