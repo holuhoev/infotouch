@@ -6,6 +6,7 @@ import service from "./service";
 import building from "./building";
 import units from "./units";
 import events from "./events";
+import announcements from "./announcements";
 
 export default function* main() {
     yield fork(map);
@@ -14,4 +15,5 @@ export default function* main() {
     yield fork(building);
     yield fork(units);
     yield fork(events);
+    yield fork(announcements);
 };

@@ -45,6 +45,16 @@ import {
     OPEN_CREATE_EVENT,
     OPEN_EDIT_EVENT_MODAL, SAVE_EVENT, SAVE_EVENT_FAILED, SAVE_EVENT_SUCCESS, SAVE_NEW_EVENT_SUCCESS
 } from "./events";
+import {
+    CANCEL_EDIT_ANNOUNCEMENT,
+    LOAD_ANNOUNCEMENTS,
+    LOAD_ANNOUNCEMENTS_FAILED,
+    LOAD_ANNOUNCEMENTS_SUCCESS,
+    OPEN_CREATE_ANNOUNCEMENT,
+    OPEN_EDIT_ANNOUNCEMENT_MODAL,
+    SAVE_ANNOUNCEMENT, SAVE_ANNOUNCEMENT_FAILED, SAVE_ANNOUNCEMENT_SUCCESS,
+    SAVE_NEW_ANNOUNCEMENT_SUCCESS
+} from "./announcements";
 
 const initialState = {
     listLoading:        false,
@@ -56,7 +66,8 @@ const initialState = {
     saveLoading:        false,
     selectedBuildingId: undefined,
     selectedDeviceId:   undefined,
-    eventsLoading:      false
+    eventsLoading:      false,
+    announcementsLoading:      false,
 };
 
 export const application = (state = initialState, action = {}) => {
@@ -104,6 +115,8 @@ export const application = (state = initialState, action = {}) => {
         case OPEN_EDIT_UNIT_MODAL:
         case OPEN_CREATE_EVENT:
         case OPEN_EDIT_EVENT_MODAL:
+        case OPEN_CREATE_ANNOUNCEMENT:
+        case OPEN_EDIT_ANNOUNCEMENT_MODAL:
             return {
                 ...state,
                 visibleModal: true
@@ -180,6 +193,28 @@ export const application = (state = initialState, action = {}) => {
                 eventsLoading: false,
                 error:         action.payload
             };
+
+        case LOAD_ANNOUNCEMENTS:
+
+            return {
+                ...state,
+                announcementsLoading: true
+            };
+        case LOAD_ANNOUNCEMENTS_SUCCESS:
+
+            return {
+                ...state,
+                announcementsLoading: false
+            };
+
+        case LOAD_ANNOUNCEMENTS_FAILED:
+
+            return {
+                ...state,
+                announcementsLoading: false,
+                error:         action.payload
+            };
+
         case LOAD_DEVICES_SUCCESS:
 
             return {
@@ -222,6 +257,7 @@ export const application = (state = initialState, action = {}) => {
         case CANCEL_EDIT_SERVICE:
         case CANCEL_EDIT_UNIT:
         case CANCEL_EDIT_EVENT:
+        case CANCEL_EDIT_ANNOUNCEMENT:
             return {
                 ...state,
                 visibleModal: false
@@ -231,6 +267,7 @@ export const application = (state = initialState, action = {}) => {
         case SAVE_SERVICE:
         case SAVE_UNIT:
         case SAVE_EVENT:
+        case SAVE_ANNOUNCEMENT:
             return {
                 ...state,
                 saveLoading: true
@@ -244,6 +281,8 @@ export const application = (state = initialState, action = {}) => {
         case SAVE_NEW_UNIT_SUCCESS:
         case SAVE_EVENT_SUCCESS:
         case SAVE_NEW_EVENT_SUCCESS:
+        case SAVE_ANNOUNCEMENT_SUCCESS:
+        case SAVE_NEW_ANNOUNCEMENT_SUCCESS:
             return {
                 ...state,
                 visibleModal: false,
@@ -254,6 +293,7 @@ export const application = (state = initialState, action = {}) => {
         case SAVE_SERVICE_FAILED:
         case SAVE_UNIT_FAILED:
         case SAVE_EVENT_FAILED:
+        case SAVE_ANNOUNCEMENT_FAILED:
             return {
                 ...state,
                 saveLoading: false,

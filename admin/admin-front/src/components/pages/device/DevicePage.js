@@ -35,7 +35,7 @@ class DevicePage extends Component {
     onDeleteClick = ({ id,title }) => () => {
         const { deleteDevice } = this.props;
 
-        showDeleteConfirm({ id,onDelete:deleteDevice, title: `Удалить устройство \`${title}\`` })
+        showDeleteConfirm({ id,onDelete:deleteDevice, title: `Удалить устройство \`${title}\`?` })
     };
 
     render() {

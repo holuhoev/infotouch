@@ -40,7 +40,7 @@ class EventPage extends Component {
   onDeleteClick = ({id,url}) => () => {
     const {deleteEvent} = this.props;
 
-    showDeleteConfirm({id, onDelete: deleteEvent, title: `Удалить ссылку на мероприятие \`${url}\``})
+    showDeleteConfirm({id, onDelete: deleteEvent, title: `Удалить ссылку на мероприятие \`${url}\`?`})
   };
 
   render() {

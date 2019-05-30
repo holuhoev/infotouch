@@ -10,6 +10,7 @@ import ServicePage from "../pages/service/ServicePage";
 import DevicePage from "../pages/device/DevicePage";
 import UnitPage from "../pages/unit/UnitPage";
 import EventPage from "../pages/event/EventPage";
+import AnnouncementPage from "../pages/announcement/AnnouncementPage";
 
 const {Header, Content, Footer} = Layout;
 
@@ -41,7 +42,9 @@ function App({location}) {
               <Menu.Item key={ROUTE.SERVICE}><Link
                   to={ROUTE.SERVICE}>Услуги</Link></Menu.Item>
               <Menu.Item key={ROUTE.EVENT}><Link
-                  to={ROUTE.EVENT}>Мероприятия</Link></Menu.Item>
+                  to={ROUTE.EVENT}>Мероприятия</Link></Menu.Item><
+              Menu.Item key={ROUTE.ANNOUNCEMENT}><Link
+                  to={ROUTE.ANNOUNCEMENT}>Объявления</Link></Menu.Item>
 
             </Menu>
           </Header>
@@ -63,6 +66,7 @@ function App({location}) {
                 <Route path={ROUTE.DEVICE} component={DevicePage}/>
                 <Route path={ROUTE.UNIT} component={UnitPage}/>
                 <Route path={ROUTE.EVENT} component={EventPage}/>
+                <Route path={ROUTE.ANNOUNCEMENT} component={AnnouncementPage}/>
 
               </Switch>
             </div>
