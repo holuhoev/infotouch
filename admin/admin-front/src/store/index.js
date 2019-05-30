@@ -11,6 +11,7 @@ import { services } from "./reducers/services";
 import buildings from "./reducers/buildings";
 import { units } from "./reducers/units";
 import { events } from "./reducers/events";
+import { announcements } from "./reducers/announcements";
 
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -25,7 +26,8 @@ const rootReducer = combineReducers({
     services,
     buildings,
     units,
-    events
+    events,
+    announcements,
 });
 
 

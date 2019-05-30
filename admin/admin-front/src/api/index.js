@@ -6,7 +6,12 @@ import {
     DEVICE,
     POST_CREATE_EDGE,
     POST_CREATE_POINT,
-    SERVICE, BUILDING, SERVICE_POINTS, UNIT, EVENT
+    SERVICE,
+    BUILDING,
+    SERVICE_POINTS,
+    UNIT,
+    EVENT,
+    ANNOUNCEMENT
 } from "../utils/url";
 
 
@@ -243,4 +248,45 @@ export const deleteEventById = (id) => {
         .delete(`${ EVENT }/${ id }`)
         .then(responseData)
         .catch(error('DELETE', `${ EVENT }/${ id }`))
+};
+
+export const putAnnouncement = ({ title, deviceId }, id) => {
+
+    return axios
+    .put(`${ ANNOUNCEMENT }/${ id }`, {
+        title, deviceId
+    })
+    .then(responseData)
+    .catch(error('PUT', `${ ANNOUNCEMENT }/${ id }`))
+};
+
+export const createAnnouncement = ({ title, deviceId }) => {
+
+    return axios
+    .post(ANNOUNCEMENT, {
+        title, deviceId
+    })
+    .then(responseData)
+    .catch(error('POST', ANNOUNCEMENT))
+};
+
+export const deleteAnnouncementById = (id) => {
+
+    return axios
+    .delete(`${ ANNOUNCEMENT }/${ id }`)
+    .then(responseData)
+    .catch(error('DELETE', `${ ANNOUNCEMENT }/${ id }`))
+};
+
+
+export const getAnnouncements = (deviceId) => {
+
+    return axios
+    .get(ANNOUNCEMENT, {
+        params: {
+            deviceId
+        }
+    })
+    .then(responseData)
+    .catch(error('GET', ANNOUNCEMENT))
 };

@@ -83,12 +83,8 @@ CREATE TABLE "announcement"
 (
   id         serial not null primary key,
   title      text   not null,
-  content    text default '',
-  priority   int    not null,
-  link       text default '',
-  start_date date   not null,
-  end_date   date   not null,
-  created_by int references "hse_user" (id)
+  created_by int references "hse_user" (id),
+  device_id    int not null references "device" (id)
 );
 
 

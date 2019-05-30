@@ -14,21 +14,18 @@ import java.util.List;
 public class AnnouncementService {
     private final AnnouncementDatasource announcementDatasource;
     private final AnnouncementRepository repository;
-    private final DeviceService deviceService;
 
-    public AnnouncementService(AnnouncementDatasource announcementDatasource, AnnouncementRepository repository, DeviceService deviceService) {
+
+    public AnnouncementService(AnnouncementDatasource announcementDatasource, AnnouncementRepository repository) {
         this.announcementDatasource = announcementDatasource;
         this.repository = repository;
-        this.deviceService = deviceService;
     }
 
     public List<Announcement> findAll(Integer deviceId,
                                       String searchString,
-                                      LocalDate from,
-                                      LocalDate to,
                                       int page) {
 
-        return announcementDatasource.findAll(deviceId, searchString, from, to, page);
+        return announcementDatasource.findAll(deviceId, searchString, page);
     }
 
     public Announcement getOneById(int id) {
@@ -38,27 +35,15 @@ public class AnnouncementService {
 
     @Transactional
     public Announcement create(AnnouncementRequest request) {
-        requireExistingRelations(request);
-
         // TODO: set createdBy when Security;
 
-        Announcement announcement = repository.save(Announcement.createFromRequest(request));
-
-        deviceService.insertAnnouncementRelations(announcement.getId(), request.getDeviceIds());
-
-
-        return announcement;
+        return repository.save(Announcement.createFromRequest(request));
     }
 
     @Transactional
     public Announcement update(int id, AnnouncementRequest request) {
-        requireExistingRelations(request);
-
         Announcement announcement = this.getOneById(id)
                 .updateFromRequest(request);
-
-        deviceService.deleteAllAnnouncementRelations(id);
-        deviceService.insertAnnouncementRelations(id, request.getDeviceIds());
 
         return repository.save(announcement);
     }
@@ -67,18 +52,6 @@ public class AnnouncementService {
     public void delete(int id) {
         final Announcement announcement = this.getOneById(id);
 
-        deviceService.deleteAllAnnouncementRelations(id);
-
         this.repository.delete(announcement);
     }
-
-    private void requireExistingRelations(AnnouncementRequest announcementRequest) {
-
-        if (deviceService.isNotExistAll(announcementRequest.getDeviceIds())) {
-            throw new IllegalArgumentException("Does not all devices exist.");
-        }
-
-    }
-
-
 }

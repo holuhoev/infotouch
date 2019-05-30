@@ -1,33 +1,15 @@
 package ru.hse.infotouch.domain.dto.request;
 
-import java.time.LocalDate;
+import javax.validation.constraints.NotNull;
 
 public class AnnouncementRequest {
 
+    @NotNull(message = "title must be specified")
     private String title;
-    private String content;
-    private int priority = 0;
-    private String link;
-    private Integer createdBy;
-    private int[] deviceIds;
-    private LocalDate startDate;
-    private LocalDate endDate;
 
-    public LocalDate getStartDate() {
-        return startDate;
-    }
+    @NotNull(message = "deviceId must be specified")
+    private int deviceId;
 
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
 
     public String getTitle() {
         return title;
@@ -37,45 +19,11 @@ public class AnnouncementRequest {
         this.title = title;
     }
 
-    public String getContent() {
-        return content;
+    public int getDeviceId() {
+        return deviceId;
     }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-
-    public int getPriority() {
-        return priority;
-    }
-
-    public void setPriority(int priority) {
-        this.priority = priority;
-    }
-
-    public String getLink() {
-        return link;
-    }
-
-    public void setLink(String link) {
-        this.link = link;
-    }
-
-    public Integer getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(Integer createdBy) {
-        this.createdBy = createdBy;
-    }
-
-
-    public int[] getDeviceIds() {
-        return deviceIds;
-    }
-
-    public void setDeviceIds(int[] deviceIds) {
-        this.deviceIds = deviceIds;
+    public void setDeviceId(int deviceId) {
+        this.deviceId = deviceId;
     }
 }
