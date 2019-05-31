@@ -11,7 +11,7 @@ import {
     SERVICE_POINTS,
     UNIT,
     EVENT,
-    ANNOUNCEMENT
+    ANNOUNCEMENT, POINT
 } from "../utils/url";
 
 
@@ -289,4 +289,12 @@ export const getAnnouncements = (deviceId) => {
     })
     .then(responseData)
     .catch(error('GET', ANNOUNCEMENT))
+};
+
+export const deletePointById = (pointId) => {
+
+    return axios
+    .delete(`${ POINT }/${ pointId }`)
+    .then(responseData)
+    .catch(error('DELETE', `${ POINT }/${ pointId }`))
 };

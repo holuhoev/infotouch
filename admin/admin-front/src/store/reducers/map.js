@@ -2,6 +2,7 @@ import { prop, map, find, propEq, isEmpty, indexBy } from "ramda";
 
 import { calculateCentroid, calculateStairsLines } from "../../utils/map";
 import { createAction } from "../../utils/action";
+import {excludeById} from "../../utils/common";
 
 export const CHANGE_SCHEME = 'admin/map/CHANGE_SCHEME';
 
@@ -18,6 +19,10 @@ export const SAVE_CREATED_POINTS         = 'admin/map/SAVE_CREATED_POINTS';
 export const CANCEL_CREATED_POINTS       = 'admin/map/CANCEL_CREATED_POINTS';
 export const SAVE_CREATED_POINTS_SUCCESS = 'admin/map/SAVE_CREATED_POINTS_SUCCESS';
 export const SAVE_CREATED_POINTS_FAILED  = 'admin/map/SAVE_CREATED_POINTS_FAILED';
+
+export const DELETE_POINT         = 'admin/map/DELETE_POINT';
+export const DELETE_POINT_SUCCESS = 'admin/map/DELETE_POINT_SUCCESS';
+export const DELETE_POINT_FAILED  = 'admin/map/DELETE_POINT_FAILED';
 
 export const ADD_EDGE                   = 'admin/map/ADD_EDGE';
 export const SAVE_CREATED_EDGES         = 'admin/map/SAVE_CREATED_EDGES';
@@ -40,6 +45,7 @@ export const cancelCreatedEdges  = createAction(CANCEL_CREATED_EDGES);
 export const changeScheme        = createAction(CHANGE_SCHEME);
 export const changeSelectedPoint = createAction(CHANGE_SELECTED_POINT);
 export const changeSelectedElement = createAction(CHANGE_SELECTED_ELEMENT);
+export const deletePoint = createAction(DELETE_POINT);
 
 const initialState = {
     loading:           false,
@@ -57,6 +63,20 @@ const initialState = {
 
 const reducer = (state = initialState, action = {}) => {
     switch (action.type) {
+
+        case DELETE_POINT_SUCCESS:
+            let id = action.payload;
+            console.log("DELETE_POINT_SUCCESS");
+            console.log(id);
+
+            return {
+                ...state,
+                selectedPointId: null,
+                data: {
+                    ...state.data,
+                    points: excludeById(id, state.data.points)
+                }
+            };
 
         case CHANGE_SELECTED_ELEMENT:
 

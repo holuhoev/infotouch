@@ -13,4 +13,6 @@ export const UNIT     = '/hseUnit';
 export const EVENT    = '/eventUrl';
 export const ANNOUNCEMENT    = '/announcement';
 
+export const POINT = '/building/scheme/points';
+
 export const SERVICE_POINTS = '/hseLocation/points';

@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { Select } from "antd";
+import {Button, Select, Typography} from "antd";
 
 import { selectServicesWithNoPoint } from "../../../../store/selectors/services";
 import { changeServicePoint } from "../../../../store/reducers/services";
 import { selectSelectedPoint } from "../../../../store/selectors/map";
 import './PointInfo.scss'
+import {deletePoint} from "../../../../store/reducers/map";
 
+const {Title} = Typography;
 
 class PointInfo extends Component {
 
@@ -21,6 +23,12 @@ class PointInfo extends Component {
         })
     };
 
+    onDeleteClick = () => {
+        const { selectedPoint, deletePoint } = this.props;
+
+        deletePoint(selectedPoint.id);
+    };
+
     render() {
         const { selectedPoint, isEditService, serviceList } = this.props;
 
@@ -30,7 +38,14 @@ class PointInfo extends Component {
         return (
             <div className={ "point_info" }>
                 <div className={ "point_info-data" }>
-                    { `Выбрана точка ${ selectedPoint.x }, ${ selectedPoint.y }. ID: ${ selectedPoint.id }` }
+                  <Title level={4} >
+                    { `Выбрана точка х:${ selectedPoint.x }, y:${ selectedPoint.y }. ID: ${ selectedPoint.id }` }
+                  </Title>
+                    <Button
+                        onClick={ this.onDeleteClick }
+                    >
+                        Удалить
+                    </Button>
                 </div>
                 { isEditService ? (
                     <Select
@@ -62,7 +77,8 @@ const mapStateToProps = (state) => {
 
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    changeServicePoint
+    changeServicePoint,
+    deletePoint
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(PointInfo);
