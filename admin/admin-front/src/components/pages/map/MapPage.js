@@ -15,7 +15,7 @@ import {
     isElementHasLabel,
     isElementIsStair,
     changeSelectedPoint,
-    changeSelectedElement
+    changeSelectedElement, toggleEditButton
 } from "../../../store/reducers/map";
 import {
     selectCurrentSchemeEdges,
@@ -24,7 +24,7 @@ import {
 } from "../../../store/selectors/map";
 import { find, isNil, propEq } from "ramda";
 import './MapPage.scss'
-import { Button, Dropdown, Menu, Spin, message } from "antd";
+import { Button, Dropdown, Menu, Spin, message, Icon, Switch } from "antd";
 import SchemeMenu from "./scheme-menu/SchemeMenu";
 import PointInfo from "./point-info/PointInfo";
 import BuildingSelector from "../../common/building/BuildingSelector";
@@ -32,6 +32,7 @@ import { loadBuildings } from "../../../store/reducers/buildings";
 import Empty from "../../common/empty/Empty";
 import { loadServices } from "../../../store/reducers/services";
 import { loadDevices } from "../../../store/reducers/devices";
+import ServiceIcon from "./service-icon/ServiceIcon";
 
 const ButtonGroup = Button.Group;
 
@@ -65,7 +66,7 @@ const renderStairs = element => {
     )
 };
 
-function Element({item, onClick}) {
+function Element({ item, onClick }) {
 
     return (
         <Fragment>
@@ -75,7 +76,7 @@ function Element({item, onClick}) {
                 stroke={ "#236481" }
                 strokeWidth={ 1 }
                 opacity={ 0.8 }
-                onClick={onClick}
+                onClick={ onClick }
             />
             { isElementHasLabel(item) && (
                 <text
@@ -97,16 +98,12 @@ function Element({item, onClick}) {
 }
 
 const MODE = {
-    NONE:         'NONE',
-    ADD_POINT:    'ADD_POINT',
-    ADD_EDGE:     'ADD_EDGE',
-    ADD_STAIRS:   'ADD_STAIRS'
+    NONE:       'NONE',
+    ADD_POINT:  'ADD_POINT',
+    ADD_EDGE:   'ADD_EDGE',
+    ADD_STAIRS: 'ADD_STAIRS'
 };
 
-// 1. хранить точки в service и менять их там же
-// 2. когда сохраняем, то сохраняем только тронутые изменением точек
-// и можно сделать отдельный endpoint для только изменения точек
-// 3. когда сохранили, то убираем флаги editableForPoint
 class MapPage extends Component {
 
     componentDidMount() {
@@ -320,11 +317,14 @@ class MapPage extends Component {
     }
 
 
-    renderPoints() {
-        const { points, selectedPointId } = this.props;
+    renderPoint = (point, index) => {
         const active                      = this.modeEdgeOrStair;
+        const { selectedPointId, isEdit } = this.props;
 
-        return points.map((point, index) => ([
+        if (!isEdit)
+            return (<ServiceIcon { ...point } key={index}/>);
+
+        return ([
             <circle
                 className={ "map-page__point-ring" }
                 onClick={ this.onPointClick(point) }
@@ -360,11 +360,20 @@ class MapPage extends Component {
                     strokeWidth={ "1" }
                 />
             )
-        ]));
+        ])
+    };
+
+    renderPoints() {
+        const { points } = this.props;
+
+        return points.map(this.renderPoint);
     }
 
     renderEdges() {
-        const { edges } = this.props;
+        const { edges, isEdit } = this.props;
+
+        if (!isEdit)
+            return null;
 
         return edges.map((edge, index) => (
             <line
@@ -403,9 +412,9 @@ class MapPage extends Component {
     }
 
     get addingMenu() {
-        const { loading, isEmpty } = this.props;
+        const { loading, isEmpty, isEdit } = this.props;
 
-        const disabled = loading || isEmpty;
+        const disabled = loading || isEmpty || !isEdit;
 
         return (
             <Menu>
@@ -428,8 +437,8 @@ class MapPage extends Component {
     };
 
     render() {
-        const { elements, loading, isEmpty } = this.props;
-        const { mode }                       = this.state;
+        const { elements, loading, isEmpty, isEdit } = this.props;
+        const { mode }                               = this.state;
 
         return (
             <div className={ "map-page" }>
@@ -437,23 +446,33 @@ class MapPage extends Component {
                     <SchemeMenu disabled={ mode === MODE.ADD_POINT }/>
                     <BuildingSelector style={ { width: 430 } } afterSelect={ this.afterBuildingSelect }/>
                 </div>
+                { (!isEmpty) && (
+                    <div className="map-page__button-menu">
 
-                <div className="map-page__button-menu">
+                        <Switch
+                            checkedChildren={ <Icon type="edit"/> }
+                            unCheckedChildren={ <Icon type="eye"/> }
+                            checked={ isEdit }
+                            onChange={ this.props.toggleEditButton }
+                        />
+                        { mode === MODE.NONE ? (
+                            <Dropdown overlay={ this.addingMenu }>
+                                <Button>Добавить</Button>
+                            </Dropdown>
+                        ) : (
+                            <Button disabled={ loading || isEmpty || !isEdit } onClick={ this.cancel }>Отменить</Button>
+                        ) }
 
-                    { mode === MODE.NONE ? (
-                        <Dropdown overlay={ this.addingMenu }>
-                            <Button disabled={ loading } icon={ "edit" }>Добавить</Button>
-                        </Dropdown>
-                    ) : (
-                        <Button disabled={ loading || isEmpty } onClick={ this.cancel }>Отменить</Button>
-                    ) }
-
-                    <ButtonGroup>
-                        <Button disabled={ loading || isEmpty } onClick={ this.saveAll }>Сохранить</Button>
-                        <Button disabled={ loading || isEmpty } onClick={ this.undoCreate }>Отмена</Button>
-                        <Button disabled={ loading || isEmpty } onClick={ this.redoCreate }>Вернуть</Button>
-                    </ButtonGroup>
-                </div>
+                        <ButtonGroup>
+                            <Button disabled={ loading || isEmpty || !isEdit }
+                                    onClick={ this.saveAll }>Сохранить</Button>
+                            <Button disabled={ loading || isEmpty || !isEdit }
+                                    onClick={ this.undoCreate }>Отмена</Button>
+                            <Button disabled={ loading || isEmpty || !isEdit }
+                                    onClick={ this.redoCreate }>Вернуть</Button>
+                        </ButtonGroup>
+                    </div>
+                ) }
                 <div className="map-page__map">
                     { isEmpty && (<Empty/>) }
                     <Spin spinning={ loading }>
@@ -468,8 +487,8 @@ class MapPage extends Component {
                                 elements.map((element, index) => (
                                     <Element
                                         key={ index }
-                                        onClick={this.onElementClick(element)}
-                                        item={element}
+                                        onClick={ this.onElementClick(element) }
+                                        item={ element }
                                     />
                                 ))
                             }
@@ -508,6 +527,7 @@ const mapStateToProps = (state) => {
         edges:           selectCurrentSchemeEdges(state),
         loading:         state.map.loading,
         isEmpty:         selectIsEmptyMap(state),
+        isEdit:          state.map.isEdit
     }
 };
 
@@ -526,7 +546,8 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     changeSelectedPoint,
     loadServices,
     changeSelectedElement,
-    loadDevices
+    loadDevices,
+    toggleEditButton
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapPage);

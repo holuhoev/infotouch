@@ -19,7 +19,7 @@ function BuildingSelector({ buildings, selected, selectBuilding, searchBuilding,
         <Select
             disabled={ disabled }
             showSearch
-            placeholder="Введите здание"
+            placeholder="Выберите здание"
             value={ selected }
             onChange={ onChange }
             style={ style }

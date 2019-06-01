@@ -1,6 +1,6 @@
 import { filter, propEq, map, has, prop, indexBy, __, find, isNil, isEmpty, values } from "ramda";
 import { isPointInPolygon } from "../../utils/map";
-import {  selectServiceIdByPointId } from "./services";
+import { selectServiceIdByPointId, selectServicesForMap } from "./services";
 import { selectDeviceIdByPointId } from "./devices";
 
 export const selectSchemes    = state => selectMapData(state).schemes;
@@ -66,12 +66,14 @@ export const selectCurrentSchemeStairPoint = state => {
 };
 
 export const selectPoints                = state => {
-    const points      = selectCurrentSchemePoints(state);
-    const stairPoints = selectCurrentSchemeStairPoint(state);
+    const points        = selectCurrentSchemePoints(state);
+    const stairPoints   = selectCurrentSchemeStairPoint(state);
+    const servicePoints = selectServicesForMap(state);
 
     return points.map(point => ({
         ...point,
-        isInStair: !!stairPoints[ point.id ]
+        isInStair:   !!stairPoints[ point.id ],
+        serviceType: servicePoints[ point.id ] || null
     }))
 };
 export const selectCurrentSchemeElements = state => filterByCurrentSchemeId(state)(values(selectSchemeElements(state)));

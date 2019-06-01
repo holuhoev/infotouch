@@ -61,7 +61,7 @@ class ServicePage extends Component {
                     <Divider orientation={ "left" }>Список услуг</Divider>
                     <div style={ {
                         overflow: 'auto',
-                        height:   444
+                        height:   390
                     } }
                     >
                         <List

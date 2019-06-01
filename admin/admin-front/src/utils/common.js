@@ -8,3 +8,8 @@ export const findIdByPointId = (list, pointId) => {
     const found = find(propEq('pointId', pointId))(list);
     return found ? found.id : null;
 };
+
+const notNil = complement(isNil);
+
+export const hasPoint = pipe(prop('pointId'), notNil);
+

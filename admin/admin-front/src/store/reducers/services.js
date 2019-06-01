@@ -49,7 +49,7 @@ export const SERVICE_TYPE_LABELS = {
     LIBRARY:        'Библиотека',
     TYPOGRAPHY:     'Типография',
     MEDICAL_CENTER: 'Медицинское отделение',
-    POS:            'Банкомат',
+    ATM:            'Банкомат',
     READING_ROOM:   'Читальный зал',
     COOLER:         'Кулер с водой',
     COMPUTER_CLASS: 'Компьютерный класс',

@@ -55,9 +55,6 @@ class PointInfo extends Component {
         if (!selectedPoint)
             return null;
 
-        console.log(deviceList);
-        console.log(serviceList);
-
         return (
             <div className={ "point_info" }>
                 <div className={ "point_info-title" }>

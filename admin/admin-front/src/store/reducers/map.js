@@ -2,7 +2,7 @@ import { prop, map, find, propEq, isEmpty, indexBy } from "ramda";
 
 import { calculateCentroid, calculateStairsLines } from "../../utils/map";
 import { createAction } from "../../utils/action";
-import {excludeById} from "../../utils/common";
+import { excludeById } from "../../utils/common";
 
 export const CHANGE_SCHEME = 'admin/map/CHANGE_SCHEME';
 
@@ -30,22 +30,25 @@ export const CANCEL_CREATED_EDGES       = 'admin/map/CANCEL_CREATED_EDGES';
 export const SAVE_CREATED_EDGES_SUCCESS = 'admin/map/SAVE_CREATED_EDGES_SUCCESS';
 export const SAVE_CREATED_EDGES_FAILED  = 'admin/map/SAVE_CREATED_EDGES_FAILED';
 
-export const CHANGE_SELECTED_POINT = 'admin/map/CHANGE_SELECTED_POINT';
+export const CHANGE_SELECTED_POINT   = 'admin/map/CHANGE_SELECTED_POINT';
 export const CHANGE_SELECTED_ELEMENT = 'admin/map/CHANGE_SELECTED_ELEMENT';
 
-export const loadBuildingMap     = createAction(LOAD);
-export const createPoint         = createAction(CREATE_POINT);
-export const undo                = createAction(UNDO);
-export const redo                = createAction(REDO);
-export const saveCreatedPoints   = createAction(SAVE_CREATED_POINTS);
-export const cancelCreatedPoints = createAction(CANCEL_CREATED_POINTS);
-export const addEdge             = createAction(ADD_EDGE);
-export const saveCreatedEdges    = createAction(SAVE_CREATED_EDGES);
-export const cancelCreatedEdges  = createAction(CANCEL_CREATED_EDGES);
-export const changeScheme        = createAction(CHANGE_SCHEME);
-export const changeSelectedPoint = createAction(CHANGE_SELECTED_POINT);
+export const TOGGLE_EDIT_BUTTON = 'admin/map/TOGGLE_EDIT_BUTTON';
+
+export const loadBuildingMap       = createAction(LOAD);
+export const createPoint           = createAction(CREATE_POINT);
+export const undo                  = createAction(UNDO);
+export const redo                  = createAction(REDO);
+export const saveCreatedPoints     = createAction(SAVE_CREATED_POINTS);
+export const cancelCreatedPoints   = createAction(CANCEL_CREATED_POINTS);
+export const addEdge               = createAction(ADD_EDGE);
+export const saveCreatedEdges      = createAction(SAVE_CREATED_EDGES);
+export const cancelCreatedEdges    = createAction(CANCEL_CREATED_EDGES);
+export const changeScheme          = createAction(CHANGE_SCHEME);
+export const changeSelectedPoint   = createAction(CHANGE_SELECTED_POINT);
 export const changeSelectedElement = createAction(CHANGE_SELECTED_ELEMENT);
-export const deletePoint = createAction(DELETE_POINT);
+export const deletePoint           = createAction(DELETE_POINT);
+export const toggleEditButton      = createAction(TOGGLE_EDIT_BUTTON);
 
 const initialState = {
     loading:           false,
@@ -56,6 +59,7 @@ const initialState = {
         elements: [],
         edges:    []
     },
+    isEdit:            false,
     buildingSchemeId:  null,
     selectedPointId:   null,
     selectedElementId: null
@@ -63,16 +67,20 @@ const initialState = {
 
 const reducer = (state = initialState, action = {}) => {
     switch (action.type) {
+        case TOGGLE_EDIT_BUTTON:
+
+            return {
+                ...state,
+                isEdit: !state.isEdit
+            };
 
         case DELETE_POINT_SUCCESS:
             let id = action.payload;
-            console.log("DELETE_POINT_SUCCESS");
-            console.log(id);
 
             return {
                 ...state,
                 selectedPointId: null,
-                data: {
+                data:            {
                     ...state.data,
                     points: excludeById(id, state.data.points)
                 }
@@ -83,14 +91,14 @@ const reducer = (state = initialState, action = {}) => {
             return {
                 ...state,
                 selectedElementId: action.payload,
-                selectedPointId: null
+                selectedPointId:   null
             };
 
         case CHANGE_SELECTED_POINT:
 
             return {
                 ...state,
-                selectedPointId: action.payload,
+                selectedPointId:   action.payload,
                 selectedElementId: null
             };
 

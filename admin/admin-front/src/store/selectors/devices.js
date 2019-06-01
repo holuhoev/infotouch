@@ -22,3 +22,4 @@ export const selectDevicesWithNoPoint = (state) => {
 export const selectDeviceIdByPointId = (state, pointId) => {
     return findIdByPointId(state.devices.list, pointId)
 };
+

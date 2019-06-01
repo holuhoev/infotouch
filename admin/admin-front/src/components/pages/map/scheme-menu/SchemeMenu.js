@@ -2,7 +2,7 @@ import React from 'react';
 import { Radio } from "antd";
 import { Component } from "react";
 import { bindActionCreators } from "redux";
-import {sortBy,prop} from 'ramda';
+import { sortBy, prop } from 'ramda';
 
 import {
     selectMapCurrentSchemeId,
@@ -21,6 +21,9 @@ class SchemeMenu extends Component {
 
     render() {
         const { schemes, currentSchemeId, disabled } = this.props;
+
+        if (!schemes || schemes.length === 0)
+            return null;
 
         return (
             <Radio.Group
@@ -41,7 +44,7 @@ class SchemeMenu extends Component {
     }
 }
 
-const mapStateToProps = (state,ownProps) => {
+const mapStateToProps = (state, ownProps) => {
 
     return {
         currentSchemeId: selectMapCurrentSchemeId(state),
