@@ -19,12 +19,12 @@ public class PointDatasource {
         this.entityManager = entityManager;
     }
 
-    public List<Point> findAll(int[] schemeIds) {
+    public List<Point> findAll(int[] elementIds) {
 
         JPAQuery<Point> query = new JPAQuery<>(entityManager)
                 .select(qPoint)
                 .from(qPoint)
-                .where(qPoint.buildingSchemeId.in(ArrayUtils.toObject(schemeIds)));
+                .where(qPoint.schemeElementId.in(ArrayUtils.toObject(elementIds)));
 
         return query.fetch();
     }

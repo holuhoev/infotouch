@@ -1,5 +1,6 @@
 package ru.hse.infotouch.admin.controller;
 
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,28 +31,28 @@ public class AnnouncementController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Announcement>> findAll(@RequestParam(value = "searchString", required = false) String searchString,
+    public ResponseEntity<List<Announcement>> findAll(@RequestParam(value = "deviceId", required = false) Integer deviceId,
+                                                      @RequestParam(value = "searchString", required = false) String searchString,
                                                       @RequestParam(value = "page", required = false) Integer page) {
 
         return ResponseEntity.ok(
                 announcementService.findAll(
-                        null,
+                        deviceId,
                         searchString,
-                        null,
-                        null,
                         isNull(page) ? 0 : page
                 ));
     }
 
     @PostMapping
-    public ResponseEntity<Announcement> createAnnouncement(AnnouncementRequest request) {
+    public ResponseEntity<Announcement> createAnnouncement(@RequestBody @Valid AnnouncementRequest request) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(announcementService.create(request));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Announcement> updateAnnouncement(@PathVariable("id") int id, AnnouncementRequest request) {
+    public ResponseEntity<Announcement> updateAnnouncement(@PathVariable("id") int id,
+                                                           @RequestBody @Valid AnnouncementRequest request) {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(announcementService.update(id, request));

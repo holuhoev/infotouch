@@ -6,9 +6,10 @@ public class HseLocationRequest {
     private String title;
     private HseLocationType type;
 
-    // TODO: may be replaced when start front
-    private double x;
-    private double y;
+    private int buildingId;
+
+    private Double gpsX;
+    private Double gpsY;
 
     public String getTitle() {
         return title;
@@ -26,19 +27,27 @@ public class HseLocationRequest {
         this.type = type;
     }
 
-    public double getX() {
-        return x;
+    public Double getGpsX() {
+        return gpsX;
     }
 
-    public void setX(double x) {
-        this.x = x;
+    public void setGpsX(Double gpsX) {
+        this.gpsX = gpsX;
     }
 
-    public double getY() {
-        return y;
+    public Double getGpsY() {
+        return gpsY;
     }
 
-    public void setY(double y) {
-        this.y = y;
+    public void setGpsY(Double gpsY) {
+        this.gpsY = gpsY;
+    }
+
+    public int getBuildingId() {
+        return buildingId;
+    }
+
+    public void setBuildingId(int buildingId) {
+        this.buildingId = buildingId;
     }
 }

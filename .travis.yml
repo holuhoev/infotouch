@@ -2,6 +2,8 @@ sudo: true
 language: java
 jdk:
 - oraclejdk8
+script:
+  - mvn clean install -P prod
 
 after_success:
   - openssl aes-256-cbc -K $encrypted_10a8c55e6349_key -iv $encrypted_10a8c55e6349_iv
@@ -12,6 +14,8 @@ after_success:
   - ssh-add ./deploy_key
   - scp -i ./deploy_key ./device/target/device.jar root@62.109.23.105:/opt/infotouch/device
   - ssh -i ./deploy_key root@62.109.23.105 systemctl restart device.service
+  - scp -i ./deploy_key ./admin/target/admin.jar root@62.109.23.105:/opt/infotouch/admin
+  - ssh -i ./deploy_key root@62.109.23.105 systemctl restart admin.service
 
 cache:
   directories:

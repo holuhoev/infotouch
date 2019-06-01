@@ -50,6 +50,7 @@ public class DeviceDatasource {
                 .where(whereClause)
                 .offset(pageSize * page)
                 .limit(pageSize)
+                .orderBy(qDevice.id.asc())
                 .fetch();
     }
 

@@ -1,69 +1,121 @@
 package ru.hse.infotouch.domain.service;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.geom.PrecisionModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.hse.infotouch.domain.datasource.HseLocationDatasource;
+import ru.hse.infotouch.domain.dto.request.HseLocationPointsRequest;
 import ru.hse.infotouch.domain.dto.request.HseLocationRequest;
 import ru.hse.infotouch.domain.models.admin.HseLocation;
+import ru.hse.infotouch.domain.models.map.BuildingScheme;
+import ru.hse.infotouch.domain.models.map.Point;
+import ru.hse.infotouch.domain.models.map.SchemeElement;
 import ru.hse.infotouch.domain.repo.HseLocationRepository;
+import ru.hse.infotouch.util.PostgresPointUtils;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class HseLocationService {
     private final HseLocationRepository repository;
+    private final HseLocationDatasource datasource;
+    private final PointService pointService;
+    private final BuildingSchemeService schemeService;
+    private final PostgresPointUtils postgresPointUtils;
+    private final EntityManager entityManager;
+    private final SchemeElementService schemeElementService;
 
-    private GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
-
-    public HseLocationService(HseLocationRepository repository) {
+    public HseLocationService(HseLocationRepository repository,
+                              HseLocationDatasource datasource,
+                              PointService pointService,
+                              BuildingSchemeService schemeService, PostgresPointUtils postgresPointUtils, EntityManager entityManager, SchemeElementService schemeElementService) {
         this.repository = repository;
+        this.datasource = datasource;
+        this.pointService = pointService;
+        this.schemeService = schemeService;
+        this.postgresPointUtils = postgresPointUtils;
+        this.entityManager = entityManager;
+        this.schemeElementService = schemeElementService;
     }
 
-    public List<HseLocation> findAll() {
-        return repository.findAll();
+    public List<HseLocation> findAll(Integer buildingId) {
+        return datasource.findAll(buildingId);
     }
 
     public HseLocation getOneById(int id) {
-        return this.repository.findById(id).orElseThrow(() -> new IllegalArgumentException(String.format("Локации с id \"%d\" не существует", id)));
+        HseLocation location = this.repository.findById(id).orElseThrow(() -> new IllegalArgumentException(String.format("Локации с id \"%d\" не существует", id)));
+
+        fetchFloorAndBuildingScheme(location);
+
+        return location;
     }
 
-    @Transactional
+    private HseLocation fetchFloorAndBuildingScheme(HseLocation location) {
+        if (location.getPointId() != null) {
+            Point point = pointService.getOneById(location.getPointId());
+
+            if (point.getSchemeElementId() != null) {
+                SchemeElement element = schemeElementService.getOneById(point.getSchemeElementId());
+                BuildingScheme scheme = schemeService.getOneById(element.getBuildingSchemeId());
+
+                location.setBuildingSchemeId(scheme.getId());
+                location.setFloor(scheme.getFloor());
+            }
+        }
+
+        return location;
+    }
+
     public HseLocation create(HseLocationRequest request) {
         HseLocation hseLocation = new HseLocation();
 
-        hseLocation.updateFromRequest(request)
-                .setLocation(createPoint(request.getX(), request.getY()));
-
-        return repository.save(hseLocation);
+        return updateHseLocation(request, hseLocation);
     }
 
-    @Transactional
     public HseLocation update(int id, HseLocationRequest request) {
         HseLocation hseLocation = repository.getOne(id);
 
-        hseLocation.updateFromRequest(request)
-                .setLocation(createPoint(request.getX(), request.getY()));
+        return fetchFloorAndBuildingScheme(updateHseLocation(request, hseLocation));
+    }
+
+    private HseLocation updateHseLocation(HseLocationRequest request, HseLocation hseLocation) {
+        hseLocation.updateFromRequest(request);
+
+        if (request.getGpsX() != null && request.getGpsY() != null) {
+            hseLocation.setLocation(postgresPointUtils.createPoint(request.getGpsX(), request.getGpsY()));
+        }
 
         return repository.save(hseLocation);
     }
 
 
-    @Transactional
     public void delete(int id) {
         HseLocation location = repository.getOne(id);
 
         repository.delete(location);
     }
 
-    // TODO: move to util
-    private Point createPoint(double x, double y) {
-        return geometryFactory.createPoint(new Coordinate(x, y));
+    @Transactional
+    public void savePoints(HseLocationPointsRequest request) {
+        int serviceId = request.getServiceId();
+        int pointId = request.getPointId();
+
+        Query removeOldServicePoint = entityManager.createNativeQuery("update hse_location set point_id=null where point_id=:pointId");
+        removeOldServicePoint.setParameter("pointId", pointId)
+                .executeUpdate();
+
+        Query addPointToService = entityManager.createNativeQuery("update hse_location set point_id=:pointId where id=:serviceId");
+        addPointToService.setParameter("pointId", pointId)
+                .setParameter("serviceId", serviceId)
+                .executeUpdate();
     }
 
-    public boolean isNotExist(int hseLocationId) {
-        return !repository.existsById(hseLocationId);
+    @Transactional
+    public void removeLocationsFromPoint(int pointId){
+        Query removeOldServicePoint = entityManager.createNativeQuery("update hse_location set point_id=null where point_id=:pointId");
+        removeOldServicePoint.setParameter("pointId", pointId)
+                .executeUpdate();
     }
 }

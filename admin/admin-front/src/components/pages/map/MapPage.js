@@ -8,17 +8,31 @@ import {
     loadBuildingMap,
     saveCreatedPoints,
     undo,
-    redo, addEdge, saveCreatedEdges, cancelCreatedEdges, isElementHasLabel, isElementIsStair
+    redo,
+    addEdge,
+    saveCreatedEdges,
+    cancelCreatedEdges,
+    isElementHasLabel,
+    isElementIsStair,
+    changeSelectedPoint,
+    changeSelectedElement, toggleEditButton
 } from "../../../store/reducers/map";
 import {
     selectCurrentSchemeEdges,
-    selectCurrentSchemeElements,
-    selectCurrentSchemePoints
+    selectCurrentSchemeElements, selectIsEmptyMap,
+    selectPoints
 } from "../../../store/selectors/map";
 import { find, isNil, propEq } from "ramda";
 import './MapPage.scss'
-import { Button, Dropdown, Menu, Spin } from "antd";
+import { Button, Dropdown, Menu, Spin, message, Icon, Switch } from "antd";
 import SchemeMenu from "./scheme-menu/SchemeMenu";
+import PointInfo from "./point-info/PointInfo";
+import BuildingSelector from "../../common/building/BuildingSelector";
+import { loadBuildings } from "../../../store/reducers/buildings";
+import Empty from "../../common/empty/Empty";
+import { loadServices } from "../../../store/reducers/services";
+import { loadDevices } from "../../../store/reducers/devices";
+import ServiceIcon from "./service-icon/ServiceIcon";
 
 const ButtonGroup = Button.Group;
 
@@ -52,7 +66,7 @@ const renderStairs = element => {
     )
 };
 
-function Element(item) {
+function Element({ item, onClick }) {
 
     return (
         <Fragment>
@@ -62,11 +76,11 @@ function Element(item) {
                 stroke={ "#236481" }
                 strokeWidth={ 1 }
                 opacity={ 0.8 }
+                onClick={ onClick }
             />
             { isElementHasLabel(item) && (
                 <text
                     fill="#507b8f"
-                    // fontWeight="bold"
                     x={ item.textCentroid[ 0 ] }
                     y={ item.textCentroid[ 1 ] }
                     fontSize="8"
@@ -93,7 +107,10 @@ const MODE = {
 class MapPage extends Component {
 
     componentDidMount() {
-        this.props.loadBuildingMap()
+        this.props.loadBuildings();
+        this.props.loadBuildingMap();
+        this.props.loadServices();
+        this.props.loadDevices()
     }
 
     constructor(props) {
@@ -101,7 +118,7 @@ class MapPage extends Component {
 
         this.state = {
             mode:             MODE.NONE,
-            startEdgePointId: null
+            startEdgePointId: null,
         }
     }
 
@@ -147,7 +164,7 @@ class MapPage extends Component {
 
     cancelDrawingEdges = () => {
         this.svgElem.removeEventListener('mousemove', this.moveAddingPoint);
-        this.props.cancelCreatedEdges()
+        this.props.cancelCreatedEdges();
         this.setState({ mode: MODE.NONE, startEdgePointId: null });
     };
 
@@ -167,6 +184,8 @@ class MapPage extends Component {
                 break;
             case MODE.ADD_STAIRS:
                 this.cancelAddStairs();
+                break;
+            default:
                 break;
         }
     };
@@ -195,6 +214,8 @@ class MapPage extends Component {
         } else if (mode === MODE.ADD_EDGE) {
             this.svgElem.removeEventListener('mousemove', this.drawEdge);
             this.props.saveCreatedEdges();
+        } else if (mode === MODE.ADD_STAIRS) {
+            this.props.saveCreatedEdges();
         }
 
 
@@ -209,6 +230,18 @@ class MapPage extends Component {
         this.props.redo()
     };
 
+    onElementClick = element => e => {
+        const { mode } = this.state;
+
+        switch (mode) {
+            case MODE.NONE:
+                this.props.changeSelectedElement(element.id);
+                break;
+            default:
+                break;
+        }
+    };
+
     onPointClick = point => e => {
         const { mode } = this.state;
 
@@ -218,6 +251,11 @@ class MapPage extends Component {
                 break;
             case MODE.ADD_STAIRS:
                 this.pointClickWithDrawingStair(point);
+                break;
+            case MODE.NONE:
+                this.props.changeSelectedPoint(point.id);
+                break;
+            default:
                 break;
         }
     };
@@ -235,6 +273,7 @@ class MapPage extends Component {
         if (this.selectingFirstPoint) {
             this.setState({ startEdgePointId: point.id })
         } else if (this.isDrawingStair) {
+            message.info("Добавлено");
             this.endDrawEdge(point)
         }
     };
@@ -272,42 +311,69 @@ class MapPage extends Component {
     get modeEdgeOrStair() {
         const { mode } = this.state;
 
-        return mode === MODE.ADD_EDGE || mode === MODE.ADD_STAIRS;
+
+        return mode === MODE.ADD_EDGE
+            || mode === MODE.ADD_STAIRS;
     }
 
 
-    renderPoints() {
-        const { points } = this.props;
-        const active     = this.modeEdgeOrStair;
+    renderPoint = (point, index) => {
+        const active                      = this.modeEdgeOrStair;
+        const { selectedPointId, isEdit } = this.props;
 
-        return points.map((point, index) => ([
+        if (!isEdit)
+            return (<ServiceIcon { ...point } key={index}/>);
+
+        return ([
             <circle
                 className={ "map-page__point-ring" }
                 onClick={ this.onPointClick(point) }
                 key={ index }
                 cx={ point.x }
                 cy={ point.y }
-                r="1"
+                r="1.5"
                 fill={ "#26c2ed" }
                 stroke={ "#26c2ed" }
             />,
-            (active || point.isNew) && (
+            (active || point.isNew || (point.id === selectedPointId)) && (
                 <circle
                     className={ "map-page__point-ring" }
                     onClick={ this.onPointClick(point) }
-                    key={ index + "_" }
+                    key={ index + "_ring" }
                     cx={ point.x }
                     cy={ point.y }
-                    r="3"
+                    r="4"
                     fill={ "none" }
                     stroke={ "#26c2ed" }
-                    strokeWidth={ "0.5" }
+                    strokeWidth={ "1" }
                 />
-            ) ]));
+            ),
+            (point.isInStair) && (
+                <circle
+                    onClick={ this.onPointClick(point) }
+                    key={ index + "_stair" }
+                    cx={ point.x }
+                    cy={ point.y }
+                    r="4"
+                    fill={ "none" }
+                    stroke={ "#274fed" }
+                    strokeWidth={ "1" }
+                />
+            )
+        ])
+    };
+
+    renderPoints() {
+        const { points } = this.props;
+
+        return points.map(this.renderPoint);
     }
 
     renderEdges() {
-        const { edges } = this.props;
+        const { edges, isEdit } = this.props;
+
+        if (!isEdit)
+            return null;
 
         return edges.map((edge, index) => (
             <line
@@ -346,47 +412,69 @@ class MapPage extends Component {
     }
 
     get addingMenu() {
-        const { loading } = this.props;
+        const { loading, isEmpty, isEdit } = this.props;
+
+        const disabled = loading || isEmpty || !isEdit;
 
         return (
             <Menu>
-                <Menu.Item disabled={ loading } onClick={ this.startDrawingPoints }>
+                <Menu.Item disabled={ disabled } onClick={ this.startDrawingPoints }>
                     Точки
                 </Menu.Item>
-                <Menu.Item disabled={ loading } onClick={ this.startDrawingEdges }>
+                <Menu.Item disabled={ disabled } onClick={ this.startDrawingEdges }>
                     Ребра
                 </Menu.Item>
-                <Menu.Item disabled={ loading } onClick={ this.startDrawingStairs }>
-                    Лестницу
+                <Menu.Item disabled={ disabled } onClick={ this.startDrawingStairs }>
+                    Переход
                 </Menu.Item>
             </Menu>
         )
     }
 
+    afterBuildingSelect = () => {
+        this.props.loadBuildingMap();
+        this.props.loadServices()
+    };
+
     render() {
-        const { elements, loading } = this.props;
-        const { mode }              = this.state;
+        const { elements, loading, isEmpty, isEdit } = this.props;
+        const { mode }                               = this.state;
 
         return (
-            <div className="map-page">
-                <SchemeMenu/>
-                <div className="map-page__button-menu">
-
-                    { mode === MODE.NONE ? (
-                        <Dropdown overlay={ this.addingMenu }>
-                            <Button disabled={ loading } icon={ "edit" }>Добавить</Button>
-                        </Dropdown>
-                    ) : (
-                        <Button disabled={ loading } onClick={ this.cancel }>Отменить</Button>
-                    ) }
-
-                    <ButtonGroup>
-                        <Button disabled={ loading } onClick={ this.saveAll }>Сохранить</Button>
-                        <Button disabled={ loading } onClick={ this.undoCreate }>Отмена</Button>
-                        <Button disabled={ loading } onClick={ this.redoCreate }>Вернуть</Button>
-                    </ButtonGroup>
+            <div className={ "map-page" }>
+                <div className="map-page__scheme-menu">
+                    <SchemeMenu disabled={ mode === MODE.ADD_POINT }/>
+                    <BuildingSelector style={ { width: 430 } } afterSelect={ this.afterBuildingSelect }/>
                 </div>
+                { (!isEmpty) && (
+                    <div className="map-page__button-menu">
+
+                        <Switch
+                            checkedChildren={ <Icon type="edit"/> }
+                            unCheckedChildren={ <Icon type="eye"/> }
+                            checked={ isEdit }
+                            onChange={ this.props.toggleEditButton }
+                        />
+                        { mode === MODE.NONE ? (
+                            <Dropdown overlay={ this.addingMenu }>
+                                <Button>Добавить</Button>
+                            </Dropdown>
+                        ) : (
+                            <Button disabled={ loading || isEmpty || !isEdit } onClick={ this.cancel }>Отменить</Button>
+                        ) }
+
+                        <ButtonGroup>
+                            <Button disabled={ loading || isEmpty || !isEdit }
+                                    onClick={ this.saveAll }>Сохранить</Button>
+                            <Button disabled={ loading || isEmpty || !isEdit }
+                                    onClick={ this.undoCreate }>Отмена</Button>
+                            <Button disabled={ loading || isEmpty || !isEdit }
+                                    onClick={ this.redoCreate }>Вернуть</Button>
+                        </ButtonGroup>
+                    </div>
+                ) }
                 <div className="map-page__map">
+                    { isEmpty && (<Empty/>) }
                     <Spin spinning={ loading }>
                         <svg
                             height="330" width="600"
@@ -399,7 +487,8 @@ class MapPage extends Component {
                                 elements.map((element, index) => (
                                     <Element
                                         key={ index }
-                                        { ...element }
+                                        onClick={ this.onElementClick(element) }
+                                        item={ element }
                                     />
                                 ))
                             }
@@ -422,19 +511,23 @@ class MapPage extends Component {
                         </svg>
                     </Spin>
                 </div>
-
+                <PointInfo/>
             </div>
         )
     }
+
 }
 
 const mapStateToProps = (state) => {
 
     return {
-        points:   selectCurrentSchemePoints(state),
-        elements: selectCurrentSchemeElements(state),
-        edges:    selectCurrentSchemeEdges(state),
-        loading:  state.map.loading
+        selectedPointId: state.map.selectedPointId,
+        points:          selectPoints(state),
+        elements:        selectCurrentSchemeElements(state),
+        edges:           selectCurrentSchemeEdges(state),
+        loading:         state.map.loading,
+        isEmpty:         selectIsEmptyMap(state),
+        isEdit:          state.map.isEdit
     }
 };
 
@@ -448,7 +541,13 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     redo,
     addEdge,
     saveCreatedEdges,
-    cancelCreatedEdges
+    cancelCreatedEdges,
+    loadBuildings,
+    changeSelectedPoint,
+    loadServices,
+    changeSelectedElement,
+    loadDevices,
+    toggleEditButton
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapPage);

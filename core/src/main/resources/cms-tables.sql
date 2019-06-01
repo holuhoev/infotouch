@@ -36,10 +36,12 @@ CREATE TABLE "topic"
 DROP TABLE IF EXISTS "hse_location" CASCADE;
 CREATE TABLE "hse_location"
 (
-  id       serial not null primary key,
-  type     integer,
-  title    text   not null unique,
-  location geometry(Point, 4326)
+  id          serial                not null primary key,
+  type        integer,
+  title       text                  not null unique,
+  location    geometry(Point, 4326) null,
+  building_id integer               not null references building (ID),
+  point_id    integer               null references point (ID)
 );
 
 
@@ -81,12 +83,8 @@ CREATE TABLE "announcement"
 (
   id         serial not null primary key,
   title      text   not null,
-  content    text default '',
-  priority   int    not null,
-  link       text default '',
-  start_date date   not null,
-  end_date   date   not null,
-  created_by int references "hse_user" (id)
+  created_by int references "hse_user" (id),
+  device_id    int not null references "device" (id)
 );
 
 
@@ -95,7 +93,7 @@ DROP TABLE IF EXISTS "user2device" CASCADE;
 CREATE TABLE "user2device"
 (
   user_id      int not null references "hse_user" (id),
-  device_id  int not null references "device" (id),
+  device_id    int not null references "device" (id),
   access_right int not null,
   PRIMARY KEY (user_id, device_id)
 );
@@ -132,23 +130,23 @@ CREATE TABLE "user2news"
 DROP TABLE IF EXISTS "event_url" CASCADE;
 CREATE TABLE "event_url"
 (
-  id          serial not null primary key,
+  id        serial not null primary key,
   device_id int    not null references "device" (id),
-  url         text   not null
+  url       text   not null
 );
 
 DROP TABLE IF EXISTS "device2ad" CASCADE;
 CREATE TABLE "device2ad"
 (
   device_id int not null references "device" (id),
-  ad_id       int not null references "ad" (id),
+  ad_id     int not null references "ad" (id),
   PRIMARY KEY (device_id, ad_id)
 );
 
 DROP TABLE IF EXISTS "device2announcement" CASCADE;
 CREATE TABLE "device2announcement"
 (
-  device_id     int not null references "device" (id),
+  device_id       int not null references "device" (id),
   announcement_id int not null references "announcement" (id),
   PRIMARY KEY (device_id, announcement_id)
 );
@@ -157,7 +155,7 @@ DROP TABLE IF EXISTS "device2news" CASCADE;
 CREATE TABLE "device2news"
 (
   device_id int not null references "device" (id),
-  news_id     int not null references "news" (id),
+  news_id   int not null references "news" (id),
   PRIMARY KEY (device_id, news_id)
 );
 
@@ -170,6 +168,14 @@ CREATE TABLE "news2tag"
   tag_id  int    not null references "tag" (id)
 );
 
-
-
+drop table if exists "hse_unit" cascade;
+create table "hse_unit"
+(
+  id             serial  not null primary key,
+  title          text default '',
+  description    text default '',
+  building_id    integer not null references building (id),
+  map_element_id integer null references scheme_element (id),
+  CONSTRAINT hse_unit_ID_uindex UNIQUE (ID)
+);
 

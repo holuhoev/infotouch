@@ -88,15 +88,15 @@ create table building_scheme
 
 create table point
 (
-  id                 serial not null primary key,
-  x                  int    not null,
-  y                  int    not null,
-  building_scheme_id int    not null references building_scheme (id),
+  id                serial not null primary key,
+  x                 int    not null,
+  y                 int    not null,
+  scheme_element_id int    not null references scheme_element (id),
   CONSTRAINT point_id_uindex unique (id)
 );
 
 
-create table map_element
+create table scheme_element
 (
   id                 serial not null primary key unique,
   coordinates        text   not null,
@@ -105,7 +105,7 @@ create table map_element
   point_id           int    null references point (id),
   --   corridor, room, stairs, door
   element_type       int    not null,
-  CONSTRAINT map_element_id_uindex UNIQUE (id)
+  CONSTRAINT scheme_element_id_uindex UNIQUE (id)
 );
 
 

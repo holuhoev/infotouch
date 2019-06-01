@@ -1,11 +1,9 @@
 package ru.hse.infotouch.domain.service;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.PrecisionModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.hse.infotouch.domain.datasource.DeviceDatasource;
+import ru.hse.infotouch.domain.dto.request.DevicePointRequest;
 import ru.hse.infotouch.domain.dto.request.DeviceRequest;
 import ru.hse.infotouch.domain.models.admin.Device;
 import ru.hse.infotouch.domain.models.admin.relations.*;
@@ -31,8 +29,7 @@ public class DeviceService {
     private final Device2AdRepository device2AdRepository;
     private final PointRepository pointRepository;
     private final BuildingSchemeService buildingSchemeService;
-
-    private GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
+    private final SchemeElementService schemeElementService;
 
     public DeviceService(EntityManager entityManager,
                          DeviceDatasource datasource,
@@ -40,7 +37,7 @@ public class DeviceService {
                          Device2NewsRepository device2NewsRepository,
                          Device2AnnouncementRepository device2AnnouncementRepository,
                          Device2AdRepository device2AdRepository,
-                         PointRepository pointRepository, BuildingSchemeService buildingSchemeService) {
+                         PointRepository pointRepository, BuildingSchemeService buildingSchemeService, SchemeElementService schemeElementService) {
         this.entityManager = entityManager;
         this.datasource = datasource;
         this.deviceRepository = deviceRepository;
@@ -49,6 +46,7 @@ public class DeviceService {
         this.device2AdRepository = device2AdRepository;
         this.pointRepository = pointRepository;
         this.buildingSchemeService = buildingSchemeService;
+        this.schemeElementService = schemeElementService;
     }
 
 
@@ -62,9 +60,13 @@ public class DeviceService {
 
         if (device.getPointId() != null) {
             pointRepository.findById(device.getPointId()).ifPresent(point -> {
-                if (point.getBuildingSchemeId() != null) {
-                    BuildingScheme buildingScheme = buildingSchemeService.getOneById(point.getBuildingSchemeId());
-                    device.setBuildingId(buildingScheme.getBuildingId());
+                // replace this
+                if (point.getSchemeElementId() != null) {
+                    SchemeElement schemeElement = schemeElementService.getOneById(point.getSchemeElementId());
+                    if (schemeElement.getBuildingSchemeId() != null) {
+                        BuildingScheme buildingScheme = buildingSchemeService.getOneById(schemeElement.getBuildingSchemeId());
+                        device.setBuildingId(buildingScheme.getBuildingId());
+                    }
                 }
             });
         }
@@ -76,7 +78,7 @@ public class DeviceService {
     public Device create(DeviceRequest request) {
         Device device = new Device();
 
-        device.setLocation(geometryFactory.createPoint(new Coordinate(request.getX(), request.getY())));
+//        device.setLocation(geometryFactory.createPoint(new Coordinate(request.getX(), request.getY())));
 
         device.updateFromRequest(request);
 
@@ -87,7 +89,7 @@ public class DeviceService {
     public Device update(int id, DeviceRequest request) {
         Device device = this.getOneById(id);
 
-        device.setLocation(geometryFactory.createPoint(new Coordinate(request.getX(), request.getY())));
+//        device.setLocation(geometryFactory.createPoint(new Coordinate(request.getX(), request.getY())));
         device.updateFromRequest(request);
 
         return deviceRepository.save(device);
@@ -150,5 +152,28 @@ public class DeviceService {
         return Arrays.stream(deviceIds).boxed()
                 .map(deviceId -> createMethod.apply(deviceId, relationId))
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void savePoint(DevicePointRequest request) {
+        int deviceId = request.getDeviceId();
+        int pointId = request.getPointId();
+
+        Query removeOldDevicePoint = entityManager.createNativeQuery("update device set point_id=null where point_id=:pointId");
+        removeOldDevicePoint.setParameter("pointId", pointId)
+                .executeUpdate();
+
+        Query addPointToDevice = entityManager.createNativeQuery("update device set point_id=:pointId where id=:deviceId");
+        addPointToDevice.setParameter("pointId", pointId)
+                .setParameter("deviceId", deviceId)
+                .executeUpdate();
+    }
+
+
+    @Transactional
+    public void removeDevicesFromPoint(int pointId) {
+        Query removeOldDevicePoint = entityManager.createNativeQuery("update device set point_id=null where point_id=:pointId");
+        removeOldDevicePoint.setParameter("pointId", pointId)
+                .executeUpdate();
     }
 }

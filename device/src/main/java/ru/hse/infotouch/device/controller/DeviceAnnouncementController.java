@@ -25,18 +25,13 @@ public class DeviceAnnouncementController {
     @GetMapping
     public ResponseEntity<List<Announcement>> findAll(@RequestParam(value = "deviceId") Integer deviceId,
                                                       @RequestParam(value = "searchString", required = false) String searchString,
-                                                      @RequestParam(value = "from", required = false) LocalDate from,
-                                                      @RequestParam(value = "to", required = false) LocalDate to,
                                                       @RequestParam(value = "page", required = false) Integer page) {
 
-        requireValidDates(from, to);
 
         return ResponseEntity.ok(
                 announcementService.findAll(
                         deviceId,
                         searchString,
-                        from,
-                        to,
                         isNull(page) ? 0 : page
                 ));
     }
@@ -50,20 +45,7 @@ public class DeviceAnnouncementController {
                 announcementService.findAll(
                         deviceId,
                         searchString,
-                        LocalDate.now(),
-                        LocalDate.now(),
                         isNull(page) ? 0 : page
                 ));
     }
-
-    private void requireValidDates(LocalDate from, LocalDate to) {
-        if (from == null || to == null) {
-            return;
-        }
-
-        if (from.isAfter(to)) {
-            throw new IllegalArgumentException("from must be before or equal to");
-        }
-    }
-
 }

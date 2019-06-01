@@ -6,12 +6,7 @@ import ru.hse.infotouch.domain.dto.request.HseLocationRequest;
 import ru.hse.infotouch.domain.models.enums.HseLocationType;
 import ru.hse.infotouch.util.json.PointToJsonSerializer;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -29,9 +24,26 @@ public class HseLocation {
     @Column
     private HseLocationType type;
 
+    /* Имеется у тех услуг, которые находятся вне здания. */
     @Column(columnDefinition = "geometry(Point,4326)")
     @JsonSerialize(using = PointToJsonSerializer.class)
     private Point location;
+
+    /* Привязка к точке на схеме корпуса. */
+    @Column(name = "point_id")
+    private Integer pointId;
+
+    /* Здание, в котором(или у которого) находится данная услуга. */
+    @Column(name = "building_id")
+    private Integer buildingId;
+
+    /* Этаж на котором расположена точка, к которой привязана услуга. */
+    @Transient
+    private Integer floor;
+
+    /* Cхема к которой привязана точка. */
+    @Transient
+    private Integer buildingSchemeId;
 
     public Integer getId() {
         return id;
@@ -81,7 +93,40 @@ public class HseLocation {
     public HseLocation updateFromRequest(HseLocationRequest request) {
         this.setType(request.getType());
         this.setTitle(request.getTitle());
+        this.setBuildingId(request.getBuildingId());
 
         return this;
+    }
+
+    public Integer getPointId() {
+        return pointId;
+    }
+
+    public void setPointId(Integer pointId) {
+        this.pointId = pointId;
+    }
+
+    public Integer getBuildingId() {
+        return buildingId;
+    }
+
+    public void setBuildingId(Integer buildingId) {
+        this.buildingId = buildingId;
+    }
+
+    public Integer getFloor() {
+        return floor;
+    }
+
+    public void setFloor(Integer floor) {
+        this.floor = floor;
+    }
+
+    public Integer getBuildingSchemeId() {
+        return buildingSchemeId;
+    }
+
+    public void setBuildingSchemeId(Integer buildingSchemeId) {
+        this.buildingSchemeId = buildingSchemeId;
     }
 }

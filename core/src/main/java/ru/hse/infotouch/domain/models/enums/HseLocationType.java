@@ -5,5 +5,11 @@ public enum HseLocationType {
     LIBRARY,
     TYPOGRAPHY,
     MEDICAL_CENTER,
-    COMPUTER_CLASS
+    ATM,
+    COMPUTER_CLASS,
+    READING_ROOM,
+    COOLER,
+    PRINTER,
+    TOILET,
+    OTHER
 }

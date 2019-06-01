@@ -12,12 +12,12 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
-public class MapElementService {
+public class SchemeElementService {
 
     private final SchemeElementRepository repository;
     private final QSchemeElement qMapElement = QSchemeElement.schemeElement;
 
-    public MapElementService(SchemeElementRepository repository) {
+    public SchemeElementService(SchemeElementRepository repository) {
         this.repository = repository;
     }
 

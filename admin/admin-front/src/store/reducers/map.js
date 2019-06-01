@@ -1,7 +1,8 @@
-import { prop, map, find, propEq } from "ramda";
+import { prop, map, find, propEq, isEmpty, indexBy } from "ramda";
 
 import { calculateCentroid, calculateStairsLines } from "../../utils/map";
 import { createAction } from "../../utils/action";
+import { excludeById } from "../../utils/common";
 
 export const CHANGE_SCHEME = 'admin/map/CHANGE_SCHEME';
 
@@ -19,38 +20,87 @@ export const CANCEL_CREATED_POINTS       = 'admin/map/CANCEL_CREATED_POINTS';
 export const SAVE_CREATED_POINTS_SUCCESS = 'admin/map/SAVE_CREATED_POINTS_SUCCESS';
 export const SAVE_CREATED_POINTS_FAILED  = 'admin/map/SAVE_CREATED_POINTS_FAILED';
 
+export const DELETE_POINT         = 'admin/map/DELETE_POINT';
+export const DELETE_POINT_SUCCESS = 'admin/map/DELETE_POINT_SUCCESS';
+export const DELETE_POINT_FAILED  = 'admin/map/DELETE_POINT_FAILED';
+
 export const ADD_EDGE                   = 'admin/map/ADD_EDGE';
 export const SAVE_CREATED_EDGES         = 'admin/map/SAVE_CREATED_EDGES';
 export const CANCEL_CREATED_EDGES       = 'admin/map/CANCEL_CREATED_EDGES';
 export const SAVE_CREATED_EDGES_SUCCESS = 'admin/map/SAVE_CREATED_EDGES_SUCCESS';
 export const SAVE_CREATED_EDGES_FAILED  = 'admin/map/SAVE_CREATED_EDGES_FAILED';
 
-export const loadBuildingMap     = createAction(LOAD);
-export const createPoint         = createAction(CREATE_POINT);
-export const undo                = createAction(UNDO);
-export const redo                = createAction(REDO);
-export const saveCreatedPoints   = createAction(SAVE_CREATED_POINTS);
-export const cancelCreatedPoints = createAction(CANCEL_CREATED_POINTS);
-export const addEdge             = createAction(ADD_EDGE);
-export const saveCreatedEdges    = createAction(SAVE_CREATED_EDGES);
-export const cancelCreatedEdges  = createAction(CANCEL_CREATED_EDGES);
-export const changeScheme        = createAction(CHANGE_SCHEME);
+export const CHANGE_SELECTED_POINT   = 'admin/map/CHANGE_SELECTED_POINT';
+export const CHANGE_SELECTED_ELEMENT = 'admin/map/CHANGE_SELECTED_ELEMENT';
+
+export const TOGGLE_EDIT_BUTTON = 'admin/map/TOGGLE_EDIT_BUTTON';
+
+export const loadBuildingMap       = createAction(LOAD);
+export const createPoint           = createAction(CREATE_POINT);
+export const undo                  = createAction(UNDO);
+export const redo                  = createAction(REDO);
+export const saveCreatedPoints     = createAction(SAVE_CREATED_POINTS);
+export const cancelCreatedPoints   = createAction(CANCEL_CREATED_POINTS);
+export const addEdge               = createAction(ADD_EDGE);
+export const saveCreatedEdges      = createAction(SAVE_CREATED_EDGES);
+export const cancelCreatedEdges    = createAction(CANCEL_CREATED_EDGES);
+export const changeScheme          = createAction(CHANGE_SCHEME);
+export const changeSelectedPoint   = createAction(CHANGE_SELECTED_POINT);
+export const changeSelectedElement = createAction(CHANGE_SELECTED_ELEMENT);
+export const deletePoint           = createAction(DELETE_POINT);
+export const toggleEditButton      = createAction(TOGGLE_EDIT_BUTTON);
 
 const initialState = {
-    loading:          false,
-    error:            null,
-    data:             {
+    loading:           false,
+    error:             null,
+    data:              {
         schemes:  [],
-        points:   [],
+        points:   {},
         elements: [],
         edges:    []
     },
-    buildingSchemeId: 3,
-    buildingId:       2167
+    isEdit:            false,
+    buildingSchemeId:  null,
+    selectedPointId:   null,
+    selectedElementId: null
 };
 
 const reducer = (state = initialState, action = {}) => {
     switch (action.type) {
+        case TOGGLE_EDIT_BUTTON:
+
+            return {
+                ...state,
+                isEdit: !state.isEdit
+            };
+
+        case DELETE_POINT_SUCCESS:
+            let id = action.payload;
+
+            return {
+                ...state,
+                selectedPointId: null,
+                data:            {
+                    ...state.data,
+                    points: excludeById(id, state.data.points)
+                }
+            };
+
+        case CHANGE_SELECTED_ELEMENT:
+
+            return {
+                ...state,
+                selectedElementId: action.payload,
+                selectedPointId:   null
+            };
+
+        case CHANGE_SELECTED_POINT:
+
+            return {
+                ...state,
+                selectedPointId:   action.payload,
+                selectedElementId: null
+            };
 
         case CHANGE_SCHEME:
 
@@ -74,17 +124,16 @@ const reducer = (state = initialState, action = {}) => {
             };
 
         case SAVE_CREATED_POINTS_SUCCESS:
-            const getFloor = getFloorByScheme(state.data.schemes);
 
             return {
                 ...state,
                 loading: false,
                 data:    {
                     ...state.data,
-                    points: [
+                    points: {
                         ...state.data.points,
-                        ...map(mapPoint(getFloor), action.payload)
-                    ]
+                        ...indexBy(prop('id'), action.payload)
+                    }
                 }
             };
 
@@ -92,15 +141,20 @@ const reducer = (state = initialState, action = {}) => {
         case SAVE_CREATED_POINTS:
             return {
                 ...state,
-                loading: true
+                loading: true,
+                error:   null
             };
 
         case LOAD_SUCCESS:
+            const data        = mapFromServer(action.payload);
+            const { schemes } = data;
 
             return {
                 ...state,
-                data:    mapFromServer(action.payload),
-                loading: false,
+                data:             data,
+                loading:          false,
+                error:            null,
+                buildingSchemeId: isEmpty(schemes) ? null : schemes[ 0 ].id
             };
 
         case LOAD_FAILED:
@@ -123,24 +177,10 @@ const mapFromServer = data => {
     const getFloor = getFloorByScheme(schemes);
 
     return {
-        points:   map(mapPoint(getFloor), points),
-        elements: map(mapElement(getFloor), elements),
+        points:   indexBy(prop('id'), points),
+        elements: indexBy(prop('id'), map(mapElement(getFloor), elements)),
         edges:    map(mapEdge, edges),
         schemes:  schemes || []
-    }
-};
-
-const mapPoint = getFloor => point => {
-    const { buildingSchemeId, x, y, id } = point;
-
-    const floor = getFloor(buildingSchemeId);
-
-    return {
-        x,
-        y,
-        id,
-        floor,
-        buildingSchemeId
     }
 };
 
@@ -150,7 +190,7 @@ const mapElement = getFloor => element => {
 
     const floor        = getFloor(buildingSchemeId);
     const textCentroid = calculateCentroid(coordinates);
-    const stairLines   = getStairLines(element)
+    const stairLines   = getStairLines(element);
 
     return {
         id,

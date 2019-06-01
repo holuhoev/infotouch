@@ -16,13 +16,13 @@ import static ru.hse.infotouch.util.DomainObjectUtils.getIds;
 public class BuildingMapService {
 
     private final EdgeService edgeService;
-    private final MapElementService mapElementService;
+    private final SchemeElementService schemeElementService;
     private final PointDatasource pointDatasource;
     private final BuildingSchemeService buildingSchemeService;
 
-    public BuildingMapService(EdgeService edgeService, MapElementService mapElementService, PointDatasource pointDatasource, BuildingSchemeService buildingSchemeService) {
+    public BuildingMapService(EdgeService edgeService, SchemeElementService schemeElementService, PointDatasource pointDatasource, BuildingSchemeService buildingSchemeService) {
         this.edgeService = edgeService;
-        this.mapElementService = mapElementService;
+        this.schemeElementService = schemeElementService;
         this.pointDatasource = pointDatasource;
         this.buildingSchemeService = buildingSchemeService;
     }
@@ -31,8 +31,8 @@ public class BuildingMapService {
         BuildingMapDTO result = new BuildingMapDTO();
 
         List<BuildingScheme> schemes = buildingSchemeService.findAll(buildingId);
-        List<SchemeElement> elements = mapElementService.findAll(getIds(schemes));
-        List<Point> points = pointDatasource.findAll(getIds(schemes));
+        List<SchemeElement> elements = schemeElementService.findAll(getIds(schemes));
+        List<Point> points = pointDatasource.findAll(getIds(elements));
         List<Edge> edges = edgeService.findAll(getIds(points));
 
         result.setSchemes(schemes);

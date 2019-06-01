@@ -18,22 +18,18 @@ public class Announcement {
     private String title;
 
     @Column
-    private String content;
-
-    @Column
-    private int priority;
-
-    @Column
-    private String link;
-
-    @Column(name = "created_by")
     private Integer createdBy;
 
-    @Column(name = "start_date")
-    private LocalDate startDate;
+    @Column
+    private int deviceId;
 
-    @Column(name = "end_date")
-    private LocalDate endDate;
+    public int getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(int deviceId) {
+        this.deviceId = deviceId;
+    }
 
     public Integer getCreatedBy() {
         return createdBy;
@@ -59,31 +55,6 @@ public class Announcement {
         this.title = title;
     }
 
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-
-    public int getPriority() {
-        return priority;
-    }
-
-    public void setPriority(int priority) {
-        this.priority = priority;
-    }
-
-    public String getLink() {
-        return link;
-    }
-
-    public void setLink(String link) {
-        this.link = link;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -98,40 +69,23 @@ public class Announcement {
     }
 
 
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
     public static Announcement createFromRequest(AnnouncementRequest request) {
         Announcement announcement = new Announcement();
 
-        announcement.setContent(request.getContent());
-        announcement.setLink(request.getLink());
         announcement.setTitle(request.getTitle());
-        announcement.setPriority(request.getPriority());
-        announcement.setStartDate(request.getStartDate());
-        announcement.setEndDate(request.getEndDate());
+        announcement.setDeviceId(request.getDeviceId());
 
         return announcement;
     }
 
     public Announcement updateFromRequest(AnnouncementRequest request) {
-        Announcement announcement = createFromRequest(request);
+        Announcement announcement = new Announcement();
 
         announcement.setId(this.id);
+        announcement.setDeviceId(this.deviceId);
         announcement.setCreatedBy(this.createdBy);
+
+        announcement.setTitle(request.getTitle());
 
         return announcement;
     }
