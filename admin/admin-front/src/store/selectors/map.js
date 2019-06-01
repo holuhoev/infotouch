@@ -26,7 +26,7 @@ export const selectCurrentSchemeEdges = state => {
     }), filteredEdges);
 };
 
-export const selectSchemeCreatedPoints     = state => state.createdPoints.present.map(point => {
+export const selectSchemeCreatedPoints = state => state.createdPoints.present.map(point => {
     return {
         x:     point[ 0 ],
         y:     point[ 1 ],
@@ -34,8 +34,8 @@ export const selectSchemeCreatedPoints     = state => state.createdPoints.presen
     }
 });
 
-export const selectCurrentSchemePoints     = state => {
-    const schemeId = selectMapCurrentSchemeId(state);
+export const selectCurrentSchemePoints = state => {
+    const schemeId             = selectMapCurrentSchemeId(state);
     const pointShouldDisplayed = point => selectSchemeElementSchemeId(state, point.schemeElementId) === schemeId;
 
     return [
@@ -125,7 +125,13 @@ export const selectSelectedPoint = (state) => {
     if (!selectedPointId)
         return null;
 
-    const point   = find(propEq('id', selectedPointId))(selectCurrentSchemePoints(state));
+    const point = find(propEq('id', selectedPointId))(selectCurrentSchemePoints(state));
+
+    if (!point) {
+        return null;
+    }
+
+
     const service = selectServiceByPointId(state, selectedPointId);
 
     return {
