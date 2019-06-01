@@ -25,7 +25,6 @@ export const selectServiceList = state => {
 
 export const selectServicesForMap = state => {
     const services = state.services.list;
-    console.log(indexBy(prop('pointId'), filter(hasPoint, services)));
 
     return map(prop('type'), indexBy(prop('pointId'), filter(hasPoint, services)));
 };

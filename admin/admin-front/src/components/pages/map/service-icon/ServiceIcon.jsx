@@ -1,6 +1,6 @@
 import React from "react";
 
-let iconColor = "#626262";
+let iconColor = "#26c2ed";
 
 /**
  * @return {null}

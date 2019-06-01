@@ -1,19 +1,19 @@
 export const context = process.env.REACT_APP_CONTEXT;
 
 
-export const GET_BUILDING_MAP = '/building/scheme';
+export const GET_BUILDING_MAP = 'api/building/scheme';
 
-export const POST_CREATE_POINT = `/building/scheme/points/create`;
-export const POST_CREATE_EDGE  = `/building/scheme/edges`;
+export const POST_CREATE_POINT = `api/building/scheme/points/create`;
+export const POST_CREATE_EDGE  = `api/building/scheme/edges`;
 
-export const DEVICE   = '/device';
-export const SERVICE  = '/hseLocation';
-export const BUILDING = '/building';
-export const UNIT     = '/hseUnit';
-export const EVENT    = '/eventUrl';
-export const ANNOUNCEMENT    = '/announcement';
+export const DEVICE   = 'api/device';
+export const SERVICE  = 'api/hseLocation';
+export const BUILDING = 'api/building';
+export const UNIT     = 'api/hseUnit';
+export const EVENT    = 'api/eventUrl';
+export const ANNOUNCEMENT    = 'api/announcement';
 
-export const POINT = '/building/scheme/points';
+export const POINT = 'api/building/scheme/points';
 
-export const SERVICE_POINT = '/hseLocation/point';
-export const DEVICE_POINT = '/device/point';
+export const SERVICE_POINT = 'api/hseLocation/point';
+export const DEVICE_POINT = 'api/device/point';
