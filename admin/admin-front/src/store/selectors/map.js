@@ -1,7 +1,7 @@
 import { filter, propEq, map, has, prop, indexBy, __, find, isNil, isEmpty, values } from "ramda";
-import { isRoomOrCorridor } from "../reducers/map";
 import { isPointInPolygon } from "../../utils/map";
-import { selectServiceByPointId } from "./services";
+import {  selectServiceIdByPointId } from "./services";
+import { selectDeviceIdByPointId } from "./devices";
 
 export const selectSchemes    = state => selectMapData(state).schemes;
 export const selectBuildingId = state => state.application.selectedBuildingId;
@@ -132,11 +132,12 @@ export const selectSelectedPoint = (state) => {
     }
 
 
-    const service = selectServiceByPointId(state, selectedPointId);
+    const serviceId = selectServiceIdByPointId(state, selectedPointId);
+    const deviceId  = selectDeviceIdByPointId(state, selectedPointId);
 
     return {
         ...point,
-        serviceId:    service ? service.id : null,
-        serviceLabel: service ? `${ service.title }` : ''
+        serviceId,
+        deviceId
     }
 };

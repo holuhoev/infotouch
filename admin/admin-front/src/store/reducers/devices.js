@@ -26,23 +26,73 @@ export const DELETE_DEVICE_FAILED  = 'admin/device/DELETE_DEVICE_FAILED';
 
 export const SELECT_DEVICE = 'admin/device/SELECT_DEVICE';
 
-export const createDevice     = createAction(OPEN_CREATE_DEVICE);
-export const editDevice       = createAction(EDIT_DEVICE);
-export const loadDevices      = createAction(LOAD_DEVICES);
-export const loadDeviceById   = createAction(LOAD_ONE_DEVICE);
-export const cancelEditDevice = createAction(CANCEL_EDIT_DEVICE);
-export const saveDevice       = createAction(SAVE_DEVICE);
-export const deleteDevice     = createAction(DELETE_DEVICE);
-export const selectDevice     = createAction(SELECT_DEVICE);
+export const CHANGE_DEVICE_POINT = 'admin/device/CHANGE_DEVICE_POINT';
+export const REMOVE_DEVICE_POINT = 'admin/device/REMOVE_DEVICE_POINT';
+
+
+export const createDevice      = createAction(OPEN_CREATE_DEVICE);
+export const editDevice        = createAction(EDIT_DEVICE);
+export const loadDevices       = createAction(LOAD_DEVICES);
+export const loadDeviceById    = createAction(LOAD_ONE_DEVICE);
+export const cancelEditDevice  = createAction(CANCEL_EDIT_DEVICE);
+export const saveDevice        = createAction(SAVE_DEVICE);
+export const deleteDevice      = createAction(DELETE_DEVICE);
+export const selectDevice      = createAction(SELECT_DEVICE);
+export const changeDevicePoint = createAction(CHANGE_DEVICE_POINT);
+export const removeDevicePoint = createAction(REMOVE_DEVICE_POINT);
+
 
 const initState = {
     list:     [],
     editable: {}
 };
 
+const device = (state = {}, action = {}) => {
+    switch (action.type) {
+
+        case CHANGE_DEVICE_POINT:
+            if (action.payload.pointId === state.pointId) {
+
+                return {
+                    ...state,
+                    pointId: null
+                }
+            }
+
+            if (action.payload.deviceId === state.id.toString()) {
+
+                return {
+                    ...state,
+                    pointId: action.payload.pointId
+                }
+            }
+            return state;
+
+        case REMOVE_DEVICE_POINT:
+            if (action.payload === state.pointId) {
+
+                return {
+                    ...state,
+                    pointId: null
+                }
+            }
+            return state;
+
+        default:
+            return state;
+    }
+};
+
 export const devices = (state = initState, action = {}) => {
 
     switch (action.type) {
+
+        case CHANGE_DEVICE_POINT:
+        case REMOVE_DEVICE_POINT:
+            return {
+                ...state,
+                list: state.list.map(s => device(s, action))
+            };
 
         case DELETE_DEVICE_SUCCESS:
 

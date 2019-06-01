@@ -31,6 +31,7 @@ import BuildingSelector from "../../common/building/BuildingSelector";
 import { loadBuildings } from "../../../store/reducers/buildings";
 import Empty from "../../common/empty/Empty";
 import { loadServices } from "../../../store/reducers/services";
+import { loadDevices } from "../../../store/reducers/devices";
 
 const ButtonGroup = Button.Group;
 
@@ -112,6 +113,7 @@ class MapPage extends Component {
         this.props.loadBuildings();
         this.props.loadBuildingMap();
         this.props.loadServices();
+        this.props.loadDevices()
     }
 
     constructor(props) {
@@ -523,7 +525,8 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     loadBuildings,
     changeSelectedPoint,
     loadServices,
-    changeSelectedElement
+    changeSelectedElement,
+    loadDevices
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapPage);

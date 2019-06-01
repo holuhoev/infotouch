@@ -8,6 +8,8 @@ import { changeServicePoint, removeServicePoint } from "../../../../store/reduce
 import { selectSelectedPoint } from "../../../../store/selectors/map";
 import './PointInfo.scss'
 import { deletePoint } from "../../../../store/reducers/map";
+import { selectDevicesWithNoPoint } from "../../../../store/selectors/devices";
+import { changeDevicePoint, removeDevicePoint } from "../../../../store/reducers/devices";
 
 const { Title } = Typography;
 
@@ -15,7 +17,7 @@ class PointInfo extends Component {
 
     onServiceChange = serviceId => {
         const { selectedPoint } = this.props;
-        const pointId = selectedPoint.id;
+        const pointId           = selectedPoint.id;
 
         if (!!serviceId) {
             this.props.changeServicePoint({
@@ -27,6 +29,20 @@ class PointInfo extends Component {
         }
     };
 
+    onDeviceChange = deviceId => {
+        const { selectedPoint } = this.props;
+        const pointId           = selectedPoint.id;
+
+        if (!!deviceId) {
+            this.props.changeDevicePoint({
+                deviceId,
+                pointId
+            })
+        } else {
+            this.props.removeDevicePoint(pointId)
+        }
+    };
+
     onDeleteClick = () => {
         const { selectedPoint, deletePoint } = this.props;
 
@@ -34,10 +50,13 @@ class PointInfo extends Component {
     };
 
     render() {
-        const { selectedPoint, serviceList } = this.props;
+        const { selectedPoint, serviceList, deviceList } = this.props;
 
         if (!selectedPoint)
             return null;
+
+        console.log(deviceList);
+        console.log(serviceList);
 
         return (
             <div className={ "point_info" }>
@@ -45,18 +64,28 @@ class PointInfo extends Component {
                     <Title level={ 4 }>
                         { `Выбрана точка х:${ selectedPoint.x }, y:${ selectedPoint.y }. ID: ${ selectedPoint.id }` }
                     </Title>
-
                 </div>
                 <div className={ "point_info-controls" }>
                     <Select
                         placeholder={ "Выберите услугу" }
-                        style={ { width: 300 } }
+                        style={ { width: 200 } }
                         onChange={ this.onServiceChange }
                         allowClear
                         value={ selectedPoint.serviceId ? selectedPoint.serviceId.toString() : undefined }
                     >
                         { serviceList.map(({ id, title }) => (
-                            <Select.Option key={ id }>{ title }</Select.Option>
+                            <Select.Option key={ id } >{ title }</Select.Option>
+                        )) }
+                    </Select>
+                    <Select
+                        placeholder={ "Выберите устройство" }
+                        style={ { width: 200 } }
+                        onChange={ this.onDeviceChange }
+                        allowClear
+                        value={ selectedPoint.deviceId ? selectedPoint.deviceId.toString() : undefined }
+                    >
+                        { deviceList.map(device => (
+                            <Select.Option key={ device.id.toString() }>{ device.title }</Select.Option>
                         )) }
                     </Select>
                     <Button
@@ -75,7 +104,8 @@ const mapStateToProps = (state) => {
 
     return {
         selectedPoint: selectSelectedPoint(state),
-        serviceList:   selectServicesWithNoPoint(state)
+        serviceList:   selectServicesWithNoPoint(state),
+        deviceList:    selectDevicesWithNoPoint(state)
     }
 };
 
@@ -83,6 +113,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => bindActionCreators({
     changeServicePoint,
     removeServicePoint,
+    changeDevicePoint,
+    removeDevicePoint,
     deletePoint
 }, dispatch);
 

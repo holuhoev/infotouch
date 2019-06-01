@@ -48,6 +48,9 @@ public class PointService {
         Query removeFromSchemeElement = entityManager.createNativeQuery("update scheme_element set point_id = null where point_id = :pointId");
         removeFromSchemeElement.setParameter("pointId", pointId).executeUpdate();
 
+        Query removeFromDevice = entityManager.createNativeQuery("update device set point_id = null where point_id = :pointId");
+        removeFromDevice.setParameter("pointId", pointId).executeUpdate();
+
         pointRepository.deleteById(pointId);
     }
 }

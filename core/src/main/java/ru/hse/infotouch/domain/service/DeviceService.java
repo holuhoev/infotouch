@@ -3,6 +3,7 @@ package ru.hse.infotouch.domain.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.hse.infotouch.domain.datasource.DeviceDatasource;
+import ru.hse.infotouch.domain.dto.request.DevicePointRequest;
 import ru.hse.infotouch.domain.dto.request.DeviceRequest;
 import ru.hse.infotouch.domain.models.admin.Device;
 import ru.hse.infotouch.domain.models.admin.relations.*;
@@ -151,5 +152,28 @@ public class DeviceService {
         return Arrays.stream(deviceIds).boxed()
                 .map(deviceId -> createMethod.apply(deviceId, relationId))
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void savePoint(DevicePointRequest request) {
+        int deviceId = request.getDeviceId();
+        int pointId = request.getPointId();
+
+        Query removeOldDevicePoint = entityManager.createNativeQuery("update device set point_id=null where point_id=:pointId");
+        removeOldDevicePoint.setParameter("pointId", pointId)
+                .executeUpdate();
+
+        Query addPointToDevice = entityManager.createNativeQuery("update device set point_id=:pointId where id=:deviceId");
+        addPointToDevice.setParameter("pointId", pointId)
+                .setParameter("deviceId", deviceId)
+                .executeUpdate();
+    }
+
+
+    @Transactional
+    public void removeDevicesFromPoint(int pointId) {
+        Query removeOldDevicePoint = entityManager.createNativeQuery("update device set point_id=null where point_id=:pointId");
+        removeOldDevicePoint.setParameter("pointId", pointId)
+                .executeUpdate();
     }
 }

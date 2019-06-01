@@ -76,6 +76,14 @@ const service = (state = {}, action = {}) => {
 
         case CHANGE_SERVICE_POINT:
 
+            if (action.payload.pointId === state.pointId) {
+
+                return {
+                    ...state,
+                    pointId: null
+                }
+            }
+
             if (action.payload.serviceId !== state.id.toString()) {
                 return state;
             }

@@ -1,6 +1,7 @@
 import { filter, find, indexBy, map, mapObjIndexed, prop, propEq, values } from "ramda";
 import { SERVICE_TYPE_LABELS } from "../reducers/services";
 import { selectBuildingNameById } from "./buildings";
+import { findIdByPointId } from "../../utils/common";
 
 
 const getServiceTypeLabel = service => SERVICE_TYPE_LABELS[ service.type ];
@@ -35,16 +36,6 @@ export const selectServicesWithNoPoint = state => {
     return filter(s => (!s.pointId || s.pointId === selectedPointId), services);
 };
 
-export const selectServiceByPointId = (state, pointId) => {
-    return find(propEq('pointId', pointId))(state.services.list)
-};
-
 export const selectServiceIdByPointId = (state, pointId) => {
-    const service = selectServiceByPointId(state, pointId);
-
-    return service ? service.id : null
-};
-
-export const selectForSavePoints = (state) => {
-    return map(prop('pointId'), indexBy(prop('id'), filter(prop('isPointEdit'), state.services.list)))
+    return findIdByPointId(state.services.list,pointId)
 };

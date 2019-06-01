@@ -3,6 +3,7 @@ import { takeLatest, put, call, select } from "redux-saga/effects";
 
 import { message } from "antd";
 import {
+    CHANGE_DEVICE_POINT,
     DELETE_DEVICE, DELETE_DEVICE_FAILED,
     DELETE_DEVICE_SUCCESS,
     LOAD_DEVICES,
@@ -10,19 +11,50 @@ import {
     LOAD_DEVICES_SUCCESS,
     LOAD_ONE_DEVICE,
     LOAD_ONE_DEVICE_FAILED,
-    LOAD_ONE_DEVICE_SUCCESS,
+    LOAD_ONE_DEVICE_SUCCESS, REMOVE_DEVICE_POINT,
     SAVE_DEVICE,
     SAVE_DEVICE_FAILED,
     SAVE_DEVICE_SUCCESS,
     SAVE_NEW_DEVICE_SUCCESS
 } from "../reducers/devices";
-import { createDevice, deleteDeviceById, getDeviceById, getDevices, putDevice } from "../../api";
+import {
+    createDevice,
+    deleteDeviceById,
+    getDeviceById,
+    getDevices,
+    putDevice, putDevicePoint,
+    removeDevicesFromPoint
+} from "../../api";
 
 export default function* main() {
     yield takeLatest(LOAD_DEVICES, fetchDeviceList);
     yield takeLatest(LOAD_ONE_DEVICE, fetchOneDeviceById);
     yield takeLatest(SAVE_DEVICE, saveDevice);
     yield takeLatest(DELETE_DEVICE, deleteDevice);
+    yield takeLatest(CHANGE_DEVICE_POINT, changeDevicePoint);
+    yield takeLatest(REMOVE_DEVICE_POINT, removeDevicePoint);
+}
+
+function* changeDevicePoint(action) {
+    const { deviceId, pointId } = action.payload;
+    try {
+        yield call(putDevicePoint, { deviceId, pointId });
+
+        message.success("Устройство добавлено к точке")
+    } catch (error) {
+        message.error(`Ошибка сохранения устройства`);
+    }
+}
+
+function* removeDevicePoint(action) {
+    try {
+        const pointId = action.payload;
+        yield call(removeDevicesFromPoint, pointId);
+
+        message.success("Устройство отвязано")
+    } catch (error) {
+        message.error(`Ошибка отвязки устройства`);
+    }
 }
 
 function* fetchDeviceList(action) {

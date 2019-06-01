@@ -63,7 +63,7 @@ public class HseLocationController {
 
     @DeleteMapping("/point/{pointId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void setPoints(@PathVariable("pointId") int pointId) {
+    public void deletePoint(@PathVariable("pointId") int pointId) {
         this.hseLocationService.removeLocationsFromPoint(pointId);
     }
 }

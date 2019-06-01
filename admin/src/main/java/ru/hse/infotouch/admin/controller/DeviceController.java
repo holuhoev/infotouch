@@ -3,7 +3,9 @@ package ru.hse.infotouch.admin.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hse.infotouch.domain.dto.request.DevicePointRequest;
 import ru.hse.infotouch.domain.dto.request.DeviceRequest;
+import ru.hse.infotouch.domain.dto.request.HseLocationPointsRequest;
 import ru.hse.infotouch.domain.models.admin.Device;
 import ru.hse.infotouch.domain.service.DeviceService;
 
@@ -56,5 +58,17 @@ public class DeviceController {
     public void deleteDevice(@PathVariable("id") int id) {
 
         deviceService.delete(id);
+    }
+
+    @PutMapping("/point")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void setPoints(@RequestBody DevicePointRequest request) {
+        this.deviceService.savePoint(request);
+    }
+
+    @DeleteMapping("/point/{pointId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePoint(@PathVariable("pointId") int pointId) {
+        this.deviceService.removeDevicesFromPoint(pointId);
     }
 }

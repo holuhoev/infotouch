@@ -11,7 +11,7 @@ import {
     SERVICE_POINT,
     UNIT,
     EVENT,
-    ANNOUNCEMENT, POINT
+    ANNOUNCEMENT, POINT, DEVICE_POINT
 } from "../utils/url";
 
 
@@ -159,9 +159,7 @@ export const deleteServiceById = (id) => {
 export const putServicePoint = (data) => {
 
     return axios
-        .put(SERVICE_POINT, {
-            hseLocationToPoint: data
-        })
+        .put(SERVICE_POINT, data)
         .then(responseData)
         .catch(error('PUT', SERVICE_POINT))
 };
@@ -305,4 +303,20 @@ export const deletePointById = (pointId) => {
         .delete(`${ POINT }/${ pointId }`)
         .then(responseData)
         .catch(error('DELETE', `${ POINT }/${ pointId }`))
+};
+
+export const putDevicePoint = (data) => {
+
+    return axios
+        .put(DEVICE_POINT, data)
+        .then(responseData)
+        .catch(error('PUT', DEVICE_POINT))
+};
+
+export const removeDevicesFromPoint = pointId => {
+
+    return axios
+        .delete(`${ DEVICE_POINT }/${ pointId }`)
+        .then(responseData)
+        .catch(error('DELETE', `${ DEVICE_POINT }/${ pointId }`))
 };
