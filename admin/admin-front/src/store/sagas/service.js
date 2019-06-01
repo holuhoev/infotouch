@@ -4,44 +4,58 @@ import { call, put, select, takeLatest } from "redux-saga/effects";
 import { message } from "antd";
 
 import {
+    CHANGE_SERVICE_POINT,
     DELETE_SERVICE,
     DELETE_SERVICE_FAILED,
     DELETE_SERVICE_SUCCESS,
     LOAD_SERVICES,
     LOAD_SERVICES_FAILED,
-    LOAD_SERVICES_SUCCESS,
+    LOAD_SERVICES_SUCCESS, REMOVE_SERVICE_POINT,
     SAVE_NEW_SERVICE_SUCCESS,
     SAVE_SERVICE,
     SAVE_SERVICE_FAILED,
     SAVE_SERVICE_SUCCESS,
-    SAVE_SERVICES_POINTS, SAVE_SERVICES_POINTS_FAILED, SAVE_SERVICES_POINTS_SUCCESS
+    SAVE_SERVICES_POINTS_FAILED,
+    CHANGE_SERVICE_POINT_SUCCESS
 } from "../reducers/services";
-import { createService, deleteServiceById, getServices, putService, putServicesPoints } from "../../api";
+import {
+    createService,
+    deleteServiceById,
+    getServices,
+    putService,
+    putServicePoint,
+    removeServicesFromPoint
+} from "../../api";
 
 import { selectBuildingId } from "../selectors/map";
-import { selectForSavePoints } from "../selectors/services";
 
 export default function* main() {
     yield takeLatest(LOAD_SERVICES, fetchServices);
     yield takeLatest(SAVE_SERVICE, saveService);
     yield takeLatest(DELETE_SERVICE, deleteService);
-    yield takeLatest(SAVE_SERVICES_POINTS, saveServicesPoints);
+    yield takeLatest(CHANGE_SERVICE_POINT, changeServicePoint);
+    yield takeLatest(REMOVE_SERVICE_POINT, removeServicePoint)
 }
 
-function* saveServicesPoints() {
-    const state  = yield select();
-    const toSave = selectForSavePoints(state);
-
+function* changeServicePoint(action) {
+    const { serviceId, pointId } = action.payload;
     try {
-        yield call(putServicesPoints, toSave);
+        yield call(putServicePoint, { serviceId, pointId });
 
-        yield put({
-            type:    SAVE_SERVICES_POINTS_SUCCESS,
-            payload: []
-        })
+        message.success("Услуга добавлена к точке")
     } catch (error) {
         message.error(`Ошибка сохранения услуги`);
-        yield put({ type: SAVE_SERVICES_POINTS_FAILED, payload: error })
+    }
+}
+
+function* removeServicePoint(action) {
+    try {
+        const pointId = action.payload;
+        yield call(removeServicesFromPoint, pointId);
+
+        message.success("Услуга отвязана")
+    } catch (error) {
+        message.error(`Ошибка отвязки услуги`);
     }
 }
 

@@ -99,16 +99,23 @@ public class HseLocationService {
 
     @Transactional
     public void savePoints(HseLocationPointsRequest request) {
-        Map<Integer, Integer> locationToPoint = request.getHseLocationToPoint();
+        int serviceId = request.getServiceId();
+        int pointId = request.getPointId();
 
-        locationToPoint.entrySet()
-                .stream()
-                .map(entry -> {
-                    Query query = entityManager.createNativeQuery("update hse_location set point_id=:pointId where id=:hseLocationId");
-                    query.setParameter("pointId", entry.getValue())
-                            .setParameter("hseLocationId", entry.getKey());
+        Query removeOldServicePoint = entityManager.createNativeQuery("update hse_location set point_id=null where point_id=:pointId");
+        removeOldServicePoint.setParameter("pointId", pointId)
+                .executeUpdate();
 
-                    return query;
-                }).forEach(Query::executeUpdate);
+        Query addPointToService = entityManager.createNativeQuery("update hse_location set point_id=:pointId where id=:serviceId");
+        addPointToService.setParameter("pointId", pointId)
+                .setParameter("serviceId", serviceId)
+                .executeUpdate();
+    }
+
+    @Transactional
+    public void removeLocationsFromPoint(int pointId){
+        Query removeOldServicePoint = entityManager.createNativeQuery("update hse_location set point_id=null where point_id=:pointId");
+        removeOldServicePoint.setParameter("pointId", pointId)
+                .executeUpdate();
     }
 }

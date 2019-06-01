@@ -30,7 +30,7 @@ import PointInfo from "./point-info/PointInfo";
 import BuildingSelector from "../../common/building/BuildingSelector";
 import { loadBuildings } from "../../../store/reducers/buildings";
 import Empty from "../../common/empty/Empty";
-import { loadServices, saveServicesPoints } from "../../../store/reducers/services";
+import { loadServices } from "../../../store/reducers/services";
 
 const ButtonGroup = Button.Group;
 
@@ -99,8 +99,7 @@ const MODE = {
     NONE:         'NONE',
     ADD_POINT:    'ADD_POINT',
     ADD_EDGE:     'ADD_EDGE',
-    ADD_STAIRS:   'ADD_STAIRS',
-    ADD_SERVICES: 'ADD_SERVICES'
+    ADD_STAIRS:   'ADD_STAIRS'
 };
 
 // 1. хранить точки в service и менять их там же
@@ -187,10 +186,6 @@ class MapPage extends Component {
             case MODE.ADD_STAIRS:
                 this.cancelAddStairs();
                 break;
-            case MODE.ADD_SERVICES:
-                this.props.changeSelectedPoint(null);
-                this.setState({ mode: 'NONE' });
-                break;
             default:
                 break;
         }
@@ -202,10 +197,6 @@ class MapPage extends Component {
 
     startDrawingStairs = () => {
         this.setState({ mode: MODE.ADD_STAIRS });
-    };
-
-    setAddingServicesMode = () => {
-        this.setState({ mode: MODE.ADD_SERVICES })
     };
 
     createPoint = () => {
@@ -226,8 +217,6 @@ class MapPage extends Component {
             this.props.saveCreatedEdges();
         } else if (mode === MODE.ADD_STAIRS) {
             this.props.saveCreatedEdges();
-        } else if (mode === MODE.ADD_SERVICES) {
-            this.props.saveServicesPoints()
         }
 
 
@@ -264,7 +253,6 @@ class MapPage extends Component {
             case MODE.ADD_STAIRS:
                 this.pointClickWithDrawingStair(point);
                 break;
-            case MODE.ADD_SERVICES:
             case MODE.NONE:
                 this.props.changeSelectedPoint(point.id);
                 break;
@@ -352,10 +340,10 @@ class MapPage extends Component {
                     key={ index + "_ring" }
                     cx={ point.x }
                     cy={ point.y }
-                    r="3"
+                    r="4"
                     fill={ "none" }
                     stroke={ "#26c2ed" }
-                    strokeWidth={ "0.5" }
+                    strokeWidth={ "1" }
                 />
             ),
             (point.isInStair) && (
@@ -427,9 +415,6 @@ class MapPage extends Component {
                 </Menu.Item>
                 <Menu.Item disabled={ disabled } onClick={ this.startDrawingStairs }>
                     Переход
-                </Menu.Item>
-                <Menu.Item disabled={ disabled } onClick={ this.setAddingServicesMode }>
-                    Услуги
                 </Menu.Item>
             </Menu>
         )
@@ -505,7 +490,7 @@ class MapPage extends Component {
                         </svg>
                     </Spin>
                 </div>
-                <PointInfo isEditService={ mode === MODE.ADD_SERVICES }/>
+                <PointInfo/>
             </div>
         )
     }
@@ -538,7 +523,6 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     loadBuildings,
     changeSelectedPoint,
     loadServices,
-    saveServicesPoints,
     changeSelectedElement
 }, dispatch);
 

@@ -15,4 +15,4 @@ export const ANNOUNCEMENT    = '/announcement';
 
 export const POINT = '/building/scheme/points';
 
-export const SERVICE_POINTS = '/hseLocation/points';
+export const SERVICE_POINT = '/hseLocation/point';

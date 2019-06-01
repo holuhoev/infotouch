@@ -1,9 +1,14 @@
 .point_info {
   width: 600px;
-  justify-content: space-between;
   display: flex;
+  flex-direction: column;
 }
 
-.point_info-data {
-  line-height: 33px;
+.point_info-title {
+
+}
+
+.point_info-controls {
+  display: flex;
+  justify-content: space-between;
 }

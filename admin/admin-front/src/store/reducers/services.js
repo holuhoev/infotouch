@@ -24,9 +24,9 @@ export const DELETE_SERVICE_SUCCESS = 'admin/service/DELETE_SERVICE_SUCCESS';
 export const DELETE_SERVICE_FAILED  = 'admin/service/DELETE_SERVICE_FAILED';
 
 export const CHANGE_SERVICE_POINT         = 'admin/service/CHANGE_SERVICE_POINT';
-export const SAVE_SERVICES_POINTS         = 'admin/service/SAVE_SERVICES_POINTS';
-export const SAVE_SERVICES_POINTS_SUCCESS = 'admin/service/SAVE_SERVICES_POINTS_SUCCESS';
-export const SAVE_SERVICES_POINTS_FAILED  = 'admin/service/SAVE_SERVICES_POINTS_FAILED';
+export const REMOVE_SERVICE_POINT         = 'admin/service/REMOVE_SERVICE_POINT';
+export const CHANGE_SERVICE_POINT_SUCCESS = 'admin/service/CHANGE_SERVICE_POINT_SUCCESS';
+export const CHANGE_SERVICE_POINT_FAILED  = 'admin/service/CHANGE_SERVICE_POINT_FAILED';
 
 export const openEditServiceModal   = createAction(OPEN_EDIT_SERVICE_MODAL);
 export const loadServices           = createAction(LOAD_SERVICES);
@@ -36,7 +36,7 @@ export const cancelEditService      = createAction(CANCEL_EDIT_SERVICE);
 export const changeService          = createAction(CHANGE_SERVICE);
 export const openCreateServiceModal = createAction(OPEN_CREATE_SERVICE);
 export const changeServicePoint     = createAction(CHANGE_SERVICE_POINT);
-export const saveServicesPoints     = createAction(SAVE_SERVICES_POINTS);
+export const removeServicePoint     = createAction(REMOVE_SERVICE_POINT);
 
 const initState = {
     list:     [],
@@ -63,6 +63,17 @@ export const SERVICE_TYPES = indexBy(identity, keys(SERVICE_TYPE_LABELS));
 const service = (state = {}, action = {}) => {
     switch (action.type) {
 
+        case REMOVE_SERVICE_POINT:
+            if (action.payload === state.pointId) {
+
+                return {
+                    ...state,
+                    pointId: null
+                }
+            }
+
+            return state;
+
         case CHANGE_SERVICE_POINT:
 
             if (action.payload.serviceId !== state.id.toString()) {
@@ -71,8 +82,7 @@ const service = (state = {}, action = {}) => {
 
             return {
                 ...state,
-                isPointEdit: true,
-                pointId:     action.payload.pointId
+                pointId: action.payload.pointId
             };
 
         default:
@@ -86,7 +96,7 @@ export const services = (state = initState, action = {}) => {
     switch (action.type) {
 
         case CHANGE_SERVICE_POINT:
-
+        case REMOVE_SERVICE_POINT:
             return {
                 ...state,
                 list: state.list.map(s => service(s, action))

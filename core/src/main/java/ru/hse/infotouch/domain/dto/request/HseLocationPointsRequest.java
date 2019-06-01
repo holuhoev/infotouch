@@ -1,15 +1,22 @@
 package ru.hse.infotouch.domain.dto.request;
 
-import java.util.Map;
-
 public class HseLocationPointsRequest {
-   private Map<Integer, Integer> hseLocationToPoint;
+    private int serviceId;
+    private int pointId;
 
-    public Map<Integer, Integer> getHseLocationToPoint() {
-        return hseLocationToPoint;
+    public int getServiceId() {
+        return serviceId;
     }
 
-    public void setHseLocationToPoint(Map<Integer, Integer> hseLocationToPoint) {
-        this.hseLocationToPoint = hseLocationToPoint;
+    public void setServiceId(int serviceId) {
+        this.serviceId = serviceId;
+    }
+
+    public int getPointId() {
+        return pointId;
+    }
+
+    public void setPointId(int pointId) {
+        this.pointId = pointId;
     }
 }

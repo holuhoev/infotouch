@@ -55,9 +55,15 @@ public class HseLocationController {
         this.hseLocationService.delete(id);
     }
 
-    @PutMapping("/points")
+    @PutMapping("/point")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void setPoints(@RequestBody HseLocationPointsRequest request) {
         this.hseLocationService.savePoints(request);
+    }
+
+    @DeleteMapping("/point/{pointId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void setPoints(@PathVariable("pointId") int pointId) {
+        this.hseLocationService.removeLocationsFromPoint(pointId);
     }
 }

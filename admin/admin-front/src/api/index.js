@@ -8,7 +8,7 @@ import {
     POST_CREATE_POINT,
     SERVICE,
     BUILDING,
-    SERVICE_POINTS,
+    SERVICE_POINT,
     UNIT,
     EVENT,
     ANNOUNCEMENT, POINT
@@ -156,14 +156,22 @@ export const deleteServiceById = (id) => {
         .catch(error('DELETE', `${ SERVICE }/${ id }`))
 };
 
-export const putServicesPoints = (data) => {
+export const putServicePoint = (data) => {
 
     return axios
-        .put(SERVICE_POINTS, {
+        .put(SERVICE_POINT, {
             hseLocationToPoint: data
         })
         .then(responseData)
-        .catch(error('PUT', SERVICE_POINTS))
+        .catch(error('PUT', SERVICE_POINT))
+};
+
+export const removeServicesFromPoint = pointId => {
+
+    return axios
+        .delete(`${ SERVICE_POINT }/${ pointId }`)
+        .then(responseData)
+        .catch(error('DELETE', `${ SERVICE_POINT }/${ pointId }`))
 };
 
 export const getUnits = (buildingId) => {
@@ -253,48 +261,48 @@ export const deleteEventById = (id) => {
 export const putAnnouncement = ({ title, deviceId }, id) => {
 
     return axios
-    .put(`${ ANNOUNCEMENT }/${ id }`, {
-        title, deviceId
-    })
-    .then(responseData)
-    .catch(error('PUT', `${ ANNOUNCEMENT }/${ id }`))
+        .put(`${ ANNOUNCEMENT }/${ id }`, {
+            title, deviceId
+        })
+        .then(responseData)
+        .catch(error('PUT', `${ ANNOUNCEMENT }/${ id }`))
 };
 
 export const createAnnouncement = ({ title, deviceId }) => {
 
     return axios
-    .post(ANNOUNCEMENT, {
-        title, deviceId
-    })
-    .then(responseData)
-    .catch(error('POST', ANNOUNCEMENT))
+        .post(ANNOUNCEMENT, {
+            title, deviceId
+        })
+        .then(responseData)
+        .catch(error('POST', ANNOUNCEMENT))
 };
 
 export const deleteAnnouncementById = (id) => {
 
     return axios
-    .delete(`${ ANNOUNCEMENT }/${ id }`)
-    .then(responseData)
-    .catch(error('DELETE', `${ ANNOUNCEMENT }/${ id }`))
+        .delete(`${ ANNOUNCEMENT }/${ id }`)
+        .then(responseData)
+        .catch(error('DELETE', `${ ANNOUNCEMENT }/${ id }`))
 };
 
 
 export const getAnnouncements = (deviceId) => {
 
     return axios
-    .get(ANNOUNCEMENT, {
-        params: {
-            deviceId
-        }
-    })
-    .then(responseData)
-    .catch(error('GET', ANNOUNCEMENT))
+        .get(ANNOUNCEMENT, {
+            params: {
+                deviceId
+            }
+        })
+        .then(responseData)
+        .catch(error('GET', ANNOUNCEMENT))
 };
 
 export const deletePointById = (pointId) => {
 
     return axios
-    .delete(`${ POINT }/${ pointId }`)
-    .then(responseData)
-    .catch(error('DELETE', `${ POINT }/${ pointId }`))
+        .delete(`${ POINT }/${ pointId }`)
+        .then(responseData)
+        .catch(error('DELETE', `${ POINT }/${ pointId }`))
 };
