@@ -1,6 +1,8 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
+import { find, isNil, propEq } from "ramda";
+import { Button, Dropdown, Menu, Spin, message, Icon, Switch } from "antd";
 
 import {
     cancelCreatedPoints,
@@ -12,8 +14,6 @@ import {
     addEdge,
     saveCreatedEdges,
     cancelCreatedEdges,
-    isElementHasLabel,
-    isElementIsStair,
     changeSelectedPoint,
     changeSelectedElement, toggleEditButton
 } from "../../../store/reducers/map";
@@ -22,9 +22,8 @@ import {
     selectCurrentSchemeElements, selectIsEmptyMap,
     selectPoints
 } from "../../../store/selectors/map";
-import { find, isNil, propEq } from "ramda";
 import './MapPage.scss'
-import { Button, Dropdown, Menu, Spin, message, Icon, Switch } from "antd";
+
 import SchemeMenu from "./scheme-menu/SchemeMenu";
 import PointInfo from "./point-info/PointInfo";
 import BuildingSelector from "../../common/building/BuildingSelector";
@@ -33,69 +32,11 @@ import Empty from "../../common/empty/Empty";
 import { loadServices } from "../../../store/reducers/services";
 import { loadDevices } from "../../../store/reducers/devices";
 import ServiceIcon from "./service-icon/ServiceIcon";
+import SchemeElement from "./scheme-element/SchemeElement";
+import { loadUnits } from "../../../store/reducers/units";
+import SchemeElementInfo from "./scheme-element-info/SchemeElementInfo";
 
 const ButtonGroup = Button.Group;
-
-const renderStairs = element => {
-    const { lines } = element;
-
-    if (!lines)
-        return null;
-
-    return (
-        <Fragment>
-            <clipPath id={ `stairsPath_${ element.id }` }>
-                <polygon points={ element.coordinates }/>
-            </clipPath>
-            <g clipPath={ `url(#stairsPath_${ element.id })` }>
-                {
-                    lines.map((line, i) => (
-                        <line
-                            key={ i }
-                            x1={ line.x1 }
-                            y1={ line.y1 }
-                            x2={ line.x2 }
-                            y2={ line.y2 }
-                            stroke={ "#236481" }
-                        />
-                    ))
-                }
-            </g>
-        </Fragment>
-
-    )
-};
-
-function Element({ item, onClick }) {
-
-    return (
-        <Fragment>
-            <polygon
-                points={ item.coordinates }
-                fill="#FFF"
-                stroke={ "#236481" }
-                strokeWidth={ 1 }
-                opacity={ 0.8 }
-                onClick={ onClick }
-            />
-            { isElementHasLabel(item) && (
-                <text
-                    fill="#507b8f"
-                    x={ item.textCentroid[ 0 ] }
-                    y={ item.textCentroid[ 1 ] }
-                    fontSize="8"
-                    textAnchor={ "middle" }
-                >
-                    { item.label }
-                </text>
-            ) }
-
-            { isElementIsStair(item) && (
-                renderStairs(item)
-            ) }
-        </Fragment>
-    )
-}
 
 const MODE = {
     NONE:       'NONE',
@@ -109,8 +50,7 @@ class MapPage extends Component {
     componentDidMount() {
         this.props.loadBuildings();
         this.props.loadBuildingMap();
-        this.props.loadServices();
-        this.props.loadDevices()
+        this.props.loadDevices();
     }
 
     constructor(props) {
@@ -231,14 +171,17 @@ class MapPage extends Component {
     };
 
     onElementClick = element => e => {
-        const { mode } = this.state;
+        const { mode }   = this.state;
+        const { isEdit } = this.props;
 
-        switch (mode) {
-            case MODE.NONE:
-                this.props.changeSelectedElement(element.id);
-                break;
-            default:
-                break;
+        if (isEdit) {
+            switch (mode) {
+                case MODE.NONE:
+                    this.props.changeSelectedElement(element.id);
+                    break;
+                default:
+                    break;
+            }
         }
     };
 
@@ -322,7 +265,7 @@ class MapPage extends Component {
         const { selectedPointId, isEdit } = this.props;
 
         if (!isEdit)
-            return (<ServiceIcon { ...point } key={index}/>);
+            return (<ServiceIcon { ...point } key={ index }/>);
 
         return ([
             <circle
@@ -433,7 +376,8 @@ class MapPage extends Component {
 
     afterBuildingSelect = () => {
         this.props.loadBuildingMap();
-        this.props.loadServices()
+        this.props.loadServices();
+        this.props.loadUnits();
     };
 
     render() {
@@ -485,7 +429,7 @@ class MapPage extends Component {
                         >
                             {
                                 elements.map((element, index) => (
-                                    <Element
+                                    <SchemeElement
                                         key={ index }
                                         onClick={ this.onElementClick(element) }
                                         item={ element }
@@ -512,6 +456,7 @@ class MapPage extends Component {
                     </Spin>
                 </div>
                 <PointInfo/>
+                <SchemeElementInfo/>
             </div>
         )
     }
@@ -547,7 +492,8 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     loadServices,
     changeSelectedElement,
     loadDevices,
-    toggleEditButton
+    toggleEditButton,
+    loadUnits,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapPage);

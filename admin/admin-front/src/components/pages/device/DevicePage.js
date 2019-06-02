@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { Button, Divider, List, Skeleton, Spin, Typography } from "antd";
+import { Button, Divider, List, Skeleton, Spin } from "antd";
 
 import {
     createDevice,
@@ -14,8 +14,6 @@ import DeviceModal from "./DeviceModal";
 import { showDeleteConfirm } from "../../common/delete-modal/DeleteModal";
 import { renderListItemActions } from "../../common/list-item-actions/ListItemActions";
 import {loadBuildings} from "../../../store/reducers/buildings";
-
-const { Title } = Typography;
 
 class DevicePage extends Component {
 

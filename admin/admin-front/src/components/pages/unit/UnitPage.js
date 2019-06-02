@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Divider, Skeleton, Spin, List, Typography } from "antd";
+import { Button, Divider, Skeleton, Spin, List } from "antd";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
@@ -17,8 +17,6 @@ import UnitModal from "./UnitModal";
 import { showDeleteConfirm } from "../../common/delete-modal/DeleteModal";
 import { renderListItemActions } from "../../common/list-item-actions/ListItemActions";
 
-
-const { Title } = Typography;
 
 class UnitPage extends Component {
 

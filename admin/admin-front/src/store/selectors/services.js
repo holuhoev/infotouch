@@ -1,7 +1,7 @@
-import { filter, find, indexBy, map, mapObjIndexed, prop, propEq, values } from "ramda";
+import { filter, indexBy, map, mapObjIndexed, prop, values } from "ramda";
 import { SERVICE_TYPE_LABELS } from "../reducers/services";
 import { selectBuildingNameById } from "./buildings";
-import { findIdByPointId, hasNoPoint, hasPoint } from "../../utils/common";
+import { findIdByPointId, hasPoint } from "../../utils/common";
 
 
 const getServiceTypeLabel = service => SERVICE_TYPE_LABELS[ service.type ];

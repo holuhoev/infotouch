@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Button, Divider, Skeleton, Spin, List, Typography} from "antd";
+import {Button, Divider, Skeleton, Spin, List} from "antd";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 
@@ -20,7 +20,6 @@ import {
   selectIsCreateEnable
 } from "../../../store/selectors/events";
 
-const {Title} = Typography;
 
 class EventPage extends Component {
 

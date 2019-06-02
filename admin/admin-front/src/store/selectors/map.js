@@ -2,6 +2,7 @@ import { filter, propEq, map, has, prop, indexBy, __, find, isNil, isEmpty, valu
 import { isPointInPolygon } from "../../utils/map";
 import { selectServiceIdByPointId, selectServicesForMap } from "./services";
 import { selectDeviceIdByPointId } from "./devices";
+import { selectUnitIdByElementId } from "./units";
 
 export const selectSchemes    = state => selectMapData(state).schemes;
 export const selectBuildingId = state => state.application.selectedBuildingId;
@@ -76,7 +77,18 @@ export const selectPoints                = state => {
         serviceType: servicePoints[ point.id ] || null
     }))
 };
-export const selectCurrentSchemeElements = state => filterByCurrentSchemeId(state)(values(selectSchemeElements(state)));
+export const selectCurrentSchemeElements = state => {
+    const selectedElementId = state.map.selectedElementId;
+    const filtered          = filterByCurrentSchemeId(state)(values(selectSchemeElements(state)));
+
+    return map(e => {
+
+        return {
+            ...e,
+            isActive: e.id === selectedElementId
+        }
+    }, filtered)
+};
 
 
 export const selectSchemeCreatedEdges = state => state.createdEdges.present;
@@ -141,5 +153,24 @@ export const selectSelectedPoint = (state) => {
         ...point,
         serviceId,
         deviceId
+    }
+};
+
+export const selectSelectedElement = state => {
+    const selectedElementId = state.map.selectedElementId;
+
+    if (!selectedElementId)
+        return null;
+
+    const element = find(propEq('id', selectedElementId))(selectCurrentSchemeElements(state));
+
+    if (!element) {
+        return null;
+    }
+    const unitId = selectUnitIdByElementId(state,selectedElementId);
+
+    return {
+        ...element,
+        unitId
     }
 };

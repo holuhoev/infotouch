@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Input, message, Modal, Spin } from "antd";
+import { Form, Input, message, Modal } from "antd";
 import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
 

@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Button, Divider, Skeleton, Spin, List, Typography} from "antd";
+import {Button, Divider, Skeleton, Spin, List} from "antd";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 

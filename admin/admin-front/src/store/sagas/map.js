@@ -21,7 +21,6 @@ import {
 } from "../../api";
 import {
     selectBuildingId,
-    selectMapCurrentSchemeId,
     selectElementIdByCoordinates,
     selectSchemeCreatedPoints,
     selectSchemeEdgesForSave

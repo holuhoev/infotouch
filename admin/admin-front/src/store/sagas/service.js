@@ -14,9 +14,7 @@ import {
     SAVE_NEW_SERVICE_SUCCESS,
     SAVE_SERVICE,
     SAVE_SERVICE_FAILED,
-    SAVE_SERVICE_SUCCESS,
-    SAVE_SERVICES_POINTS_FAILED,
-    CHANGE_SERVICE_POINT_SUCCESS
+    SAVE_SERVICE_SUCCESS
 } from "../reducers/services";
 import {
     createService,

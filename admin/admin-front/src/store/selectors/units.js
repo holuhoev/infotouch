@@ -1,4 +1,4 @@
-import { map } from "ramda";
+import { find, map, propEq } from "ramda";
 
 import { selectBuildingNameById } from "./buildings";
 
@@ -20,3 +20,8 @@ export const selectUnitList = state => {
 };
 
 export const selectIsCreateEnable = state => !!state.application.selectedBuildingId && !state.application.unitsLoading;
+
+export const selectUnitIdByElementId = (state, elementId) => {
+    const unit = find(propEq('schemeElementId', elementId))(state.units.list);
+    return unit ? unit.id : null;
+};
