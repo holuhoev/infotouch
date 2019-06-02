@@ -21,6 +21,9 @@ export const DELETE_UNIT         = 'admin/unit/DELETE_UNIT';
 export const DELETE_UNIT_SUCCESS = 'admin/unit/DELETE_UNIT_SUCCESS';
 export const DELETE_UNIT_FAILED  = 'admin/unit/DELETE_UNIT_FAILED';
 
+export const CHANGE_UNIT_ELEMENT = 'admin/unit/CHANGE_UNIT_ELEMENT';
+export const REMOVE_UNIT_ELEMENT = 'admin/unit/REMOVE_UNIT_ELEMENT';
+
 
 export const openEditUnitModal   = createAction(OPEN_EDIT_UNIT_MODAL);
 export const loadUnits           = createAction(LOAD_UNITS);
@@ -29,17 +32,59 @@ export const deleteUnit          = createAction(DELETE_UNIT);
 export const cancelEditUnit      = createAction(CANCEL_EDIT_UNIT);
 export const changeUnit          = createAction(CHANGE_UNIT);
 export const openCreateUnitModal = createAction(OPEN_CREATE_UNIT);
+export const changeUnitElement   = createAction(CHANGE_UNIT_ELEMENT);
+export const removeUnitElement   = createAction(REMOVE_UNIT_ELEMENT);
 
 const initState = {
     list:     [],
     editable: {},
 };
 
+const unit = (state = {}, action = {}) => {
+    switch (action.type) {
+        case CHANGE_UNIT_ELEMENT:
+            if (action.payload.elementId === state.elementId) {
 
+                return {
+                    ...state,
+                    schemeElementId: null
+                }
+            }
+
+            if (action.payload.unitId !== state.id.toString()) {
+                return state;
+            }
+
+            return {
+                ...state,
+                schemeElementId: action.payload.elementId
+            };
+
+        case REMOVE_UNIT_ELEMENT:
+            if (action.payload === state.schemeElementId) {
+
+                return {
+                    ...state,
+                    schemeElementId: null
+                }
+            }
+
+            return state;
+
+        default:
+            return state;
+    }
+};
 
 export const units = (state = initState, action = {}) => {
 
     switch (action.type) {
+        case CHANGE_UNIT_ELEMENT:
+        case REMOVE_UNIT_ELEMENT:
+            return {
+                ...state,
+                list: state.list.map(s => unit(s, action))
+            };
 
         case DELETE_UNIT_SUCCESS:
 

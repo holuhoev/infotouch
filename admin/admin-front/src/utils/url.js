@@ -17,3 +17,4 @@ export const POINT = 'api/building/scheme/points';
 
 export const SERVICE_POINT = 'api/hseLocation/point';
 export const DEVICE_POINT = 'api/device/point';
+export const UNIT_ELEMENT = 'api/hseUnit/element';

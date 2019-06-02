@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 //import ru.hse.infotouch.domain.dto.request.HseUnitPointsRequest;
+import ru.hse.infotouch.domain.dto.request.HseUnitElementRequest;
 import ru.hse.infotouch.domain.dto.request.HseUnitRequest;
 import ru.hse.infotouch.domain.models.admin.HseUnit;
 import ru.hse.infotouch.domain.service.HseUnitService;
@@ -55,9 +56,16 @@ public class HseUnitController {
         this.hseUnitService.delete(id);
     }
 
-//    @PutMapping("/points")
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    public void setPoints(@RequestBody HseUnitPointsRequest request) {
-//        this.hseUnitService.savePoints(request);
-//    }
+
+    @PutMapping("/element")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void setElement(@RequestBody HseUnitElementRequest request) {
+        this.hseUnitService.setElements(request);
+    }
+
+    @DeleteMapping("/element/{elementId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteElement(@PathVariable("elementId") int elementId) {
+        this.hseUnitService.removeUnitsFromElement(elementId);
+    }
 }

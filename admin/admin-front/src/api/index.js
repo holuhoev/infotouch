@@ -11,7 +11,7 @@ import {
     SERVICE_POINT,
     UNIT,
     EVENT,
-    ANNOUNCEMENT, POINT, DEVICE_POINT
+    ANNOUNCEMENT, POINT, DEVICE_POINT, UNIT_ELEMENT
 } from "../utils/url";
 
 
@@ -319,4 +319,20 @@ export const removeDevicesFromPoint = pointId => {
         .delete(`${ DEVICE_POINT }/${ pointId }`)
         .then(responseData)
         .catch(error('DELETE', `${ DEVICE_POINT }/${ pointId }`))
+};
+
+export const putUnitElement= (data) => {
+
+    return axios
+        .put(UNIT_ELEMENT, data)
+        .then(responseData)
+        .catch(error('PUT', UNIT_ELEMENT))
+};
+
+export const removeUnitsFromElement = elementId => {
+
+    return axios
+        .delete(`${ UNIT_ELEMENT }/${ elementId }`)
+        .then(responseData)
+        .catch(error('DELETE', `${ UNIT_ELEMENT }/${ elementId }`))
 };
