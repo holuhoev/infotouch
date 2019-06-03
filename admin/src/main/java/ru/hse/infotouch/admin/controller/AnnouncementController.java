@@ -1,6 +1,7 @@
 package ru.hse.infotouch.admin.controller;
 
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +40,8 @@ public class AnnouncementController {
                 announcementService.findAll(
                         deviceId,
                         searchString,
-                        isNull(page) ? 0 : page
+                        isNull(page) ? 0 : page,
+                        30
                 ));
     }
 

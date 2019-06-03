@@ -23,9 +23,10 @@ public class AnnouncementService {
 
     public List<Announcement> findAll(Integer deviceId,
                                       String searchString,
-                                      int page) {
+                                      int page,
+                                      int pageSize) {
 
-        return announcementDatasource.findAll(deviceId, searchString, page);
+        return announcementDatasource.findAll(deviceId, searchString, page,pageSize);
     }
 
     public Announcement getOneById(int id) {

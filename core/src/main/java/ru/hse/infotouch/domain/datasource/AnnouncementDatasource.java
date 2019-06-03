@@ -17,10 +17,6 @@ import java.util.List;
 @Repository
 public class AnnouncementDatasource {
 
-    @Value("${entities.page-size.default}")
-    private int pageSize;
-
-    private int announcementLimit = 2;
 
     private final EntityManager em;
 
@@ -32,7 +28,7 @@ public class AnnouncementDatasource {
 
     public List<Announcement> findAll(Integer deviceId,
                                       String searchString,
-                                      int page) {
+                                      int page, int pageSize) {
         BooleanBuilder whereClause = new BooleanBuilder();
         JPAQuery<Announcement> query = new JPAQuery<>(em).select(qAnnouncement)
                 .from(qAnnouncement);
@@ -48,7 +44,7 @@ public class AnnouncementDatasource {
         return query.where(whereClause)
                 .distinct()
                 .offset(pageSize * page)
-                .limit(announcementLimit)
+                .limit(pageSize)
                 .orderBy(qAnnouncement.id.desc())
                 .fetch();
     }

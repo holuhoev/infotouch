@@ -32,7 +32,8 @@ public class DeviceAnnouncementController {
                 announcementService.findAll(
                         deviceId,
                         searchString,
-                        isNull(page) ? 0 : page
+                        isNull(page) ? 0 : page,
+                        1
                 ));
     }
 
@@ -45,7 +46,8 @@ public class DeviceAnnouncementController {
                 announcementService.findAll(
                         deviceId,
                         searchString,
-                        isNull(page) ? 0 : page
+                        isNull(page) ? 0 : page,
+                        1
                 ));
     }
 }
