@@ -54,7 +54,11 @@ class LoginPage extends React.Component {
         return (
             <article className="page-login">
                 <Spin spinning={ this.state.isLoading }>
-                    <Form layout="vertical" onChange={ this.handleEdit }>
+                    <Form
+                        layout="vertical"
+                        style={ { width: 400 } }
+                        onChange={ this.handleEdit }
+                    >
                         <Form.Item>
                             <Input name={ "login" } addonBefore={ "Логин" } value={ this.state.login }/>
                         </Form.Item>
