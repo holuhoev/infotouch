@@ -1,4 +1,4 @@
-import { prop, map, find, propEq, isEmpty, indexBy } from "ramda";
+import { prop, map, find, propEq, isEmpty, indexBy, filter } from "ramda";
 
 import { calculateCentroid, calculateStairsLines } from "../../utils/map";
 import { createAction } from "../../utils/action";
@@ -82,7 +82,10 @@ const reducer = (state = initialState, action = {}) => {
                 selectedPointId: null,
                 data:            {
                     ...state.data,
-                    points: excludeById(id, state.data.points)
+                    points: excludeById(id, state.data.points),
+                    edges:  filter(([ p1, p2 ]) => {
+                        return p1 !== id && p2 !== id
+                    }, state.data.edges)
                 }
             };
 

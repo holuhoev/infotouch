@@ -50,6 +50,7 @@ class App extends Component {
                     } }>
                         { (isLoggedIn()) && [ (
                             <Menu
+                                key={"menu_1"}
                                 theme="light"
                                 mode="horizontal"
                                 selectedKeys={ [ location.pathname ] }
@@ -76,14 +77,13 @@ class App extends Component {
                             </Menu>
                         ), (
                             <Button
+                                key={"menu_2"}
                                 onClick={ this.quit }
                                 type={ "link" }
                             >
                                 Выйти
                             </Button>
                         ) ] }
-
-
                     </Header>
                     <Content style={ { padding: '0 50px', minHeight: 600 } }>
                         <Breadcrumb style={ { margin: '16px 0' } }>

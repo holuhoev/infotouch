@@ -29,12 +29,24 @@ public class PointService {
         return this.pointRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(String.format("Точки с id \"%d\" не существует", id)));
     }
 
+    @Transactional
     public List<Point> createNew(List<CreatePointDTO> createPointDTOS) {
         List<Point> toSave = createPointDTOS.stream()
                 .map(Point::createFromRequest)
                 .collect(Collectors.toList());
 
-        return pointRepository.saveAll(toSave);
+        List<Point> saved = pointRepository.saveAll(toSave);
+
+        saved.stream()
+                .filter(p -> p.getSchemeElementId() != null)
+                .map(p -> {
+                    Query addToSchemeElement = entityManager.createNativeQuery("update scheme_element set point_id = :pointId where id = :schemeElementId and point_id is null");
+                    addToSchemeElement.setParameter("pointId", p.getId())
+                            .setParameter("schemeElementId", p.getSchemeElementId());
+                    return addToSchemeElement;
+                }).forEach(Query::executeUpdate);
+
+        return saved;
     }
 
     @Transactional

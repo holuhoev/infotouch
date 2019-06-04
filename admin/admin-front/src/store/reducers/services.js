@@ -1,7 +1,8 @@
-import { identity, indexBy, keys } from 'ramda';
+import { filter, identity, indexBy, keys } from 'ramda';
 
 import { createAction } from "../../utils/action";
 import { excludeById } from "../../utils/common";
+import { DELETE_POINT_SUCCESS } from "./map";
 
 
 export const LOAD_SERVICES         = 'admin/service/LOAD_SERVICES';
@@ -62,6 +63,14 @@ export const SERVICE_TYPES = indexBy(identity, keys(SERVICE_TYPE_LABELS));
 
 const service = (state = {}, action = {}) => {
     switch (action.type) {
+
+        case DELETE_POINT_SUCCESS:
+            let id = action.payload;
+
+            return {
+                ...state,
+                list: filter(({ pointId }) => pointId !== id, state.list)
+            };
 
         case REMOVE_SERVICE_POINT:
             if (action.payload === state.pointId) {
